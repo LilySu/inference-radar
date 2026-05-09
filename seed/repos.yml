@@ -1,0 +1,10 @@
+# Watched repos. Edit to add/remove. Slug = "owner/name".
+# `name` is shown in ntfy notification titles.
+- slug: vllm-project/vllm
+  name: vLLM
+- slug: sgl-project/sglang
+  name: SGLang
+- slug: NVIDIA/Megatron-LM
+  name: Megatron
+- slug: NVIDIA/TensorRT-LLM
+  name: TRT-LLM
