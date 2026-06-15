@@ -34,7 +34,7 @@ jobs:
         run: pipx install uv
 
       - name: uv sync
-        run: uv sync
+        run: uv sync --extra anthropic
 
       # Persist data/radar.db across runs. Without this, every hourly run starts
       # from an empty DB, re-ingests everything, and re-sends ntfy notifications
