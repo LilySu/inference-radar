@@ -55,8 +55,13 @@ jobs:
         run: uv run python -m radar.ingest
 
       # --- always: firsts (cheap; <30 calls usually) ---
+      # Uses Anthropic by default; Groq free tier rate-limits when bootstrapping
+      # from a cold DB cache because the backlog produces 80+ LLM batches.
       - name: Firsts — 3-pass filter + ntfy
         env:
+          RADAR_LLM: anthropic
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: claude-sonnet-4-6
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           NTFY_TOPIC_SPECULATIVE: ${{ secrets.NTFY_TOPIC_SPECULATIVE }}
