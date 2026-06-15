@@ -1,0 +1,1127 @@
+[
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44817,
+    "title": "[Bug][DeepSeekV4-MTP] DeepSeekV4MultiTokenPredictorLayer.e_proj/h_proj constructed without prefix=, breaks compressed-tensors quant matching",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44817",
+    "created_at": "2026-06-08T01:40:39Z",
+    "updated_at": "2026-06-08T01:40:39Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "Explicit DeepSeek V4 MTP bug with a concrete two-line fix described; fits the deepseek bucket via both the DeepSeek name and MTP primitive.",
+    "evidence_quotes": [
+      "[Bug][DeepSeekV4-MTP] DeepSeekV4MultiTokenPredictorLayer.e_proj/h_proj constructed without prefix=",
+      "deepseek_v4_mtp.py",
+      "DeepSeekV4MultiTokenPredictorLayer.__init__"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:14:55.426680+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41579,
+    "title": "[CI Failure]:  mi300_1: DeepSeek V2-Lite Prefetch Offload Accuracy (H100-MI300)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41579",
+    "created_at": "2026-05-03T23:27:04Z",
+    "updated_at": "2026-05-03T23:28:42Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "While this names DeepSeek-V2-Lite, that model is not DeepSeek V3.2/V4, and the issue does not involve MLA, MTP, or shared-expert routing. It is a generic CI accuracy regression for DeepSeek-V2-Lite on ROCm, which does not qualify under the strict deepseek bucket rules (must be V3.2/V4 or explicit MLA/MTP/shared-expert primitives).",
+    "evidence_quotes": [
+      "deepseek-ai/DeepSeek-V2-Lite prefetch_offload accuracy 0.015",
+      "mi300_1-deepseek-v2-lite-prefetch-offload-accuracy-h100-mi300",
+      "deepseek_v2_lite_prefetch_offload.sh"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:13:06.921967+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41604,
+    "title": "[Bug]: DeepseekV4Attention crashes with KeyError: scale_fmt on non-canonical DSv4 quantizations",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41604",
+    "created_at": "2026-05-04T04:35:55Z",
+    "updated_at": "2026-05-05T00:51:03Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "Explicitly about DeepSeek V4 attention module; the fix is a one-line .get() with a default, concretely described, touching a single file.",
+    "evidence_quotes": [
+      "DeepseekV4Attention crashes with KeyError: scale_fmt",
+      "DeepseekV4Attention.__init__",
+      "Intel/DeepSeek-V4-Flash-W4A16-AutoRound"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:12:03.630978+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41961,
+    "title": "[ROCm/MI325X] DeepSeek-V4-Flash: NotImplementedError: mul_cuda not implemented for Float8_e8m0fnu in normalize_e4m3fn_to_e4m3fnuz",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41961",
+    "created_at": "2026-05-07T14:00:26Z",
+    "updated_at": "2026-06-03T19:28:53Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "Issue explicitly names DeepSeek-V4-Flash and the fix is concretely described as a small cast change in one file.",
+    "evidence_quotes": [
+      "deepseek-ai/DeepSeek-V4-Flash",
+      "normalize_e4m3fn_to_e4m3fnuz"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:03:56.298939+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44740,
+    "title": "[Bug]: Negative CUDA graph memory estimation (-35 GiB) with MTP speculative decoding leads to severe KV cache over-allocation and OOM",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44740",
+    "created_at": "2026-06-06T17:03:20Z",
+    "updated_at": "2026-06-06T17:03:20Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "Issue involves MTP (multi-token prediction) speculative decoding, which is a DeepSeek architectural primitive, causing negative CUDA graph memory estimation on Blackwell GB10 hardware.",
+    "evidence_quotes": [
+      "Enable MTP speculative decoding with num_speculative_tokens: 3",
+      "--speculative-config '{\"method\": \"mtp\", \"num_speculative_tokens\": 3}'"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:15:42.100213+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 39428,
+    "title": "[torch.compile] E2E correctness testing for fusions",
+    "html_url": "https://github.com/vllm-project/vllm/issues/39428",
+    "created_at": "2026-04-09T16:05:24Z",
+    "updated_at": "2026-06-07T05:31:44Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue explicitly mentions DeepSeek as a model requiring fixes in the context of E2E correctness testing for fusions, placing it in the deepseek bucket.",
+    "evidence_quotes": [
+      "fix weight loading for models like DeepSeek when `--hf-overrides.num_hidden_layers` is overriden"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:15:24.823967+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41094,
+    "title": "[Bug]: [GLM-5.1] [MTP] DeepGEMM context_lens.is_contiguous assertion in paged MQA metadata",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41094",
+    "created_at": "2026-04-28T04:57:18Z",
+    "updated_at": "2026-05-03T23:50:53Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue explicitly involves MLA (multi-head latent attention) and MTP (multi-token prediction) primitives, which are DeepSeek architectural primitives in scope for the deepseek bucket, even though it manifests on GLM-5.1.",
+    "evidence_quotes": [
+      "MTP speculative decoding",
+      "MLA",
+      "GLM-5.1 / DSA / MoE / MLA / MTP serving class",
+      "Hardware: 8x NVIDIA B200",
+      "context_lens.is_contiguous()",
+      "the GLM-5.1 MTP path can pass a non-contiguous `context_lens`/sequence-length tensor into DeepGEMM paged MQA metadata construction via the MLA indexer"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:13:06.920557+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 40987,
+    "title": "[Bug][DeepSeek-V4][MTP] deep_gemm assertion: context_lens.is_contiguous() in paged MQA metadata",
+    "html_url": "https://github.com/vllm-project/vllm/issues/40987",
+    "created_at": "2026-04-27T08:46:45Z",
+    "updated_at": "2026-05-04T15:19:25Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "Explicitly names DeepSeek-V4-Pro and involves MTP (multi-token prediction) speculative decoding and MLA indexer \u2014 both are DeepSeek architectural primitives; the fix (enforcing contiguous layout) is relatively straightforward but spans multiple call sites.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Pro",
+      "speculative_config={\"method\":\"mtp\",\"num_speculative_tokens\":1}",
+      "v1/attention/backends/mla/indexer.py",
+      "get_paged_mqa_logits_metadata"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:12:16.954199+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41027,
+    "title": "[Bug]: can't run deepseek v4 flash",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41027",
+    "created_at": "2026-04-27T15:45:10Z",
+    "updated_at": "2026-05-05T06:37:08Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "Issue explicitly mentions DeepSeek V4 Flash and is labeled DSv4, satisfying the deepseek bucket requirement.",
+    "evidence_quotes": [
+      "can't run deepseek v4 flash",
+      "GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:10:29.881268+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41525,
+    "title": "[Bug]: the A800 architecture cannot start the glm5.1 model.",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41525",
+    "created_at": "2026-05-03T01:06:56Z",
+    "updated_at": "2026-05-05T09:32:27Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The error involves MLA (multi-head latent attention) backend selection, which is a DeepSeek architectural primitive, failing on Ampere (sm80).",
+    "evidence_quotes": [
+      "use_mla=True",
+      "glm5.1 and deepseek v4 both failed",
+      "FlashMLA Sparse is only supported on Hopper and Blackwell devices."
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:10:17.270737+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41208,
+    "title": "[Usage]: Is there someway to accelerate deepseek v4 flash/pro load ckpt time?",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41208",
+    "created_at": "2026-04-29T07:46:38Z",
+    "updated_at": "2026-06-04T09:21:41Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue explicitly names 'deepseek v4' (DeepSeek V4), making it in scope for the deepseek bucket.",
+    "evidence_quotes": [
+      "Is there someway to accelerate deepseek v4 flash/pro load ckpt time?"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:08:52.336985+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41331,
+    "title": "[Bug]: Garbled Output in DeepSeek-V4 with CUDA Graph Enabled Under Concurrent Identical Input Requests",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41331",
+    "created_at": "2026-04-30T03:47:22Z",
+    "updated_at": "2026-05-07T02:29:43Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "Issue explicitly names DeepSeek-V4 in the title and is observed on B200 hardware, satisfying the deepseek bucket requirement.",
+    "evidence_quotes": [
+      "Garbled Output in DeepSeek-V4 with CUDA Graph Enabled Under Concurrent Identical Input Requests"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:07:28.089694+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 40801,
+    "title": "[Bug]: Title: DeepSeek V4 intermittently leaks DSML fragments in auto + streaming mode, causing unstable tool-call parsing",
+    "html_url": "https://github.com/vllm-project/vllm/issues/40801",
+    "created_at": "2026-04-24T11:23:04Z",
+    "updated_at": "2026-05-07T02:54:33Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "Issue explicitly names DeepSeek V4 in the title and body label 'DSv4', satisfying the deepseek bucket requirement.",
+    "evidence_quotes": [
+      "DeepSeek V4 intermittently leaks DSML fragments in auto + streaming mode, causing unstable tool-call parsing"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:07:28.084525+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 40955,
+    "title": "[Bug]: DeepSeek V4 pro can not run with TP16",
+    "html_url": "https://github.com/vllm-project/vllm/issues/40955",
+    "created_at": "2026-04-27T02:29:43Z",
+    "updated_at": "2026-05-07T08:01:15Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue explicitly names DeepSeek V4 Pro and reports a bug with TP16 execution.",
+    "evidence_quotes": [
+      "DeepSeek V4 pro can not run with TP16",
+      "V4 shape: 3072/16=192, fp8 quantization need size is 128*x"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:07:04.358070+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41962,
+    "title": "[ROCm] DeepSeek-V4-Flash: rocm_dequantize_blocked_k_cache materializes entire KV cache pool causing OOM during decode",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41962",
+    "created_at": "2026-05-07T14:00:48Z",
+    "updated_at": "2026-05-07T14:01:00Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "Issue explicitly names DeepSeek-V4-Flash and involves the MLA sparse attention decode path on ROCm, qualifying it for the deepseek bucket.",
+    "evidence_quotes": [
+      "deepseek-ai/DeepSeek-V4-Flash",
+      "rocm_dequantize_blocked_k_cache",
+      "MLA"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:03:56.295375+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41963,
+    "title": "[ROCm/MI325X] DeepSeek-V4-Flash: Triton fp8_mqa_logits kernel requires 96KB shared memory, MI325X limit is 64KB",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41963",
+    "created_at": "2026-05-07T14:01:05Z",
+    "updated_at": "2026-05-08T05:53:32Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "Explicitly names DeepSeek-V4-Flash as the model; the bug involves a Triton kernel shared memory issue requiring hardware-capability dispatch changes.",
+    "evidence_quotes": [
+      "Model**: deepseek-ai/DeepSeek-V4-Flash",
+      "DeepSeek-V4-Flash is completely non-functional for inference on MI325X"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:03:04.701106+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41830,
+    "title": "[Feature]: --kv-transfer-config unconditionally disables HMA, ignoring SupportsHMA on the connector",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41830",
+    "created_at": "2026-05-06T15:03:53Z",
+    "updated_at": "2026-05-08T05:55:38Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue explicitly names DeepSeek-V4-Flash as the primary reproduction case and affected model, qualifying it for the deepseek bucket; the fix involves config/connector logic across multiple files.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash, 2\u00d7 RTX PRO 6000 Blackwell, TP=2",
+      "DeepSeek-V4-Flash (full + sliding-window + chunked-local)"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:03:04.695602+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 42087,
+    "title": "[Bug]: Dsv4-Flash blank `/v1/completions` response",
+    "html_url": "https://github.com/vllm-project/vllm/issues/42087",
+    "created_at": "2026-05-08T15:41:21Z",
+    "updated_at": "2026-05-08T15:45:48Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "Bug report is explicitly about DeepSeek-V4-Flash producing blank completions, qualifying it for the deepseek bucket.",
+    "evidence_quotes": [
+      "vllm serve deepseek-ai/DeepSeek-V4-Flash",
+      "\"model\": \"deepseek-ai/DeepSeek-V4-Flash\""
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:02:05.349260+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 42060,
+    "title": "[Bug]: runai_streamer + MTP drafter fails to load weights from model_streamer local cache",
+    "html_url": "https://github.com/vllm-project/vllm/issues/42060",
+    "created_at": "2026-05-08T11:17:05Z",
+    "updated_at": "2026-05-08T17:06:10Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The bug is specifically triggered by MTP (multi-token prediction) speculative decoding, which is a DeepSeek architectural primitive that qualifies for the deepseek bucket.",
+    "evidence_quotes": [
+      "speculative_config={\"method\": \"mtp\", ...}",
+      "The error only happens when MTP is enabled, and only during the drafter model load phase."
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:02:05.344886+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 42118,
+    "title": "[Bug]:  FLASHINFER_CUTLASS_MXFP4_MXFP8 produces wrong output under expert parallelism",
+    "html_url": "https://github.com/vllm-project/vllm/issues/42118",
+    "created_at": "2026-05-08T21:35:37Z",
+    "updated_at": "2026-05-08T21:35:37Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 3,
+    "why": "The issue explicitly names the CUTLASS MoE kernel and is about a bug in scale swizzling that causes incorrect outputs in the CUTLASS-backed MXfp4/MXfp8 MoE path; it requires multi-file changes and the fix is not fully concretely described.",
+    "evidence_quotes": [
+      "FLASHINFER_CUTLASS_MXFP4_MXFP8 produces wrong output under expert parallelism",
+      "The CUTLASS MoE kernel requires swizzled scales, so outputs are garbage.",
+      "Backend confirmed: `FLASHINFER_CUTLASS_MXFP4_MXFP8`."
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:01:50.212613+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44722,
+    "title": "[Feature]: Add support for Bailing MTP speculative decoding",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44722",
+    "created_at": "2026-06-06T06:56:42Z",
+    "updated_at": "2026-06-06T06:56:42Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "This feature request explicitly targets MTP (multi-token prediction) speculative decoding, which is a DeepSeek-style architectural primitive that falls within the deepseek bucket per the rules.",
+    "evidence_quotes": [
+      "Bailing MTP (Multi-Token Prediction)",
+      "MTP architectures offer a strong speed-up for speculative decoding"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:15:53.715506+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44732,
+    "title": "\ud83d\udca5 RTX 5090 + WSL2: V1 Engine hangs at startup \u2014 EngineCore spawns but never connects via ZMQ, ALL models fail (v0.21-0.22), raw spawn+Pytorch works fine",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44732",
+    "created_at": "2026-06-06T12:23:36Z",
+    "updated_at": "2026-06-06T12:23:36Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "The issue explicitly names Blackwell (sm_120) as the GPU where vLLM V1 EngineCore hangs at startup, making it a Blackwell-targeted issue requiring investigation of Blackwell-specific kernel/initialization paths.",
+    "evidence_quotes": [
+      "RTX 5090 (Blackwell sm_120)",
+      "GPU:** NVIDIA GeForce RTX 5090 Laptop GPU (Blackwell sm_120)"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:15:53.713468+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44688,
+    "title": "[Performance]: Qwen3.6-35B-A3B-FP8 on RTX PRO 6000 Blackwell has very low decode throughput; missing FP8 MoE config for E=256,N=256",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44688",
+    "created_at": "2026-06-05T21:13:42Z",
+    "updated_at": "2026-06-07T12:48:41Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "The issue explicitly names Blackwell hardware (RTX PRO 6000 Blackwell) and reports missing FP8 MoE kernel configurations for that GPU, which is Blackwell-targeted kernel work.",
+    "evidence_quotes": [
+      "Qwen3.6-35B-A3B-FP8 on RTX PRO 6000 Blackwell has very low decode throughput",
+      "GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "GPU 1: NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "missing FP8 MoE config for E=256,N=256"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:15:11.165594+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44790,
+    "title": "[RFC]: Support Bailing MTP (Multi-Token Prediction) for Ling-2.6-flash",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44790",
+    "created_at": "2026-06-07T13:53:05Z",
+    "updated_at": "2026-06-07T13:53:05Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "The issue requests implementing Multi-Token Prediction (MTP), which is one of the named architectural primitives for the deepseek bucket, requiring new model architecture, registry entries, draft worker integration, and weight mapping.",
+    "evidence_quotes": [
+      "Support Bailing MTP (Multi-Token Prediction) for Ling-2.6-flash",
+      "The Bailing Ling-2.6-flash model from Ant Group features a Multi-Token Prediction (MTP) mechanism",
+      "Implement BailingMTPModel to handle the specific tensor shapes and the auxiliary MTP head"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:15:11.161860+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 35288,
+    "title": "[Bug]: MTP speculative decoding produces corrupted output at concurrency >= 4 (V1 engine)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/35288",
+    "created_at": "2026-02-25T11:52:46Z",
+    "updated_at": "2026-06-07T17:57:13Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "Issue is about MTP (multi-token prediction) speculative decoding producing corrupted output, which is a DeepSeek-bucket architectural primitive; diagnosing concurrency bugs in MTP requires kernel/logic-level investigation.",
+    "evidence_quotes": [
+      "MTP speculative decoding produces corrupted output at concurrency >= 4"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:14:55.690593+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44826,
+    "title": "[RFC]: MTP Routing for Qwen3.5 Series Multi-LoRA Deployments",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44826",
+    "created_at": "2026-06-08T03:54:15Z",
+    "updated_at": "2026-06-08T03:54:15Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "Issue explicitly centers on MTP (multi-token prediction), which is a DeepSeek-bucket architectural primitive, applied to Qwen3.5 MTP routing; involves kernel-adjacent model architecture changes and dynamic routing logic.",
+    "evidence_quotes": [
+      "Multi-Token Prediction (MTP)",
+      "MTP Routing for Qwen3.5 Series Multi-LoRA Deployments",
+      "multiple specialized MTP models to coexist and serve different LoRA adapters"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:14:55.422395+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44808,
+    "title": "[Bug]: GPT-OSS serving performance regression with FlashInfer 0.6.11+ / 0.6.12",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44808",
+    "created_at": "2026-06-07T20:41:33Z",
+    "updated_at": "2026-06-08T11:55:52Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "Explicit Blackwell/GB300 hardware context and the bug is a performance regression in FlashInfer on Blackwell GPUs, requiring investigation and fix of kernel-level performance paths.",
+    "evidence_quotes": [
+      "The machine used for these measurements is a single-node/tray GB300 system. The node has 4 Blackwell Ultra GPUs",
+      "This looks like a FlashInfer regression affecting GPT-OSS serving on Blackwell"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:14:37.344231+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 42426,
+    "title": "[Bug]: Kimi-K2.6 intermittently outputs only \"!!!!!!!!!!\" in reasoning field with content null",
+    "html_url": "https://github.com/vllm-project/vllm/issues/42426",
+    "created_at": "2026-05-12T13:31:55Z",
+    "updated_at": "2026-06-08T12:58:48Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "The issue explicitly mentions MLA prefill and MLA decode (multi-head latent attention), which is a DeepSeek architectural primitive qualifying for the deepseek bucket.",
+    "evidence_quotes": [
+      "FA4 MLA prefill",
+      "FLASHINFER_MLA decode"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:14:22.919458+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44879,
+    "title": "[Bug]: compressed-tensors kv_cache_scheme overrides kv_cache_dtype to fp8 during MTP speculative decoding, causing CUDA crash on SM89 (L4/RTX4090)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44879",
+    "created_at": "2026-06-08T13:02:48Z",
+    "updated_at": "2026-06-08T13:03:18Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "The issue involves MTP (multi-token prediction) speculative decoding, which is one of the DeepSeek architectural primitives that qualifies for the deepseek bucket.",
+    "evidence_quotes": [
+      "compressed-tensors kv_cache_scheme overrides kv_cache_dtype to fp8 during MTP speculative decoding"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:14:22.915089+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44881,
+    "title": "[Performance]: Cold start takes ~5 min for nvidia/Qwen3.6-35B-A3B-NVFP4 on RTX 5090 (sm_120) with vLLM",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44881",
+    "created_at": "2026-06-08T13:07:07Z",
+    "updated_at": "2026-06-08T13:08:15Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "Explicitly names sm_120 and Blackwell GPU (RTX 5090), and the root cause is missing native FP4 support on sm_120, making this a Blackwell-targeted kernel/support issue.",
+    "evidence_quotes": [
+      "RTX 5090 (32GB VRAM, sm_120 / Blackwell)",
+      "No native FP4 support on sm_120"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:14:22.909110+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 43357,
+    "title": "[Bug]: TurboQuant workspace locked at 3.06 MB \u2014 continuation_prefill requires 12 MB on any prompt >4096 tokens (Qwen3.6-27B NVFP4 hybrid, Blackwell SM120)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/43357",
+    "created_at": "2026-05-21T20:23:18Z",
+    "updated_at": "2026-06-08T16:58:16Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "Explicit Blackwell/SM120 hardware; the bug is in workspace pre-allocation for a TurboQuant kernel path on Blackwell, requiring kernel-level workspace sizing fix.",
+    "evidence_quotes": [
+      "Blackwell SM120",
+      "GPU: NVIDIA RTX Pro 6000 Blackwell (SM120, 96GB GDDR7)"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:14:09.715225+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 35467,
+    "title": "[Performance]: non-optimal performance of `linear` for medium batches",
+    "html_url": "https://github.com/vllm-project/vllm/issues/35467",
+    "created_at": "2026-02-27T02:37:50Z",
+    "updated_at": "2026-06-08T20:37:05Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "The issue benchmarks medium-batch BF16 GEMM performance explicitly on a B200 (SM 10.0) GPU and proposes kernel selection improvements to achieve 26-30% speedup on Blackwell hardware.",
+    "evidence_quotes": [
+      "NVIDIA B200 (SM 10.0), HBM3e 7.7 TB/s, BF16 Tensor Core 4500 TFLOPS"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:13:53.951626+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 27173,
+    "title": "[Performance]: non-optimal performance of `linear` for small batches",
+    "html_url": "https://github.com/vllm-project/vllm/issues/27173",
+    "created_at": "2025-10-19T17:35:55Z",
+    "updated_at": "2026-06-08T20:37:40Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "The issue benchmarks small-batch linear performance explicitly on a B200 GPU and proposes replacing torch.linear with a faster kernel (TGV GEMM / FlashInfer) for that hardware, making it Blackwell-targeted kernel performance work.",
+    "evidence_quotes": [
+      "B200 GPU."
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:13:53.948620+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 21014,
+    "title": "[Feature]: Add Triton implementation of NVFP4 GEMM",
+    "html_url": "https://github.com/vllm-project/vllm/issues/21014",
+    "created_at": "2025-07-15T21:33:26Z",
+    "updated_at": "2026-05-03T02:16:45Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "The issue explicitly mentions SM100 and SM120 (Blackwell architectures) and requests a Triton NVFP4 GEMM implementation to cover SM120 where the existing CUTLASS SM100 kernel does not work, making this clearly Blackwell-targeted kernel work.",
+    "evidence_quotes": [
+      "Currently we only have NVFP4 GEMMs written in CUTLASS for SM100, which means we have no support for SM120.",
+      "it would be nice to have a reference Triton implementation available as a fallback if no other kernels are available"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:13:23.659980+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 35919,
+    "title": "[Feature]: FA4 MLA decode",
+    "html_url": "https://github.com/vllm-project/vllm/issues/35919",
+    "created_at": "2026-03-03T21:54:42Z",
+    "updated_at": "2026-05-04T07:08:47Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "The issue is explicitly about MLA (multi-head latent attention) decode support, which is a DeepSeek architectural primitive, requiring kernel-level backend work.",
+    "evidence_quotes": [
+      "FA4 MLA decode",
+      "Add support for FA4 to: https://github.com/vllm-project/vllm/blob/main/vllm/v1/attention/backends/mla/flashattn_mla.py"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:12:46.380699+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41511,
+    "title": "[Bug]: compressed-tensors W4A16 MoE: weight_scale not sharded along K under tensor parallelism, kernel computes wrong group_size",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41511",
+    "created_at": "2026-05-02T16:07:48Z",
+    "updated_at": "2026-05-04T07:19:24Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "The bug is in a DeepSeek-V4 model's compressed-tensors W4A16 MoE weight sharding path, involving kernel-level correctness (Marlin MoE kernel group_size miscalculation under tensor parallelism), placing it in the deepseek bucket at D4.",
+    "evidence_quotes": [
+      "Model: pastapaul/DeepSeek-V4-Flash-W4A16-FP8",
+      "DeepseekV4ForCausalLM",
+      "W4A16 MoE: weight_scale not sharded along K under tensor parallelism"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:12:46.364364+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41530,
+    "title": "[Bug]:  TP Worker hang causes EngineDeadError - RPC call to sample_tokens timed out (DeepSeek-V4-Pro, TP=8, MTP    speculative decoding)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41530",
+    "created_at": "2026-05-03T04:04:12Z",
+    "updated_at": "2026-06-08T12:42:41Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "Issue explicitly names DeepSeek-V4-Pro and MTP (multi-token prediction) speculative decoding, both of which are in-scope DeepSeek architectural primitives.",
+    "evidence_quotes": [
+      "Model: deepseek-ai/DeepSeek-V4-Pro/",
+      "Speculative decoding: MTP (method='mtp', num_speculative_tokens=1)"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:12:30.616363+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 40821,
+    "title": "[Bug]: Deepseek V4 failed to load on RTX PRO 6000",
+    "html_url": "https://github.com/vllm-project/vllm/issues/40821",
+    "created_at": "2026-04-24T17:00:37Z",
+    "updated_at": "2026-05-04T19:36:54Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "Explicitly names DeepSeek-V4-Flash and involves a torch.compile/Inductor failure in the DeepSeek V4 forward pass, qualifying under the deepseek bucket; kernel compilation correctness issue makes this D4.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash",
+      "deepseek-ai/DeepSeek-V4-Flash",
+      "deepseek_v4.py: forward",
+      "auto_functionalized was not removed when serving DeepSeek-V4-Flash"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:12:16.946525+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41687,
+    "title": "[Bug]: DeepEP MoE all-to-all backend integration is unusable on Blackwell (SM103 / GB300)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41687",
+    "created_at": "2026-05-05T00:59:25Z",
+    "updated_at": "2026-05-05T00:59:25Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "Explicitly targets GB300/SM103 (Blackwell) hardware and concerns the DeepEP MoE all-to-all backend being unusable on that platform, requiring kernel-level fixes for a new GPU generation.",
+    "evidence_quotes": [
+      "GB300 (SM103)",
+      "NVIDIA GB300 (sm103) NVL72",
+      "DeepSeek-R1-0528-FP4 (MoE)"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:12:03.623568+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 40851,
+    "title": "[Feature]: DeepSeek-V4 Flash sm_80 (A100/A800) support",
+    "html_url": "https://github.com/vllm-project/vllm/issues/40851",
+    "created_at": "2026-04-25T01:44:40Z",
+    "updated_at": "2026-05-05T05:54:46Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "Issue explicitly names DeepSeek-V4-Flash and requests kernel/backend support for a new architecture, fitting the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4 Flash sm_80 (A100/A800) support",
+      "Model: `DeepSeek-V4-Flash`"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:10:29.899674+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41125,
+    "title": "[Bug]: DeepSeek V4 hangs when input length exceeds 64k tokens (vLLM deepseekv4-cu129 image)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41125",
+    "created_at": "2026-04-28T11:10:34Z",
+    "updated_at": "2026-05-05T09:39:42Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "Explicit DeepSeek V4 model with MTP speculative decoding; hang at 64k input length indicates a kernel or memory management issue requiring investigation.",
+    "evidence_quotes": [
+      "DeepSeek V4 hangs when input length exceeds 64k tokens",
+      "deepseek-ai/DeepSeek-V4-Flash",
+      "vllm serve deepseek-ai/DeepSeek-V4-Flash",
+      "\"method\":\"mtp\",\"num_speculative_tokens\":1"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:10:17.267732+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41519,
+    "title": "[Bug]: Xiaomi MiMo v2.5 broken on SM12x",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41519",
+    "created_at": "2026-05-02T22:19:13Z",
+    "updated_at": "2026-05-06T07:29:40Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "The issue is explicitly about a bug on Blackwell hardware (NVIDIA RTX PRO 6000 Blackwell Server Edition, SM12x), placing it in the b200 bucket.",
+    "evidence_quotes": [
+      "GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "SM12x"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-08T23:08:52.343030+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41670,
+    "title": "Layerwise reload crashes with CUDA illegal memory access on compressed-tensors channel-wise FP8 MoE",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41670",
+    "created_at": "2026-05-04T22:06:12Z",
+    "updated_at": "2026-05-06T07:42:47Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 4,
+    "why": "The issue names CutlassExpertsFp8Base (a CUTLASS-based class) as the root cause of the crash, making it in scope for the cutlass_cute bucket; fixing it requires kernel/memory correctness work.",
+    "evidence_quotes": [
+      "CutlassExpertsFp8Base.__init__` pre-allocates stride tensors on device"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:08:52.340203+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41855,
+    "title": "[Bug]: vLLM+UCCL-EP: DeepGemm CUDA Illegal Address at EP=64",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41855",
+    "created_at": "2026-05-06T18:48:52Z",
+    "updated_at": "2026-05-06T18:48:52Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "Issue explicitly names DeepSeek-V3-0324 as the model being served and involves a CUDA illegal address crash in DeepGemm FP8 JIT kernels during CUDA graph capture at EP=64.",
+    "evidence_quotes": [
+      "Deploy DeepSeek-V3-0324 across 8 nodes:",
+      "vllm serve deepseek-ai/DeepSeek-V3-0324"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:08:23.573198+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 37754,
+    "title": "[Bug] FlashInfer + MTP speculative decoding crashes on SM121 (DGX Spark) with GQA=16 model",
+    "html_url": "https://github.com/vllm-project/vllm/issues/37754",
+    "created_at": "2026-03-21T17:44:13Z",
+    "updated_at": "2026-05-07T04:42:27Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "The issue explicitly names SM121, Blackwell (DGX Spark variant), and discusses kernel incompatibility on this Blackwell compute capability, making it clearly Blackwell-targeted kernel work.",
+    "evidence_quotes": [
+      "NVIDIA GB10 (compute capability 12.1 / SM121, DGX Spark)",
+      "SM121 is the DGX Spark variant of Blackwell \u2014 uses `mma.sync` not `tcgen05`, 99KB smem vs 228KB on SM100"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-08T23:07:04.375136+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 35878,
+    "title": "[Feature]: Support DeepGEMM MTP3 NV Kernel",
+    "html_url": "https://github.com/vllm-project/vllm/issues/35878",
+    "created_at": "2026-03-03T16:21:34Z",
+    "updated_at": "2026-05-08T01:46:54Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "The issue explicitly names DeepSeek V3.2 and MTP (multi-token prediction) with 3 speculative tokens, which are DeepSeek architectural primitives.",
+    "evidence_quotes": [
+      "deploying DeepSeek Sparse Attention in DeepSeek V3.2 and GLM5",
+      "MTP3 is supported on NVIDIA's dev branch of DeepGEMM"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:03:29.814013+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 40350,
+    "title": "[Bug]: Qwen3.5-397B-A17B-NVFP4 engine hangs (Running\u22651, 0 tok/s) under high concurrency on Blackwell GPUs",
+    "html_url": "https://github.com/vllm-project/vllm/issues/40350",
+    "created_at": "2026-04-20T12:03:59Z",
+    "updated_at": "2026-05-08T11:38:30Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "Explicit Blackwell hardware (B200, B300, GB200, GB300) with NVFP4 engine hang under high concurrency \u2014 a kernel/scheduling correctness issue on Blackwell GPUs.",
+    "evidence_quotes": [
+      "The hang was observed on B200, B300, GB200, and GB300.",
+      "GPU: NVIDIA B300 \u00d7 4 (single node, TP=4, EP=4)",
+      "This is NVFP4-specific."
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-08T23:02:47.919414+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 42063,
+    "title": "[Bug]: Engine hangs indefinitely during model weight loading for nvidia/Qwen3.5-397B-A17B-NVFP4 on Blackwell GPUs (RTX PRO 6000) with TP=4",
+    "html_url": "https://github.com/vllm-project/vllm/issues/42063",
+    "created_at": "2026-05-08T12:19:27Z",
+    "updated_at": "2026-05-08T12:19:27Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "The issue explicitly names Blackwell GPUs (RTX PRO 6000 Blackwell, compute capability 12.0) and involves a hang during weight loading of an NVFP4 model, indicating a Blackwell-specific kernel/backend compatibility bug.",
+    "evidence_quotes": [
+      "GPU 0: NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "Engine hangs indefinitely during model weight loading for nvidia/Qwen3.5-397B-A17B-NVFP4 on Blackwell GPUs (RTX PRO 6000) with TP=4",
+      "CUDA Archs: 7.5 8.0 8.6 8.9 9.0 10.0 12.0+PTX"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-08T23:02:36.457006+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 42085,
+    "title": "[Bug]: SimpleCPUOffloadConnector + Hybrid KV Cache Manager: GPU block pool exhaustion (popleft_n assert) on second long-context request",
+    "html_url": "https://github.com/vllm-project/vllm/issues/42085",
+    "created_at": "2026-05-08T15:37:39Z",
+    "updated_at": "2026-05-08T15:37:39Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "The GPU block pool exhaustion bug is explicitly reproduced with DeepSeek-V4-Flash and involves DeepSeek's hybrid KV cache architecture, qualifying it for the deepseek bucket.",
+    "evidence_quotes": [
+      "Model: `deepseek-ai/DeepSeek-V4-Flash`",
+      "For DeepSeek-V4-Flash this is full-attention + sliding-window + chunked-local."
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:02:05.357215+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 40969,
+    "title": "[Bug]: DeepSeek-V4-Flash hangs after ~6 requests with cudagraph_mode=FULL_AND_PIECEWISE + chunked prefill on SM 12.x (GB10)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/40969",
+    "created_at": "2026-04-27T06:38:14Z",
+    "updated_at": "2026-05-08T22:37:28Z",
+    "bucket": "deepseek",
+    "difficulty": 4,
+    "why": "The issue explicitly names DeepSeek-V4-Flash and its MLA-based KV cache path (fp8_ds_mla, DeepseekV4Indexer), qualifying it for the deepseek bucket.",
+    "evidence_quotes": [
+      "Model: `deepseek-ai/DeepSeek-V4-Flash` (mxfp4 MoE)",
+      "DeepseekV4Indexer",
+      "--kv-cache-dtype fp8_ds_mla"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-05-14T07:37:43.291203+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 42096,
+    "title": "[Performance]: Qwen3-VL-235B-A22B-Instruct NVFP4 Performance dropped at upstream main",
+    "html_url": "https://github.com/vllm-project/vllm/issues/42096",
+    "created_at": "2026-05-08T16:56:14Z",
+    "updated_at": "2026-05-09T01:56:44Z",
+    "bucket": "b200",
+    "difficulty": 4,
+    "why": "GB300 is an explicit Blackwell hardware reference (compute capability 10.0 = sm_100), and the issue reports a significant TTFT/latency performance regression on that platform for a NVFP4 model.",
+    "evidence_quotes": [
+      "Hardware: GB300 (compute capability 10.0), 4 GPUs, NVLink, NVIDIA driver 580.159.04"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-05-14T07:37:43.285247+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 35439,
+    "title": "[Feature Request]: W4A8 (compressed-tensors) Kernel support for Blackwell SM100+",
+    "html_url": "https://github.com/vllm-project/vllm/issues/35439",
+    "created_at": "2026-02-26T20:19:35Z",
+    "updated_at": "2026-06-08T04:29:21Z",
+    "bucket": "b200",
+    "difficulty": 5,
+    "why": "Explicit Blackwell/SM100/B200 keywords throughout; issue requests new kernel implementations for W4A8 on SM100, which is architectural/cross-cutting work requiring new kernel correctness work.",
+    "evidence_quotes": [
+      "GPU: NVIDIA B200 (SM100, Blackwell)",
+      "W4A8 (compressed-tensors) Kernel support for Blackwell SM100+",
+      "CutlassW4A8LinearKernel | Requires compute capability of 90 (Hopper)",
+      "W4A8 compressed-tensors checkpoints should load and serve on Blackwell (SM100) GPUs",
+      "SM100 needs its own kernel implementations"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-09T00:14:55.402445+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 44873,
+    "title": "[Feature]: Streaming parser engine for tool/reasoning parsers",
+    "html_url": "https://github.com/vllm-project/vllm/issues/44873",
+    "created_at": "2026-06-08T12:01:00Z",
+    "updated_at": "2026-06-08T12:02:00Z",
+    "bucket": "deepseek",
+    "difficulty": 5,
+    "why": "The issue explicitly names DeepSeek V4 as one of the model formats being ported to the new streaming parser engine, satisfying the deepseek bucket requirement.",
+    "evidence_quotes": [
+      "DeepSeek V4's DSML attributes"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-09T00:14:22.925769+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 40902,
+    "title": "[Roadmap] DeepSeek V4",
+    "html_url": "https://github.com/vllm-project/vllm/issues/40902",
+    "created_at": "2026-04-26T05:29:46Z",
+    "updated_at": "2026-05-06T15:18:49Z",
+    "bucket": "deepseek",
+    "difficulty": 5,
+    "why": "Explicitly titled 'DeepSeek V4' and contains MTP optimizations as a roadmap item; qualifies for the deepseek bucket under the explicit DeepSeek V4 signal and MTP primitives.",
+    "evidence_quotes": [
+      "DeepSeek V4",
+      "MTP optimizations",
+      "SM120"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:08:37.608768+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41985,
+    "title": "[Bug] DeepSeek-V4-Pro sampling mode produces CJK bad tokens at ~50-75% rate; SGLang is unaffected",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41985",
+    "created_at": "2026-05-07T17:10:21Z",
+    "updated_at": "2026-05-07T17:26:31Z",
+    "bucket": "deepseek",
+    "difficulty": 5,
+    "why": "Issue explicitly names DeepSeek-V4-Pro and MLA attention, which are core deepseek bucket signals; root cause analysis points to precision issues in MLA decode path requiring cross-framework investigation.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Pro sampling mode produces CJK bad tokens",
+      "MLA Attention FP8 precision difference between vLLM and SGLang",
+      "vLLM uses a custom FP8 E4M3 implementation with 2D block scaling for the MLA decode path",
+      "deepseek-ai/DeepSeek-V4-Pro"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:03:56.287111+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41403,
+    "title": "[Tracking] TurboQuant + Gemma 4 multimodal: 5-gate blocker stack",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41403",
+    "created_at": "2026-04-30T19:22:47Z",
+    "updated_at": "2026-05-08T04:03:08Z",
+    "bucket": "b200",
+    "difficulty": 5,
+    "why": "The issue explicitly targets Blackwell (sm_120) hardware and describes a multi-gate blocker stack for running quantized models on consumer Blackwell GPUs; it names sm_120 which is a Blackwell compute capability.",
+    "evidence_quotes": [
+      "consumer Blackwell hardware (4\u00d7 RTX 5060 Ti, sm_120, TP=4)",
+      "4\u00d7 RTX 5060 Ti (Blackwell consumer, sm_120), CUDA 13.2"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-06-08T23:03:16.793419+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 33702,
+    "title": "[Roadmap]: PD Disaggregation with `NixlConnector` Roadmap",
+    "html_url": "https://github.com/vllm-project/vllm/issues/33702",
+    "created_at": "2026-02-03T14:55:43Z",
+    "updated_at": "2026-06-01T08:04:09Z",
+    "bucket": "deepseek",
+    "difficulty": 5,
+    "why": "The roadmap issue explicitly tracks MLA support for Deepseek v3.2 as a completed and planned feature in the NixlConnector PD disaggregation roadmap.",
+    "evidence_quotes": [
+      "Add support for MLA caches with different latent dim (Deepseek v3.2 Indexer)",
+      "MLA"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:02:22.798975+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41820,
+    "title": "[Performance]: Deepseek-V4 Support and Optimization on ROCm Backend",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41820",
+    "created_at": "2026-05-06T13:14:42Z",
+    "updated_at": "2026-05-08T17:32:51Z",
+    "bucket": "deepseek",
+    "difficulty": 5,
+    "why": "Explicitly tracks DeepSeek-V4 enablement and optimization including MLA (CSA/MHC), MTP, and MoE \u2014 all core DeepSeek architectural primitives \u2014 qualifying it for the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4 on ROCm backend",
+      "Support MTP",
+      "DeepSeek-V4 includes multiple critical blocks (mHC/HCA/CSA/MoE/MTP)",
+      "Make the sparse MLA indexer optimization for Deepseek-V4",
+      "Enable CSA multi-stream execution in Decode"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-06-08T23:02:05.339377+00:00",
+    "model": "anthropic:claude-sonnet-4-6"
+  }
+]

@@ -8,3 +8,15 @@
   name: Megatron
 - slug: NVIDIA/TensorRT-LLM
   name: TRT-LLM
+- slug: NVIDIA/cutlass
+  name: CUTLASS
+- slug: NVIDIA/cudnn-frontend
+  name: cuDNN-frontend
+- slug: NVIDIA/cccl
+  name: CCCL
+- slug: Dao-AILab/flash-attention
+  name: FlashAttention
+- slug: flashinfer-ai/flashinfer
+  name: FlashInfer
+- slug: tile-ai/tilelang
+  name: TileLang

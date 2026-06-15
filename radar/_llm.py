@@ -124,9 +124,10 @@ async def _complete_anthropic(system: str, user: str, schema: dict[str, Any]) ->
         "description": "Emit the structured evaluation.",
         "input_schema": schema,
     }
+    max_tokens = int(os.environ.get("ANTHROPIC_MAX_TOKENS", "16384"))
     msg = await cli.messages.create(
         model=model,
-        max_tokens=4096,
+        max_tokens=max_tokens,
         system=system,
         tools=[tool],
         tool_choice={"type": "tool", "name": tool_name},
@@ -161,7 +162,8 @@ async def _complete_claude_code(system: str, user: str, schema: dict[str, Any]) 
         envelope = json.loads(stdout.decode())
     except json.JSONDecodeError as e:
         raise RuntimeError(
-            f"claude rc={proc.returncode}, non-JSON stdout: {stdout[:200]!r}; stderr={stderr[:200]!r}"
+            f"claude rc={proc.returncode}, non-JSON stdout: {stdout[:200]!r}; "
+            f"stderr={stderr[:200]!r}"
         ) from e
     if envelope.get("is_error"):
         raise RuntimeError(

@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background: #0a0c10;
+  color: #e5e7eb;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.gradient-title {
+  background: linear-gradient(180deg, #f9fafb, #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #a78bfa;
+  font-size: 0.78rem;
+}
+
+.panel {
+  background: #11141c;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+}

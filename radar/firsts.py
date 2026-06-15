@@ -19,10 +19,9 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import json
+import base64
 import os
 import re
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -263,9 +262,20 @@ async def fetch_candidates(
 
 # ---------------- ntfy ----------------
 
+def _rfc2047(s: str) -> str:
+    # HTTP headers are ASCII-only. ntfy accepts RFC 2047 encoded-words for
+    # non-ASCII titles (e.g. issue titles with emoji, CJK, or the middle-dot
+    # we use as a separator).
+    try:
+        s.encode("ascii")
+        return s
+    except UnicodeEncodeError:
+        return "=?UTF-8?B?" + base64.b64encode(s.encode("utf-8")).decode("ascii") + "?="
+
+
 async def send_ntfy(topic: str, title: str, body: str, click: str, tags: str) -> str:
     url = f"https://ntfy.sh/{topic}"
-    headers = {"Title": title, "Click": click, "Tags": tags}
+    headers = {"Title": _rfc2047(title), "Click": _rfc2047(click), "Tags": tags}
     async with httpx.AsyncClient(timeout=20) as cli:
         r = await cli.post(url, content=body.encode("utf-8"), headers=headers)
     return f"{r.status_code}:{r.text[:80]}"
@@ -273,7 +283,10 @@ async def send_ntfy(topic: str, title: str, body: str, click: str, tags: str) ->
 
 def _bullet_title(issue: IssueRow, ev: dict) -> str:
     title = (issue.title or "").strip()
-    return f"D{ev['difficulty']} · {issue.repo_short} #{issue.number} · {ev['scope_bucket']} · {title[:60]}"
+    return (
+        f"D{ev['difficulty']} · {issue.repo_short} #{issue.number} · "
+        f"{ev['scope_bucket']} · {title[:60]}"
+    )
 
 
 def _body(ev: dict) -> str:

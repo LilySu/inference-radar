@@ -1,0 +1,59 @@
+---
+marp: true
+theme: default
+size: 16:9
+paginate: true
+backgroundColor: "#0a0c10"
+color: "#e5e7eb"
+style: |
+  section {
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    padding: 60px 80px;
+  }
+  h1, h2 {
+    font-family: 'Syne', sans-serif;
+    color: #f9fafb;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.2em;
+  }
+  h1 { font-size: 64px; font-weight: 700; }
+  h2 { font-size: 36px; color: #38bdf8; font-weight: 600; }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 18px;
+    color: #a78bfa;
+    margin-bottom: 12px;
+  }
+  ul { font-size: 30px; line-height: 1.45; color: #e5e7eb; }
+  li { margin-bottom: 14px; }
+  .pr { color: #34d399; }
+  .accent { color: #fbbf24; }
+  footer { color: #64748b; font-size: 16px; }
+---
+
+<!-- Title slide -->
+<div class="eyebrow">{{ title_eyebrow }}</div>
+
+# {{ title }}
+
+{{ intro }}
+
+---
+
+{% for slide in slides %}
+<div class="eyebrow">{{ slide.heading }}</div>
+
+## {{ slide.subhead }}
+
+{% for bullet in slide.bullets %}
+- {{ bullet }}
+{% endfor %}
+
+---
+
+{% endfor %}
+
+# {{ outro_title }}
+
+{{ outro }}

@@ -1,0 +1,198 @@
+[
+  {
+    "repo": "vllm-project/vllm",
+    "categories": [
+      {
+        "slug": "attention",
+        "name": "Attention Kernels"
+      },
+      {
+        "slug": "fp8_quantization",
+        "name": "FP8 / Quantization"
+      },
+      {
+        "slug": "moe",
+        "name": "MoE"
+      },
+      {
+        "slug": "spec_decode",
+        "name": "Speculative Decoding"
+      },
+      {
+        "slug": "kv_cache",
+        "name": "KV Cache Management"
+      },
+      {
+        "slug": "distributed",
+        "name": "Distributed Inference"
+      },
+      {
+        "slug": "scheduler",
+        "name": "Scheduler / Serving"
+      },
+      {
+        "slug": "torch_compile",
+        "name": "torch.compile / Graph"
+      },
+      {
+        "slug": "model_support",
+        "name": "Model Support"
+      },
+      {
+        "slug": "perf_eng_mrv2",
+        "name": "Perf Engineering / MRV2"
+      },
+      {
+        "slug": "dbo",
+        "name": "Dual Batch Overlap"
+      }
+    ]
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "categories": [
+      {
+        "slug": "attention",
+        "name": "Attention Kernels"
+      },
+      {
+        "slug": "fp8_quantization",
+        "name": "FP8 / Quantization"
+      },
+      {
+        "slug": "moe",
+        "name": "MoE"
+      },
+      {
+        "slug": "spec_decode",
+        "name": "Speculative Decoding"
+      },
+      {
+        "slug": "kv_cache",
+        "name": "KV Cache Management"
+      },
+      {
+        "slug": "distributed",
+        "name": "Distributed Inference"
+      },
+      {
+        "slug": "scheduler",
+        "name": "Scheduler / Serving"
+      },
+      {
+        "slug": "torch_compile",
+        "name": "torch.compile / Graph"
+      },
+      {
+        "slug": "model_support",
+        "name": "Model Support"
+      },
+      {
+        "slug": "perf_eng_mrv2",
+        "name": "Perf Engineering"
+      },
+      {
+        "slug": "tbo",
+        "name": "Two-Batch Overlap"
+      }
+    ]
+  },
+  {
+    "repo": "NVIDIA/Megatron-LM",
+    "categories": [
+      {
+        "slug": "attention",
+        "name": "Attention Kernels"
+      },
+      {
+        "slug": "fp8_quantization",
+        "name": "FP8 / Quantization"
+      },
+      {
+        "slug": "moe",
+        "name": "MoE"
+      },
+      {
+        "slug": "fsdp",
+        "name": "FSDP / Sharding"
+      },
+      {
+        "slug": "optimizer",
+        "name": "Optimizer"
+      },
+      {
+        "slug": "activation_offload",
+        "name": "Activation Offload / Recompute"
+      },
+      {
+        "slug": "distributed",
+        "name": "Distributed / Pipeline Parallel"
+      },
+      {
+        "slug": "torch_compile",
+        "name": "torch.compile / Graph"
+      },
+      {
+        "slug": "model_support",
+        "name": "Model Support"
+      },
+      {
+        "slug": "perf_eng",
+        "name": "Perf Engineering"
+      },
+      {
+        "slug": "data_pipeline",
+        "name": "Data Pipeline"
+      }
+    ]
+  },
+  {
+    "repo": "NVIDIA/TensorRT-LLM",
+    "categories": [
+      {
+        "slug": "attention",
+        "name": "Attention Kernels"
+      },
+      {
+        "slug": "fp8_quantization",
+        "name": "FP8 / Quantization"
+      },
+      {
+        "slug": "moe",
+        "name": "MoE"
+      },
+      {
+        "slug": "spec_decode",
+        "name": "Speculative Decoding"
+      },
+      {
+        "slug": "kv_cache",
+        "name": "KV Cache Management"
+      },
+      {
+        "slug": "distributed",
+        "name": "Distributed Inference"
+      },
+      {
+        "slug": "scheduler",
+        "name": "Scheduler / Serving"
+      },
+      {
+        "slug": "trtllm_gen",
+        "name": "trtllm-gen"
+      },
+      {
+        "slug": "model_support",
+        "name": "Model Support"
+      },
+      {
+        "slug": "perf_eng",
+        "name": "Perf Engineering"
+      },
+      {
+        "slug": "plugin_kernels",
+        "name": "Plugin Kernels"
+      }
+    ]
+  }
+]

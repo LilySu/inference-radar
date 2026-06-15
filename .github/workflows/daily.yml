@@ -1,0 +1,114 @@
+name: radar
+on:
+  schedule:
+    # Hourly ingest + firsts. Run off the :00 to avoid GH cron herding.
+    - cron: "47 * * * *"
+    # Daily full run including classify + brief + site export. 12:13 UTC ≈ 8:13 ET.
+    - cron: "13 12 * * *"
+  workflow_dispatch:
+    inputs:
+      run_brief:
+        type: boolean
+        description: "Force the daily brief pipeline (classify + brief + export)"
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: radar
+  cancel-in-progress: false
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: pipx install uv
+
+      - name: uv sync
+        run: uv sync
+
+      # Persist data/radar.db across runs. Without this, every hourly run starts
+      # from an empty DB, re-ingests everything, and re-sends ntfy notifications
+      # for the same issues because the `notifications` dedup table is gone.
+      # Cache size grows ~1 MB/day; LRU eviction at the 10 GB repo limit.
+      - name: Restore SQLite DB cache
+        uses: actions/cache@v4
+        with:
+          path: data/radar.db
+          key: radar-db-${{ github.run_id }}
+          restore-keys: |
+            radar-db-
+
+      # --- always: ingest ---
+      - name: Ingest issues + PRs
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: uv run python -m radar.ingest
+
+      # --- always: firsts (cheap; <30 calls usually) ---
+      - name: Firsts — 3-pass filter + ntfy
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_TOPIC_SPECULATIVE: ${{ secrets.NTFY_TOPIC_SPECULATIVE }}
+        run: uv run python -m radar.firsts
+
+      # --- daily only: classify + brief + export ---
+      - name: Setup ffmpeg + Marp + Piper
+        if: github.event.schedule == '13 12 * * *' || inputs.run_brief
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          npm install -g @marp-team/marp-cli@latest
+          # Piper TTS — small voice model
+          pip install piper-tts
+          mkdir -p ~/.piper-voices
+          curl -sSL -o ~/.piper-voices/en_US-lessac-medium.onnx \
+            https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx
+          curl -sSL -o ~/.piper-voices/en_US-lessac-medium.onnx.json \
+            https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
+
+      - name: Classify recent PRs
+        if: github.event.schedule == '13 12 * * *' || inputs.run_brief
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: uv run python -m radar.classify --max 200
+
+      - name: Build daily brief
+        if: github.event.schedule == '13 12 * * *' || inputs.run_brief
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          PIPER_MODEL: /home/runner/.piper-voices/en_US-lessac-medium.onnx
+        run: uv run python -m radar.brief
+
+      - name: Export SQLite slices to site/data/
+        if: github.event.schedule == '13 12 * * *' || inputs.run_brief
+        run: uv run python -m radar.export
+
+      # --- always: commit data updates ---
+      - name: Commit data updates
+        run: |
+          git config user.name  "radar-bot"
+          git config user.email "radar-bot@users.noreply.github.com"
+          git add data/ site/data/ || true
+          git diff --cached --quiet || git commit -m "data: $(date -u +%FT%TZ)"
+          git push
+
+      - uses: actions/upload-artifact@v4
+        if: always() && (github.event.schedule == '13 12 * * *' || inputs.run_brief)
+        with:
+          name: brief-out
+          path: out/
+          if-no-files-found: warn

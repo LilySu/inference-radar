@@ -16,3 +16,10 @@ data/*.db-journal
 # env
 .env
 .env.local
+
+# brief pipeline outputs (mp4, slides, audio, script.json)
+out/
+
+# uncategorized queue is a live working file
+data/uncategorized.json
+!data/uncategorized.json.example

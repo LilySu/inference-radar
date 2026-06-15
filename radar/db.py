@@ -126,6 +126,37 @@ CREATE TRIGGER IF NOT EXISTS prs_au AFTER UPDATE ON prs BEGIN
         VALUES('delete', old.id, old.title, old.body);
     INSERT INTO prs_fts(rowid, title, body) VALUES (new.id, new.title, new.body);
 END;
+
+CREATE TABLE IF NOT EXISTS pr_classifications (
+    id                       INTEGER PRIMARY KEY AUTOINCREMENT,
+    pr_id                    INTEGER NOT NULL REFERENCES prs(id),
+    primary_category         TEXT,
+    secondary_categories_json TEXT,
+    novel_category_proposed  TEXT,
+    technical_summary        TEXT,
+    perf_numbers_json        TEXT,
+    cross_references_json    TEXT,
+    reasoning                TEXT NOT NULL,
+    one_line_summary         TEXT,
+    bot_or_chore             INTEGER NOT NULL DEFAULT 0,
+    model                    TEXT NOT NULL,
+    prompt_version           TEXT NOT NULL,
+    classified_at            TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_class_pr ON pr_classifications(pr_id, classified_at DESC);
+CREATE INDEX IF NOT EXISTS idx_class_cat ON pr_classifications(primary_category);
+
+CREATE TABLE IF NOT EXISTS briefings (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    briefing_date TEXT NOT NULL UNIQUE,
+    repo_scope    TEXT NOT NULL,
+    script_json   TEXT NOT NULL,
+    video_path    TEXT,
+    video_url     TEXT,
+    duration_s    INTEGER,
+    built_at      TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_brief_date ON briefings(briefing_date DESC);
 """
 
 
@@ -215,7 +246,8 @@ class RadarDB:
     async def set_cursor(self, repo_id: int, kind: str, ts: str) -> None:
         await self.conn.execute(
             "INSERT INTO cursors (repo_id, kind, last_seen_updated_at) VALUES (?, ?, ?) "
-            "ON CONFLICT(repo_id, kind) DO UPDATE SET last_seen_updated_at=excluded.last_seen_updated_at",
+            "ON CONFLICT(repo_id, kind) DO UPDATE SET "
+            "last_seen_updated_at=excluded.last_seen_updated_at",
             (repo_id, kind, ts),
         )
         await self.conn.commit()
@@ -336,3 +368,86 @@ class RadarDB:
         )
         await self.conn.commit()
         return int(cur.lastrowid or 0)
+
+    # --- classifications ---
+
+    async def latest_classification(self, pr_id: int) -> aiosqlite.Row | None:
+        async with self.conn.execute(
+            "SELECT * FROM pr_classifications WHERE pr_id=? ORDER BY classified_at DESC LIMIT 1",
+            (pr_id,),
+        ) as cur:
+            return await cur.fetchone()
+
+    async def insert_classification(
+        self,
+        *,
+        pr_id: int,
+        primary_category: str | None,
+        secondary_categories: list[str] | None,
+        novel_category_proposed: str | None,
+        technical_summary: str | None,
+        perf_numbers: list[dict[str, Any]] | None,
+        cross_references: list[dict[str, Any]] | None,
+        reasoning: str,
+        one_line_summary: str | None,
+        bot_or_chore: bool,
+        model: str,
+        prompt_version: str,
+    ) -> int:
+        cur = await self.conn.execute(
+            """INSERT INTO pr_classifications
+               (pr_id, primary_category, secondary_categories_json, novel_category_proposed,
+                technical_summary, perf_numbers_json, cross_references_json,
+                reasoning, one_line_summary, bot_or_chore, model, prompt_version, classified_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                pr_id, primary_category, dumps(secondary_categories), novel_category_proposed,
+                technical_summary, dumps(perf_numbers), dumps(cross_references),
+                reasoning, one_line_summary, 1 if bot_or_chore else 0,
+                model, prompt_version, now_iso(),
+            ),
+        )
+        await self.conn.commit()
+        return int(cur.lastrowid or 0)
+
+    # --- briefings ---
+
+    async def get_briefing(self, briefing_date: str) -> aiosqlite.Row | None:
+        async with self.conn.execute(
+            "SELECT * FROM briefings WHERE briefing_date=?", (briefing_date,),
+        ) as cur:
+            return await cur.fetchone()
+
+    async def upsert_briefing(
+        self,
+        *,
+        briefing_date: str,
+        repo_scope: list[str],
+        script: dict[str, Any],
+        video_path: str | None,
+        video_url: str | None,
+        duration_s: int | None,
+    ) -> int:
+        await self.conn.execute(
+            """INSERT INTO briefings
+               (briefing_date, repo_scope, script_json, video_path, video_url, duration_s, built_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(briefing_date) DO UPDATE SET
+                   repo_scope=excluded.repo_scope,
+                   script_json=excluded.script_json,
+                   video_path=COALESCE(excluded.video_path, briefings.video_path),
+                   video_url=COALESCE(excluded.video_url, briefings.video_url),
+                   duration_s=COALESCE(excluded.duration_s, briefings.duration_s),
+                   built_at=excluded.built_at""",
+            (
+                briefing_date, dumps(repo_scope), dumps(script),
+                video_path, video_url, duration_s, now_iso(),
+            ),
+        )
+        await self.conn.commit()
+        async with self.conn.execute(
+            "SELECT id FROM briefings WHERE briefing_date=?", (briefing_date,),
+        ) as cur:
+            row = await cur.fetchone()
+            assert row is not None
+            return int(row["id"])
