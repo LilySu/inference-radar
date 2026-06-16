@@ -8,11 +8,20 @@ applied via PRAGMA table_info inspection.
 from __future__ import annotations
 
 import json
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 import aiosqlite
+
+# GitHub's auto-close keywords. A PR body that says any of these followed by
+# `#N` will auto-close issue N on merge. We use this to suppress alerts on
+# issues that already have a PR sitting in review.
+PR_CLOSES_ISSUE_RE = re.compile(
+    r"\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)[\s:]+#(\d+)\b",
+    re.IGNORECASE,
+)
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS repos (
@@ -463,6 +472,40 @@ class RadarDB:
         )
         await self.conn.commit()
         return int(cur.lastrowid or 0)
+
+    # --- pr-link suppression (shared by firsts + issue_alerts) ---
+
+    async def fetch_open_pr_linked_issues(
+        self, repo_id: int,
+    ) -> dict[int, list[int]]:
+        """For one repo, scan every open PR's body for GitHub's auto-close
+        keywords (`closes #N`, `fixes: #N`, `resolved #N`, …) and return a map
+        `{issue_number: [pr_number, ...]}`. Caller uses the keys to suppress
+        alerts on issues that already have a PR sitting in review.
+
+        Empty dict if no open PR links any issue.
+        """
+        async with self.conn.execute(
+            "SELECT number, body FROM prs "
+            "WHERE repo_id=? AND state='open' AND body IS NOT NULL",
+            (repo_id,),
+        ) as cur:
+            rows = await cur.fetchall()
+        linked: dict[int, list[int]] = {}
+        for r in rows:
+            try:
+                pr_num = int(r["number"])
+            except (TypeError, ValueError):
+                continue
+            for m in PR_CLOSES_ISSUE_RE.findall(r["body"] or ""):
+                try:
+                    issue_num = int(m)
+                except ValueError:
+                    continue
+                if issue_num == pr_num:
+                    continue  # PR referring to itself; nonsensical, skip
+                linked.setdefault(issue_num, []).append(pr_num)
+        return linked
 
     # --- issue alerts (separate from `notifications` which has CHECK on track) ---
 

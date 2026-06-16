@@ -352,7 +352,17 @@ async def run(
         log.warning("ntfy_topics_missing — switching to dry-run mode")
         dry_run = True
 
+    # PR-link guard: cache `{issue_number: [pr_number, ...]}` per repo across
+    # the run so we don't re-scan PR bodies for every issue.
+    linked_cache: dict[int, dict[int, list[int]]] = {}
+
+    async def linked_for(repo_id: int) -> dict[int, list[int]]:
+        if repo_id not in linked_cache:
+            linked_cache[repo_id] = await db.fetch_open_pr_linked_issues(repo_id)
+        return linked_cache[repo_id]
+
     sent = {"confirmed": 0, "speculative": 0}
+    pr_linked_suppressed = 0
     for i in range(0, len(pass1), BATCH_SIZE):
         batch = pass1[i : i + BATCH_SIZE]
         try:
@@ -393,6 +403,15 @@ async def run(
             if await db.has_notification(issue.id, track):
                 continue
 
+            # Suppress if an open PR in this repo would auto-close the issue.
+            linking_prs = (await linked_for(issue.repo_id)).get(issue.number, [])
+            if linking_prs:
+                pr_linked_suppressed += 1
+                log.info("guard_pr_linked",
+                         repo=issue.repo_slug, issue=issue.number,
+                         linked_by=linking_prs[:3])
+                continue
+
             title = _bullet_title(issue, ev)
             body = _body(ev)
             tags = _tags(ev, speculative=(track == "speculative"))
@@ -414,7 +433,11 @@ async def run(
             )
             sent[track] += 1
 
-    print(f"\nntfy sent: confirmed={sent['confirmed']} speculative={sent['speculative']}")
+    print(
+        f"\nntfy sent: confirmed={sent['confirmed']} "
+        f"speculative={sent['speculative']} "
+        f"pr_linked_suppressed={pr_linked_suppressed}"
+    )
 
 
 def parse_args() -> argparse.Namespace:

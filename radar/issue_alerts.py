@@ -312,13 +312,24 @@ async def run_feed(
     # "someone is working on it" language in `why` but still flipped
     # in_scope=true. We also re-scan the issue body so an LLM that
     # missed the signal entirely is still caught.
+    # Plus a second guard: any open PR in this repo whose body
+    # `closes/fixes/resolves` this issue — work is done, just sitting
+    # in review.
+    pr_linked_map = await db.fetch_open_pr_linked_issues(repo_id)
     guard_suppressed = 0
+    pr_linked_suppressed = 0
     queue: list[tuple[IssueRow, dict]] = []
     for iss in issues:
         cached = await db.get_issue_alert_eval(iss.id, track, PROMPT_VERSION)
         if cached is None or not cached["in_scope"]:
             continue
         if await db.has_issue_alert_notification(iss.id, track):
+            continue
+        linking_prs = pr_linked_map.get(iss.number, [])
+        if linking_prs:
+            pr_linked_suppressed += 1
+            log.info("guard_pr_linked", slug=slug, track=track,
+                     issue=iss.number, linked_by=linking_prs[:3])
             continue
         why_text = cached["why"] or ""
         hit = work_intent_match(why_text) or work_intent_match(iss.text)
@@ -332,9 +343,9 @@ async def run_feed(
             "why": cached["why"],
             "evidence_quotes": loads(cached["evidence_quotes_json"]) or [],
         }))
-    if guard_suppressed:
+    if guard_suppressed or pr_linked_suppressed:
         log.info("guard_summary", slug=slug, track=track,
-                 suppressed=guard_suppressed)
+                 work_intent=guard_suppressed, pr_linked=pr_linked_suppressed)
 
     # Sort by relevance desc, then created_at asc — highest-confidence picks
     # surface first; ties go to the oldest stale issue.
