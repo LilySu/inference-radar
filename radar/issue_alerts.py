@@ -31,6 +31,7 @@ import argparse
 import asyncio
 import base64
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -159,6 +160,63 @@ def verify_quotes(issue: IssueRow, quotes: list[str]) -> bool:
     return True
 
 
+# ---------- work-intent guard ----------
+#
+# Deterministic post-LLM safety net. Catches the case where someone in the
+# issue thread is already taking the work — the LLM is supposed to flag this
+# under condition 3 of the prompt but is occasionally inconsistent. Bias is
+# toward suppression: we'd rather skip a real alert than push one where a
+# contributor is already on it. Patterns scan BOTH the issue body and the
+# LLM's `why` text (so a LLM that cites disqualifying language but flips
+# in_scope to true gets caught).
+
+_INTENT_PATTERNS = [
+    # First-person commitment.
+    r"\bI(?:['’]ll| will| am(?: working)?|['’]m(?: working)?| have| would|['’]ve)\s+"
+    r"(?:work|take|fix|look|tackle|investigat|submit|open|pick|address|come\s+up|"
+    r"implement|create|prepare|send|push|try|attempt|draft)",
+    r"\b(?:let\s+me|I\s+can|I\s+plan(?:\s+to)?)\s+"
+    r"(?:work|take|fix|tackle|address|submit|implement|try|attempt|investigat|draft)",
+    # Third-person intent (author/maintainer/etc.).
+    r"\b(?:author|maintainer|someone|user|reporter|@\w+)\s+"
+    r"(?:will|intends?\s+to|plans?\s+to|is\s+working|has\s+been\s+working)",
+    # Generic future verbs that imply commitment to the task.
+    r"\bwill\s+(?:come\s+up\s+with|submit|open|prepare|tackle|attempt|try|fix|"
+    r"work\s+on|implement|create|push|address|investigate|draft|raise|file)\b",
+    # Active markers.
+    r"\bWIP\b",
+    r"\bwork[\-\s]in[\-\s]progress\b",
+    r"\bin\s+progress\b",
+    # Bare "working on" gerund is ambiguous on its own (could be call-for-help)
+    # but pairs strongly with a PR number nearby — that's a commit signal.
+    r"\bworking\s+on\b[^.\n]{0,40}#\d+",
+    # Tracker / linked-PR references signalling ownership.
+    r"\b(?:tracked|tracking|being\s+tracked|fix(?:ed)?)\s+(?:in|by)\s+#\d+",
+    r"\bsee\s+(?:my\s+)?(?:PR|fix|branch|fork)\s+#?\d+",
+    r"\bsubmit(?:ted|ting)?\s+(?:a\s+)?PR\b",
+    r"\bopen(?:ed|ing)?\s+(?:a\s+)?PR\b",
+    r"\bPR\s+(?:incoming|coming|ready|up|opened|submitted)\b",
+    r"\bhave\s+(?:a\s+)?(?:PR|fix|patch|branch)\s+(?:incoming|coming|ready|up|opened)",
+    # Resolution markers.
+    r"\bduplicate\s+of\b",
+    r"\balready\s+(?:being\s+worked|in\s+flight|claimed|assigned|merged|fixed|resolved)",
+    # LLM self-contradiction markers ("condition 3 IS FAILED", etc.).
+    r"\bIS\s+FAILED\b",
+    r"\bcondition\s+\d\b[^.]{0,60}(?:failed|not\s+met|violated|broken)",
+    r"\bdisqualif",
+]
+
+WORK_INTENT_RE = re.compile("|".join(_INTENT_PATTERNS), re.IGNORECASE)
+
+
+def work_intent_match(text: str) -> str | None:
+    """Return the matched intent fragment, or None if no signal found."""
+    if not text:
+        return None
+    m = WORK_INTENT_RE.search(text)
+    return m.group(0) if m else None
+
+
 # ---------- ntfy ----------
 
 def _rfc2047(s: str) -> str:
@@ -250,6 +308,11 @@ async def run_feed(
             )
 
     # 3) Build alert queue: in_scope, not yet notified, sorted oldest-first.
+    # Deterministic guard catches contradictions where the LLM cited
+    # "someone is working on it" language in `why` but still flipped
+    # in_scope=true. We also re-scan the issue body so an LLM that
+    # missed the signal entirely is still caught.
+    guard_suppressed = 0
     queue: list[tuple[IssueRow, dict]] = []
     for iss in issues:
         cached = await db.get_issue_alert_eval(iss.id, track, PROMPT_VERSION)
@@ -257,11 +320,21 @@ async def run_feed(
             continue
         if await db.has_issue_alert_notification(iss.id, track):
             continue
+        why_text = cached["why"] or ""
+        hit = work_intent_match(why_text) or work_intent_match(iss.text)
+        if hit:
+            guard_suppressed += 1
+            log.info("guard_suppressed", slug=slug, track=track,
+                     issue=iss.number, hit=hit[:80])
+            continue
         queue.append((iss, {
             "relevance": cached["relevance"],
             "why": cached["why"],
             "evidence_quotes": loads(cached["evidence_quotes_json"]) or [],
         }))
+    if guard_suppressed:
+        log.info("guard_summary", slug=slug, track=track,
+                 suppressed=guard_suppressed)
 
     # Sort by relevance desc, then created_at asc — highest-confidence picks
     # surface first; ties go to the oldest stale issue.
