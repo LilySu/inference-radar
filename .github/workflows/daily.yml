@@ -67,6 +67,20 @@ jobs:
           NTFY_TOPIC_SPECULATIVE: ${{ secrets.NTFY_TOPIC_SPECULATIVE }}
         run: uv run python -m radar.firsts
 
+      # --- always: per-repo PR alerts (6 feeds, capped 3 ntfy/feed/run) ---
+      - name: PR alerts — per-repo feeds
+        env:
+          RADAR_LLM: anthropic
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: claude-sonnet-4-6
+          NTFY_TOPIC_VLLM_BW:  ${{ secrets.NTFY_TOPIC_VLLM_BW }}
+          NTFY_TOPIC_VLLM_ALL: ${{ secrets.NTFY_TOPIC_VLLM_ALL }}
+          NTFY_TOPIC_SGL_BW:   ${{ secrets.NTFY_TOPIC_SGL_BW }}
+          NTFY_TOPIC_SGL_ALL:  ${{ secrets.NTFY_TOPIC_SGL_ALL }}
+          NTFY_TOPIC_TRT_BW:   ${{ secrets.NTFY_TOPIC_TRT_BW }}
+          NTFY_TOPIC_TRT_ALL:  ${{ secrets.NTFY_TOPIC_TRT_ALL }}
+        run: uv run python -m radar.pr_alerts
+
       # --- daily only: classify + brief + export ---
       - name: Setup ffmpeg + Marp + Piper
         if: github.event.schedule == '13 12 * * *' || inputs.run_brief

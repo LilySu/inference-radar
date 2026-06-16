@@ -146,6 +146,33 @@ CREATE TABLE IF NOT EXISTS pr_classifications (
 CREATE INDEX IF NOT EXISTS idx_class_pr ON pr_classifications(pr_id, classified_at DESC);
 CREATE INDEX IF NOT EXISTS idx_class_cat ON pr_classifications(primary_category);
 
+CREATE TABLE IF NOT EXISTS pr_alert_evaluations (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    pr_id                INTEGER NOT NULL REFERENCES prs(id),
+    track                TEXT NOT NULL,
+    in_scope             INTEGER NOT NULL,
+    relevance            INTEGER,
+    evidence_quotes_json TEXT,
+    why                  TEXT,
+    model                TEXT NOT NULL,
+    prompt_version       TEXT NOT NULL,
+    evaluated_at         TEXT NOT NULL,
+    UNIQUE(pr_id, track, prompt_version, model)
+);
+CREATE INDEX IF NOT EXISTS idx_pr_alert_eval_lookup
+    ON pr_alert_evaluations(pr_id, track, prompt_version);
+
+CREATE TABLE IF NOT EXISTS pr_notifications (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    pr_id           INTEGER NOT NULL REFERENCES prs(id),
+    track           TEXT NOT NULL,
+    sent_at         TEXT NOT NULL,
+    ntfy_response   TEXT,
+    UNIQUE(pr_id, track)
+);
+CREATE INDEX IF NOT EXISTS idx_pr_notif_track
+    ON pr_notifications(track, sent_at DESC);
+
 CREATE TABLE IF NOT EXISTS briefings (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     briefing_date TEXT NOT NULL UNIQUE,
@@ -406,6 +433,84 @@ class RadarDB:
                 reasoning, one_line_summary, 1 if bot_or_chore else 0,
                 model, prompt_version, now_iso(),
             ),
+        )
+        await self.conn.commit()
+        return int(cur.lastrowid or 0)
+
+    # --- pr alerts ---
+
+    async def fetch_recent_open_unassigned_prs(
+        self, repo_id: int, since_days: int,
+    ) -> list[aiosqlite.Row]:
+        """Open PRs in this repo, no assignee, created within the past N days.
+
+        Uses raw_json.assignee since the prs table doesn't have an assignee column.
+        Sorted oldest-first so the alert queue drains FIFO.
+        """
+        async with self.conn.execute(
+            f"""SELECT id, repo_id, number, title, body, labels_json, state,
+                       html_url, created_at, updated_at, raw_json
+                  FROM prs
+                 WHERE repo_id = ?
+                   AND state = 'open'
+                   AND json_extract(raw_json, '$.assignee') IS NULL
+                   AND created_at >= datetime('now', '-{int(since_days)} days')
+              ORDER BY created_at ASC""",
+            (repo_id,),
+        ) as cur:
+            return list(await cur.fetchall())
+
+    async def get_pr_alert_eval(
+        self, pr_id: int, track: str, prompt_version: str,
+    ) -> aiosqlite.Row | None:
+        async with self.conn.execute(
+            """SELECT * FROM pr_alert_evaluations
+                WHERE pr_id=? AND track=? AND prompt_version=?
+                ORDER BY evaluated_at DESC LIMIT 1""",
+            (pr_id, track, prompt_version),
+        ) as cur:
+            return await cur.fetchone()
+
+    async def insert_pr_alert_eval(
+        self,
+        *,
+        pr_id: int,
+        track: str,
+        in_scope: bool,
+        relevance: int | None,
+        evidence_quotes: list[str] | None,
+        why: str | None,
+        model: str,
+        prompt_version: str,
+    ) -> int:
+        cur = await self.conn.execute(
+            """INSERT OR IGNORE INTO pr_alert_evaluations
+               (pr_id, track, in_scope, relevance, evidence_quotes_json,
+                why, model, prompt_version, evaluated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                pr_id, track, 1 if in_scope else 0, relevance,
+                dumps(evidence_quotes), why, model, prompt_version, now_iso(),
+            ),
+        )
+        await self.conn.commit()
+        return int(cur.lastrowid or 0)
+
+    async def has_pr_notification(self, pr_id: int, track: str) -> bool:
+        async with self.conn.execute(
+            "SELECT 1 FROM pr_notifications WHERE pr_id=? AND track=? LIMIT 1",
+            (pr_id, track),
+        ) as cur:
+            return await cur.fetchone() is not None
+
+    async def insert_pr_notification(
+        self, *, pr_id: int, track: str, ntfy_response: str | None,
+    ) -> int:
+        cur = await self.conn.execute(
+            """INSERT OR IGNORE INTO pr_notifications
+               (pr_id, track, sent_at, ntfy_response)
+               VALUES (?, ?, ?, ?)""",
+            (pr_id, track, now_iso(), ntfy_response),
         )
         await self.conn.commit()
         return int(cur.lastrowid or 0)
