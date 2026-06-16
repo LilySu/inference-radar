@@ -146,6 +146,33 @@ CREATE TABLE IF NOT EXISTS pr_classifications (
 CREATE INDEX IF NOT EXISTS idx_class_pr ON pr_classifications(pr_id, classified_at DESC);
 CREATE INDEX IF NOT EXISTS idx_class_cat ON pr_classifications(primary_category);
 
+CREATE TABLE IF NOT EXISTS issue_alert_evaluations (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    issue_id             INTEGER NOT NULL REFERENCES issues(id),
+    track                TEXT NOT NULL,
+    in_scope             INTEGER NOT NULL,
+    relevance            INTEGER,
+    evidence_quotes_json TEXT,
+    why                  TEXT,
+    model                TEXT NOT NULL,
+    prompt_version       TEXT NOT NULL,
+    evaluated_at         TEXT NOT NULL,
+    UNIQUE(issue_id, track, prompt_version, model)
+);
+CREATE INDEX IF NOT EXISTS idx_issue_alert_eval_lookup
+    ON issue_alert_evaluations(issue_id, track, prompt_version);
+
+CREATE TABLE IF NOT EXISTS issue_alert_notifications (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    issue_id        INTEGER NOT NULL REFERENCES issues(id),
+    track           TEXT NOT NULL,
+    sent_at         TEXT NOT NULL,
+    ntfy_response   TEXT,
+    UNIQUE(issue_id, track)
+);
+CREATE INDEX IF NOT EXISTS idx_issue_alert_notif_track
+    ON issue_alert_notifications(track, sent_at DESC);
+
 CREATE TABLE IF NOT EXISTS pr_alert_evaluations (
     id                   INTEGER PRIMARY KEY AUTOINCREMENT,
     pr_id                INTEGER NOT NULL REFERENCES prs(id),
@@ -433,6 +460,77 @@ class RadarDB:
                 reasoning, one_line_summary, 1 if bot_or_chore else 0,
                 model, prompt_version, now_iso(),
             ),
+        )
+        await self.conn.commit()
+        return int(cur.lastrowid or 0)
+
+    # --- issue alerts (separate from `notifications` which has CHECK on track) ---
+
+    async def fetch_open_unassigned_issues(self, repo_id: int) -> list[aiosqlite.Row]:
+        """Open + unassigned issues for one repo, oldest-first."""
+        async with self.conn.execute(
+            """SELECT id, repo_id, number, title, body, labels_json,
+                       assignee, state, html_url, created_at, updated_at
+                  FROM issues
+                 WHERE repo_id = ?
+                   AND state = 'open'
+                   AND (assignee IS NULL OR assignee = '')
+              ORDER BY created_at ASC""",
+            (repo_id,),
+        ) as cur:
+            return list(await cur.fetchall())
+
+    async def get_issue_alert_eval(
+        self, issue_id: int, track: str, prompt_version: str,
+    ) -> aiosqlite.Row | None:
+        async with self.conn.execute(
+            """SELECT * FROM issue_alert_evaluations
+                WHERE issue_id=? AND track=? AND prompt_version=?
+                ORDER BY evaluated_at DESC LIMIT 1""",
+            (issue_id, track, prompt_version),
+        ) as cur:
+            return await cur.fetchone()
+
+    async def insert_issue_alert_eval(
+        self,
+        *,
+        issue_id: int,
+        track: str,
+        in_scope: bool,
+        relevance: int | None,
+        evidence_quotes: list[str] | None,
+        why: str | None,
+        model: str,
+        prompt_version: str,
+    ) -> int:
+        cur = await self.conn.execute(
+            """INSERT OR IGNORE INTO issue_alert_evaluations
+               (issue_id, track, in_scope, relevance, evidence_quotes_json,
+                why, model, prompt_version, evaluated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                issue_id, track, 1 if in_scope else 0, relevance,
+                dumps(evidence_quotes), why, model, prompt_version, now_iso(),
+            ),
+        )
+        await self.conn.commit()
+        return int(cur.lastrowid or 0)
+
+    async def has_issue_alert_notification(self, issue_id: int, track: str) -> bool:
+        async with self.conn.execute(
+            "SELECT 1 FROM issue_alert_notifications WHERE issue_id=? AND track=? LIMIT 1",
+            (issue_id, track),
+        ) as cur:
+            return await cur.fetchone() is not None
+
+    async def insert_issue_alert_notification(
+        self, *, issue_id: int, track: str, ntfy_response: str | None,
+    ) -> int:
+        cur = await self.conn.execute(
+            """INSERT OR IGNORE INTO issue_alert_notifications
+               (issue_id, track, sent_at, ntfy_response)
+               VALUES (?, ?, ?, ?)""",
+            (issue_id, track, now_iso(), ntfy_response),
         )
         await self.conn.commit()
         return int(cur.lastrowid or 0)

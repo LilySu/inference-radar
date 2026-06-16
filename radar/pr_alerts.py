@@ -166,11 +166,19 @@ def _rfc2047(s: str) -> str:
 
 
 async def send_ntfy(topic: str, title: str, body: str, click: str, tags: str) -> str:
+    """POST to ntfy.sh. Returns "<code>:<snippet>" on success or "error:<reason>"
+    on any transport failure. Never raises — a transient ntfy hiccup must not
+    kill the whole run.
+    """
     url = f"https://ntfy.sh/{topic}"
     headers = {"Title": _rfc2047(title), "Click": _rfc2047(click), "Tags": tags}
-    async with httpx.AsyncClient(timeout=20) as cli:
-        r = await cli.post(url, content=body.encode("utf-8"), headers=headers)
-    return f"{r.status_code}:{r.text[:80]}"
+    try:
+        async with httpx.AsyncClient(timeout=20) as cli:
+            r = await cli.post(url, content=body.encode("utf-8"), headers=headers)
+        return f"{r.status_code}:{r.text[:80]}"
+    except Exception as e:  # noqa: BLE001
+        log.warning("ntfy_send_failed", topic=topic, err=str(e)[:200])
+        return f"error:{type(e).__name__}:{str(e)[:80]}"
 
 
 def _format_title(short: str, track: str, pr: PRRow, relevance: int | None) -> str:
@@ -268,6 +276,8 @@ async def run_feed_bw(
             continue
         resp = await send_ntfy(topic=topic, title=title, body=body,
                                click=pr.html_url, tags="rocket")
+        if resp.startswith("error:"):
+            continue
         await db.insert_pr_notification(
             pr_id=pr.id, track="bw", ntfy_response=resp,
         )
@@ -303,6 +313,8 @@ async def run_feed_all(
             continue
         resp = await send_ntfy(topic=topic, title=title, body=body,
                                click=pr.html_url, tags="page_facing_up")
+        if resp.startswith("error:"):
+            continue
         await db.insert_pr_notification(
             pr_id=pr.id, track="all", ntfy_response=resp,
         )

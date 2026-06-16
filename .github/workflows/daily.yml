@@ -81,6 +81,18 @@ jobs:
           NTFY_TOPIC_TRT_ALL:  ${{ secrets.NTFY_TOPIC_TRT_ALL }}
         run: uv run python -m radar.pr_alerts
 
+      # --- always: per-repo "achievable issue" alerts (4 feeds, capped 3/feed/run) ---
+      - name: Issue alerts — Megatron / FlashInfer / TileLang / CUTLASS
+        env:
+          RADAR_LLM: anthropic
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: claude-sonnet-4-6
+          NTFY_TOPIC_MEG_FIRSTS:     ${{ secrets.NTFY_TOPIC_MEG_FIRSTS }}
+          NTFY_TOPIC_FLASH_FIRSTS:   ${{ secrets.NTFY_TOPIC_FLASH_FIRSTS }}
+          NTFY_TOPIC_TILE_FIRSTS:    ${{ secrets.NTFY_TOPIC_TILE_FIRSTS }}
+          NTFY_TOPIC_CUTLASS_FIRSTS: ${{ secrets.NTFY_TOPIC_CUTLASS_FIRSTS }}
+        run: uv run python -m radar.issue_alerts
+
       # --- daily only: classify + brief + export ---
       - name: Setup ffmpeg + Marp + Piper
         if: github.event.schedule == '13 12 * * *' || inputs.run_brief

@@ -274,11 +274,19 @@ def _rfc2047(s: str) -> str:
 
 
 async def send_ntfy(topic: str, title: str, body: str, click: str, tags: str) -> str:
+    """POST to ntfy.sh. Returns "<code>:<snippet>" on success or "error:<reason>"
+    on any transport failure. Never raises — a transient ntfy hiccup must not
+    kill the whole hourly run.
+    """
     url = f"https://ntfy.sh/{topic}"
     headers = {"Title": _rfc2047(title), "Click": _rfc2047(click), "Tags": tags}
-    async with httpx.AsyncClient(timeout=20) as cli:
-        r = await cli.post(url, content=body.encode("utf-8"), headers=headers)
-    return f"{r.status_code}:{r.text[:80]}"
+    try:
+        async with httpx.AsyncClient(timeout=20) as cli:
+            r = await cli.post(url, content=body.encode("utf-8"), headers=headers)
+        return f"{r.status_code}:{r.text[:80]}"
+    except Exception as e:  # noqa: BLE001
+        log.warning("ntfy_send_failed", topic=topic, err=str(e)[:200])
+        return f"error:{type(e).__name__}:{str(e)[:80]}"
 
 
 def _bullet_title(issue: IssueRow, ev: dict) -> str:
@@ -396,6 +404,10 @@ async def run(
             resp = await send_ntfy(
                 topic=topic, title=title, body=body, click=issue.html_url, tags=tags,
             )
+            if resp.startswith("error:"):
+                # transient ntfy failure — don't record a notification, so we
+                # retry on the next run instead of leaking the issue
+                continue
             await db.insert_notification(
                 issue_id=issue.id, evaluation_id=eval_id, track=track,
                 ntfy_response=resp,
