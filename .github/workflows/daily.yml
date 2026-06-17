@@ -55,24 +55,25 @@ jobs:
         run: uv run python -m radar.ingest
 
       # --- always: firsts (cheap; <30 calls usually) ---
-      # Uses Anthropic by default; Groq free tier rate-limits when bootstrapping
-      # from a cold DB cache because the backlog produces 80+ LLM batches.
+      # LLM router uses Groq with llama-3.3-70b-versatile (70B, ≥32B per user
+      # preference). Free-tier limits (30 RPM, ~6k TPM) handle the steady-state
+      # hourly load; max_evaluate is capped at 25 to avoid the rate-limit blowout
+      # we hit on cold-cache bootstrap. Backlog drains across subsequent hours.
       - name: Firsts — 3-pass filter + ntfy
         env:
-          RADAR_LLM: anthropic
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL: claude-sonnet-4-6
+          RADAR_LLM: groq
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: llama-3.3-70b-versatile
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           NTFY_TOPIC_SPECULATIVE: ${{ secrets.NTFY_TOPIC_SPECULATIVE }}
-        run: uv run python -m radar.firsts
+        run: uv run python -m radar.firsts --max-evaluate 25
 
       # --- always: per-repo PR alerts (6 feeds, capped 3 ntfy/feed/run) ---
       - name: PR alerts — per-repo feeds
         env:
-          RADAR_LLM: anthropic
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL: claude-sonnet-4-6
+          RADAR_LLM: groq
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: llama-3.3-70b-versatile
           NTFY_TOPIC_VLLM_BW:  ${{ secrets.NTFY_TOPIC_VLLM_BW }}
           NTFY_TOPIC_VLLM_ALL: ${{ secrets.NTFY_TOPIC_VLLM_ALL }}
           NTFY_TOPIC_SGL_BW:   ${{ secrets.NTFY_TOPIC_SGL_BW }}
@@ -84,9 +85,9 @@ jobs:
       # --- always: per-repo "achievable issue" alerts (4 feeds, capped 3/feed/run) ---
       - name: Issue alerts — Megatron / FlashInfer / TileLang / CUTLASS
         env:
-          RADAR_LLM: anthropic
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL: claude-sonnet-4-6
+          RADAR_LLM: groq
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: llama-3.3-70b-versatile
           NTFY_TOPIC_MEG_FIRSTS:     ${{ secrets.NTFY_TOPIC_MEG_FIRSTS }}
           NTFY_TOPIC_FLASH_FIRSTS:   ${{ secrets.NTFY_TOPIC_FLASH_FIRSTS }}
           NTFY_TOPIC_TILE_FIRSTS:    ${{ secrets.NTFY_TOPIC_TILE_FIRSTS }}

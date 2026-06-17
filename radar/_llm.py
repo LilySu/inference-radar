@@ -26,8 +26,12 @@ import structlog
 log = structlog.get_logger(__name__)
 
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL_DEFAULT = "llama-3.3-70b-versatile"
 GROQ_BACKOFF = [2, 4, 8, 16]
+
+
+def _groq_model() -> str:
+    return os.environ.get("GROQ_MODEL", GROQ_MODEL_DEFAULT)
 
 ANTHROPIC_MODEL_DEFAULT = "claude-sonnet-4-6"
 
@@ -40,7 +44,7 @@ def model_id() -> str:
     """Stable string written to issue_evaluations.model for diffability."""
     p = selected_provider()
     if p == "groq":
-        return f"groq:{GROQ_MODEL}"
+        return f"groq:{_groq_model()}"
     if p == "anthropic":
         return f"anthropic:{os.environ.get('ANTHROPIC_MODEL', ANTHROPIC_MODEL_DEFAULT)}"
     if p == "claude_code":
@@ -72,7 +76,7 @@ async def _complete_groq(system: str, user: str, schema: dict[str, Any]) -> Any:
         raise RuntimeError("GROQ_API_KEY env var required for RADAR_LLM=groq")
 
     payload = {
-        "model": GROQ_MODEL,
+        "model": _groq_model(),
         "temperature": 0.0,
         "response_format": {"type": "json_object"},
         "messages": [
