@@ -1,145 +1,44 @@
 [
   {
-    "briefing_date": "2026-05-09",
+    "briefing_date": "2026-06-19",
     "repo_scope": [
       "vllm-project/vllm",
       "sgl-project/sglang",
       "NVIDIA/Megatron-LM",
-      "NVIDIA/TensorRT-LLM"
+      "NVIDIA/TensorRT-LLM",
+      "NVIDIA/cutlass",
+      "NVIDIA/cudnn-frontend",
+      "NVIDIA/cccl",
+      "Dao-AILab/flash-attention",
+      "flashinfer-ai/flashinfer",
+      "tile-ai/tilelang"
     ],
     "script": {
-      "title": "Inference Radar \u2014 2026-05-09",
-      "intro": "SGLang's HISA hits 1.65\u00d7 throughput at 128K context; Blackwell MoE, disagg KV, and spec-decode fixes land across all four repos.",
+      "title": "Inference Radar \u2014 2026-06-19",
+      "intro": "FlashInfer issues picked for DeepSeek and CUTLASS.",
       "slides": [
         {
-          "heading": "SGLang",
-          "subhead": "HISA sparse attention + mhc_pre kernel",
-          "bullets": [
-            "HISA hierarchical sparse indexer for DeepSeek NSA \u2014 1.65\u00d7 total throughput, 1.70\u00d7 TTFT at 128K ctx vs NSA baseline (#24672)",
-            "mhc_pre split-K reduction folded into big_fuse kernel \u2014 1.30\u20131.58\u00d7 on GB300, 1.12\u20131.25\u00d7 on B300 (\u2264512 tokens) (#24775)",
-            "HiSparse scheduler: fix admission gate for context_len > max_total_num_tokens in PD setup (#24771)"
-          ],
-          "narration": "Three attention and MoE performance landings on SGLang. HISA \u2014 Hierarchical Indexed Sparse Attention \u2014 replaces the O(L) per-token NSA indexer with a two-stage coarse-then-fine approach, yielding 1.65\u00d7 throughput and 1.70\u00d7 TTFT at 128K context. On the MoE side, the mhc_pre kernel now folds its split-K stage-one reduction directly into big_fuse, cutting one kernel launch and hitting 1.30 to 1.58\u00d7 on GB300. And a HiSparse scheduler fix correctly gates admission for requests longer than max_total_num_tokens in PD-disagg.",
-          "duration_s": 38
-        },
-        {
-          "heading": "SGLang",
-          "subhead": "Spec-decode correctness + Mamba accuracy",
-          "bullets": [
-            "DSv4 EAGLE draft out_cache_loc shape mismatch \u2014 GSM8K collapses ~0.93\u2192~0.42 without fix (#24750)",
-            "EAGLE EagleDraftExtendInput refactor: eliminate hidden_states phase-shift (#24780)",
-            "EAGLE accept_tokens moved off EagleDraftInput to method arg (#24735)",
-            "Mamba mixed-chunk + extra_buffer accuracy regression fix \u2014 MMLU 0.7326\u21920.8947, AIME25 0.8083\u21920.8917 at concurrency=16 (#24613)"
-          ],
-          "narration": "Four correctness fixes on SGLang's speculative and hybrid-SSM paths. The DeepSeek V4 EAGLE draft backend had an out_cache_loc shape mismatch \u2014 with batch size \u2265 2 GSM8K accuracy silently collapsed from 0.93 to 0.42. Two EAGLE refactors clean up data-flow across draft phases. And a critical Mamba regression under mixed-chunk plus extra_buffer mode is resolved: MMLU recovers from 0.73 to 0.89, AIME25 from 0.81 to 0.89.",
-          "duration_s": 35
-        },
-        {
-          "heading": "SGLang",
-          "subhead": "Disagg, distributed, and NPU fixes",
-          "bullets": [
-            "ZBAL memfabric NPU integration \u2014 30%+ MoE decode speedup, 1.2 GB memory saved on Ascend (#24575)",
-            "PD disagg ephemeral port exhaustion fix via keep-alive HTTP sessions (#23445)",
-            "DeepEP + Pipeline Parallelism garbled output on NPU fixed via PP proxy all-gather control (#23816)",
-            "FP8 Wan2.2-T2V-A14B quant scheme recognition fix on NPU via reverse_param_names_mapping (#24540)"
-          ],
-          "narration": "SGLang's distributed and NPU stack gets four fixes. ZBAL \u2014 Zero Buffer Acceleration Library \u2014 integrates memfabric on Ascend, delivering over 30% MoE decode speedup and saving 1.2 gigabytes. A long-standing ephemeral port exhaustion bug in multi-DP decode is resolved with persistent HTTP sessions. DeepEP combined with pipeline parallelism on NPU no longer produces garbled output. And Wan2.2 W8A8 quant recognition on NPU is corrected.",
-          "duration_s": 32
-        },
-        {
-          "heading": "vLLM",
-          "subhead": "Spec-decode perf + correctness",
-          "bullets": [
-            "NGram GPU speculator for MRV2: dense on-GPU token storage, variable-length drafts \u2014 23.9% output throughput, acceptance rate 5.16%\u219252.64% (#40704)",
-            "Eagle3: read norm_before_fc from eagle_config dict for NVIDIA GPT-OSS checkpoints \u2014 decode 51.3\u219267.1 tok/s (+30.8%) on 1\u00d7H100 (#42143)",
-            "DeepSeek-V4 MTP TP+batch>1 deadlock fix \u2014 shared-memory broadcast ring buffer desync (~120 tok/s \u2192 0) (#41404)",
-            "DeepGEMM MLA indexer: fix non-contiguous context_lens crash in MTP/spec decode path (#42135)",
-            "GDN nested torch.compile removed \u2014 prevents CUDA graph capture failure during Triton autotuning (#42070)"
-          ],
-          "narration": "Five spec-decode items on vLLM. The N-gram GPU speculator for Model Runner V2 keeps history dense on GPU and enables variable-length drafts, pushing acceptance rate from 5% to 52% and throughput up 24%. Eagle3 was silently dropping its RMSNorm-before-FC on NVIDIA GPT-OSS checkpoints \u2014 fixing that config key lifts decode from 51 to 67 tok/s. A DeepSeek V4 MTP deadlock under tensor-parallel batch runs is resolved. A non-contiguous tensor crash in the DeepGEMM MLA indexer is patched. And a nested torch.compile on GDN's rearrange_mixed_qkv is removed to unblock CUDA graph capture.",
-          "duration_s": 42
-        },
-        {
-          "heading": "vLLM",
-          "subhead": "FP8 / quantization fixes",
-          "bullets": [
-            "FP8 online loader: skip bias tensors \u2014 fixes garbage output on Qwen2/Qwen2.5 with bias=True (#42141)",
-            "GDN Triton KKT kernel: WGMMA operand layout precision bug on Hopper sm_90 \u2014 GSM8K 0\u21920.856 (#42076)",
-            "DeepGEMM warmup crash: defer alignment check past FP8 guard for non-Hopper hardware (#42142)",
-            "FlashInfer CUTLASS MoE: fix mxfp8 scale swizzling to F8_128x4 after EP all-to-all (#42133)",
-            "ModelOpt NVFP4 W4A16 via Marlin FP4 kernel \u2014 logprob \u0394=0 vs native W4A16 on Qwen3-8B (#41769)"
-          ],
-          "narration": "Five quantization fixes on vLLM. The FP8 online loader was silently leaving bias tensors uninitialized, producing garbage on Qwen2 models. A spurious dtype cast in the Triton GDN K-K-T kernel misaligned WGMMA register layout on Hopper, collapsing GSM8K from zero to 0.856 after the fix. DeepGEMM warmup crashed unconditionally on non-Hopper hardware \u2014 now gated correctly. MXFP8 activation scales after EP all-to-all weren't being swizzled to CUTLASS F8_128x4 layout. And ModelOpt NVFP4 W4A16 via Marlin FP4 lands with bit-identical logprobs to native W4A16.",
-          "duration_s": 40
-        },
-        {
-          "heading": "vLLM",
-          "subhead": "Distributed, scheduler, and ops",
-          "bullets": [
-            "NixlConnector DCP (Context Parallelism) support for PD-disagg KV transfer \u2014 GSM8K ~0.67 across mixed TP/DCP configs (#38433)",
-            "Sparse NCCL weight transfer: (indices, values) in-place patches for online RL \u2014 942 MB dense \u2192 0.16 MB sparse payload (#40096)",
-            "NVFP4 FlashInfer all-gather GEMM fusion for AsyncTP \u2014 output throughput +4.85% at input_len=4096 TP=4 (#41882)",
-            "Feather scheduling policy for prefix-sharing workloads (paper: 2\u201322\u00d7 throughput, no reproduced numbers) (#42134)",
-            "SIGINT graceful shutdown + /live liveness probe + prctl(PR_SET_PDEATHSIG) for Kubernetes (3 PRs) (#36259, #36258, #34816)"
-          ],
-          "narration": "Distributed and ops items on vLLM. The Nixl connector gains Context Parallelism support for prefill-decode disaggregation with mixed TP/DCP topologies. Sparse NCCL weight transfer for online RL shrinks payloads from 942 megabytes to 0.16 megabytes using index-value patches. NVFP4 FlashInfer all-gather GEMM fusion for AsyncTP lands at plus 4.85% throughput at 4K input on TP=4. Feather, a prefix-sharing scheduling policy, is added \u2014 paper claims 2 to 22\u00d7 but no reproduced benchmark numbers. And three PRs wire up SIGINT graceful shutdown, a /live liveness probe, and prctl PDEATHSIG for Kubernetes operators.",
-          "duration_s": 42
-        },
-        {
-          "heading": "TensorRT-LLM",
-          "subhead": "MoE kernels + Blackwell precision",
-          "bullets": [
-            "dsv3_router_gemm hidden_dim=6144 for GLM-5 on Blackwell \u2014 prevents SIMT fallback costing ~5.4%/~1 ms per decode iter (#13740)",
-            "CUTEDSL MoE backend for Nemotron-H: gated (SwiGLU) and non-gated (ReLU\u00b2) activation fusion (#12884)",
-            "W4A8_MXFP4_MXFP8 path in DeepGemmFusedMoE via m_grouped_fp8_fp4_gemm_nt_masked (#13383)",
-            "CuTe DSL FP4 paged MQA logits decode kernel for Blackwell SM100 (#13929)",
-            "FlashInfer BF16 MoE backend added to fused MoE path (#13689)"
-          ],
-          "narration": "Five MoE and precision items on TensorRT-LLM. GLM-5's hidden size of 6144 was falling through to an Ampere SIMT cuBLAS path on Blackwell, costing 5.4% per decode iteration \u2014 a new compile-time instantiation in dsv3_router_gemm fixes it. The CuTe DSL MoE backend now covers Nemotron-H with both SwiGLU and ReLU-squared activation modes. W4A8 MXFP4-times-MXFP8 is wired through DeepGemmFusedMoE. A new CuTe DSL FP4 paged MQA logits kernel targets Blackwell SM100. And FlashInfer BF16 joins the fused MoE backend alongside CUTLASS.",
-          "duration_s": 38
-        },
-        {
-          "heading": "TensorRT-LLM",
-          "subhead": "Disagg KV, ADP deadlocks, multi-thread transfer",
-          "bullets": [
-            "Multi-threaded KV transfer for disagg serving \u2014 19\u201325% mean/median latency, up to 57% max latency on DeepSeek R1 (#13075)",
-            "Disagg KV lifecycle hardening: UAF, broken promises, buffer pool wedges under cancellation (#13713)",
-            "ADP TP collective deadlock fix \u2014 synced error handling via tp_allgather before tp_gather (#13900, #13902)",
-            "MNNVL fabric memory allocation for KV cache manager v1 in disagg serving (#12490)",
-            "FP8 dummy weights: skip calibration scalars to prevent attention saturation \u2014 top-20 accuracy 14%\u219294% (8B-FP8) (#13879)"
-          ],
-          "narration": "Disaggregated serving gets significant attention on TRT-LLM. Multi-threaded KV transfer cuts mean gen-side latency by 19 to 25% and max latency by up to 57% on DeepSeek R1. A stack of UAF and broken-promise bugs in the KV transfer lifecycle is patched. Two related PRs fix ADP TP collective deadlocks via a synchronized allgather in the error path. MNNVL fabric memory allocation lands for KV cache manager v1. And a critical FP8 dummy weight bug \u2014 calibration scalars were being randomized \u2014 is fixed, recovering top-20 accuracy from 14% to 94% on the 8B FP8 model.",
-          "duration_s": 42
-        },
-        {
-          "heading": "TensorRT-LLM",
-          "subhead": "Model support: Kimi-K2.5, NemotronH, DeepSeek V4",
-          "bullets": [
-            "Kimi-K2.5 reasoning parser (kimi_k25, reasoning_at_start=True) + auto-flow for K2/K25/Gemma-4/DSV32/Nemotron-H (#13801)",
-            "NemotronH Puzzle: per-layer MoE config + FlashInfer Mamba SSD prefill (head_dim 64/128) (#12731)",
-            "DeepSeek V4 MLA dynamic sparse attention kernels with in-place RoPE and KV compression (#13652)",
-            "MoEScheduler split + MegaMoEDeepGemm EPLB/multi-chunk on DGX B200/B300 (#13908)",
-            "DFlash spec-decode: Qwen3.5 MRoPE + GDN linear-attention buffer resize fixes (#13782)"
-          ],
-          "narration": "Model support sweep on TRT-LLM. Kimi-K2.5 gets a reasoning parser that handles its think-at-start chat template, and auto-flow now covers K2, K25, Gemma-4, DeepSeek-V3.2, and Nemotron-H. NemotronH Puzzle lands with per-layer MoE configs and FlashInfer Mamba SSD prefill. DeepSeek V4 MLA gets dynamic sparse attention kernels with in-place RoPE. MegaMoEDeepGemm is refactored into a MoEScheduler abstraction and gains EPLB support on B200 and B300. And DFlash spec-decode is fixed for Qwen3.5's MRoPE and GDN linear-attention paths.",
-          "duration_s": 38
-        },
-        {
           "heading": "Picks",
-          "subhead": "Open issues worth watching",
+          "subhead": "open issues",
           "bullets": [
-            "D4 \u00b7 vLLM #40969 \u00b7 DeepSeek-V4-Flash hangs after ~6 requests with cudagraph_mode=FULL_AND_PI \u2014 MLA fp8_ds_mla / DeepseekV4Indexer path implicated; no fix merged yet",
-            "D4 \u00b7 vLLM #42096 \u00b7 Qwen3-VL-235B-A22B NVFP4 latency regression on GB300 (SM100) \u2014 TTFT/throughput drop vs prior build; intersects Blackwell NVFP4 stack changes landing this cycle"
+            "D3 \u00b7 FlashInfer #1452 \u00b7 deepseek \u00b7 Profiler error \u2014 The issue is about a profiler error with DeepSeek MLA decode",
+            "D3 \u00b7 FlashInfer #1646 \u00b7 cutlass_cute \u00b7 Using cutlass_fused_moe get NaNs in tensor \u2014 The issue is about using cutlass_fused_moe and getting NaNs in the tensor",
+            "D4 \u00b7 FlashInfer #2597 \u00b7 b200 \u00b7 FlashInfer is missing TRTLLM-GEN ragged kernel for BF16/FP16 -> FP8 output",
+            "D3 \u00b7 FlashAttention #2665 \u00b7 cutlass_cute \u00b7 [Cute,FA4,Fwd,Sm100] Correctness issue when QKV is non-contiguous on SM100 for h",
+            "D4 \u00b7 vLLM #43906 \u00b7 b200 \u00b7 [Bug] MXFP8 MoE always falls back to MARLIN on SM_121",
+            "D4 \u00b7 FlashInfer #2859 \u00b7 deepseek \u00b7 when I use mtp with trtllm_mla\uff0cthe attention performance drop 90%",
+            "D4 \u00b7 FlashInfer #2883 \u00b7 deepseek \u00b7 [Bug] trtllm_batch_decode_with_kv_cache_mla writes NaNs in CUDAGraph padded regi",
+            "D4 \u00b7 FlashInfer #1669 \u00b7 cutlass_cute \u00b7 DeepSeek FP8 Block Scaling is not yet implemented in CUTLASS fused_moe"
           ],
-          "narration": "Two open issues worth tracking. First, DeepSeek-V4-Flash hangs after roughly six requests when CUDA graph mode is set to FULL_AND_PI \u2014 the MLA FP8 indexer path is the prime suspect, difficulty four. Second, Qwen3-VL 235B NVFP4 on GB300 is showing a significant latency regression \u2014 this intersects directly with the Blackwell NVFP4 changes landing this cycle, so worth watching for a follow-up fix.",
-          "duration_s": 28
+          "narration": "Picks include FlashInfer issues for DeepSeek and CUTLASS, such as profiler errors, NaNs in tensors, missing kernels, correctness issues, and performance drops.",
+          "duration_s": 45
         }
       ],
-      "outro": "That's the stack for May 9th \u2014 back tomorrow with the next round of merges."
+      "outro": "That's all for today."
     },
-    "video_path": "out/2026-05-09/brief.mp4",
+    "video_path": "out/2026-06-19/brief.mp4",
     "video_url": null,
-    "duration_s": 404,
-    "built_at": "2026-05-14T08:35:00.514110+00:00"
+    "duration_s": 21,
+    "built_at": "2026-06-19T16:02:57.614244+00:00"
   }
 ]
