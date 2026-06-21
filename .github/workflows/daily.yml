@@ -25,6 +25,8 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
@@ -115,6 +117,14 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: uv run python -m radar.classify --max 200
 
+      # Force a Groq TPM-minute boundary between classify and brief.
+      # Classify's batched calls saturate the per-minute token budget; without
+      # this gap, brief hits 429 on attempt 0 and exhausts its 30s backoff before
+      # the limit resets. Repeated daily-cron failures on 2026-06-20 and -21.
+      - name: Wait for Groq TPM window to reset
+        if: github.event.schedule == '13 12 * * *' || inputs.run_brief
+        run: sleep 65
+
       - name: Build daily brief
         if: github.event.schedule == '13 12 * * *' || inputs.run_brief
         env:
@@ -130,13 +140,22 @@ jobs:
         run: uv run python -m radar.export
 
       # --- always: commit data updates ---
+      # Rebase + retry on push: concurrent runs can race even with concurrency.group
+      # (checkout pins github.sha at queue time, which goes stale if a sibling run
+      # pushes while this one waits). Pull --rebase reconciles; retry covers any
+      # mid-run push by a sibling.
       - name: Commit data updates
         run: |
           git config user.name  "radar-bot"
           git config user.email "radar-bot@users.noreply.github.com"
           git add data/ site/data/ || true
-          git diff --cached --quiet || git commit -m "data: $(date -u +%FT%TZ)"
-          git push
+          git diff --cached --quiet && exit 0
+          git commit -m "data: $(date -u +%FT%TZ)"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push && exit 0
+            sleep $((RANDOM % 10 + 5))
+          done
+          exit 1
 
       - uses: actions/upload-artifact@v4
         if: always() && (github.event.schedule == '13 12 * * *' || inputs.run_brief)
