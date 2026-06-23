@@ -111,11 +111,14 @@ jobs:
           curl -sSL -o ~/.piper-voices/en_US-lessac-medium.onnx.json \
             https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
 
+      # --max 50 (was 200) keeps the run inside the Groq free-tier TPD budget
+      # even with retries; 200 was exhausting the daily quota and 429-ing every
+      # subsequent call in this run (incl. brief). Backlog drains across days.
       - name: Classify recent PRs
         if: github.event.schedule == '13 12 * * *' || inputs.run_brief
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: uv run python -m radar.classify --max 200
+        run: uv run python -m radar.classify --max 50
 
       # Force a Groq TPM-minute boundary between classify and brief.
       # Classify's batched calls saturate the per-minute token budget; without

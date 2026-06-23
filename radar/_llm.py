@@ -28,6 +28,10 @@ log = structlog.get_logger(__name__)
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_MODEL_DEFAULT = "llama-3.3-70b-versatile"
 GROQ_BACKOFF = [2, 4, 8, 16]
+# If Groq's Retry-After is longer than this, fail fast instead of blocking the
+# workflow — a long Retry-After means TPD/RPD exhaustion, not a transient TPM
+# blip, and no amount of waiting will unstick it inside the 25-min job budget.
+GROQ_RETRY_AFTER_MAX = 90
 
 
 def _groq_model() -> str:
@@ -86,18 +90,40 @@ async def _complete_groq(system: str, user: str, schema: dict[str, Any]) -> Any:
     }
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     async with httpx.AsyncClient(timeout=120) as cli:
-        for attempt, delay in enumerate([0, *GROQ_BACKOFF]):
-            if delay:
-                await asyncio.sleep(delay)
+        for attempt in range(len(GROQ_BACKOFF) + 1):
             r = await cli.post(GROQ_URL, headers=headers, json=payload)
-            if r.status_code == 429:
-                log.warning("groq_rate_limited", attempt=attempt, retry_in=delay)
-                continue
-            if r.status_code >= 400:
-                raise RuntimeError(f"groq {r.status_code}: {r.text[:300]}")
-            content = r.json()["choices"][0]["message"]["content"]
-            return json.loads(content)
+            if r.status_code != 429:
+                if r.status_code >= 400:
+                    raise RuntimeError(f"groq {r.status_code}: {r.text[:300]}")
+                content = r.json()["choices"][0]["message"]["content"]
+                return json.loads(content)
+            retry_after = _parse_retry_after(r.headers.get("retry-after"))
+            if retry_after is not None and retry_after > GROQ_RETRY_AFTER_MAX:
+                raise RuntimeError(
+                    f"groq: 429 Retry-After={retry_after:.0f}s exceeds "
+                    f"{GROQ_RETRY_AFTER_MAX}s cap (likely TPD/RPD exhausted)"
+                )
+            if attempt >= len(GROQ_BACKOFF):
+                break
+            delay = retry_after if retry_after is not None else GROQ_BACKOFF[attempt]
+            log.warning(
+                "groq_rate_limited",
+                attempt=attempt,
+                retry_in=delay,
+                retry_after=retry_after,
+            )
+            await asyncio.sleep(delay)
         raise RuntimeError("groq: rate-limited after backoff exhausted")
+
+
+def _parse_retry_after(value: str | None) -> float | None:
+    """Parse the Retry-After header. Groq returns seconds as a number."""
+    if not value:
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
 
 
 def _schema_hint(schema: dict[str, Any]) -> str:
