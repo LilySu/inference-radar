@@ -1,5 +1,47 @@
 [
   {
+    "briefing_date": "2026-06-25",
+    "repo_scope": [
+      "vllm-project/vllm",
+      "sgl-project/sglang",
+      "NVIDIA/Megatron-LM",
+      "NVIDIA/TensorRT-LLM",
+      "NVIDIA/cutlass",
+      "NVIDIA/cudnn-frontend",
+      "NVIDIA/cccl",
+      "Dao-AILab/flash-attention",
+      "flashinfer-ai/flashinfer",
+      "tile-ai/tilelang"
+    ],
+    "script": {
+      "title": "Inference Radar \u2014 2026-06-25",
+      "intro": "Blackwell PRs accelerated; sglang shipped TBO in main.",
+      "slides": [
+        {
+          "heading": "Picks",
+          "subhead": "Open first-issue picks",
+          "bullets": [
+            "D3 \u00b7 vLLM #46721 \u00b7 b200 \u00b7 [Bug]: Out of Resource / block size error Kimi K2.7 on SM120 Blackwell with kv_c",
+            "D3 \u00b7 vLLM #46726 \u00b7 b200 \u00b7 [Bug]: sparse-MLA indexer error with  GLM 5.2 NVFP4 on RTX 6000 Pro SM120",
+            "D5 \u00b7 vLLM #46707 \u00b7 deepseek \u00b7 [RFC]: Support for Domino speculative decoding in vLLM",
+            "D4 \u00b7 vLLM #46679 \u00b7 deepseek \u00b7 [Bug]: GLM5.2 RuntimeError: The expanded size of the tensor (10210) must match t",
+            "D2 \u00b7 CUTLASS #3348 \u00b7 cutlass_cute \u00b7 [BUG] Allow boolean types for sm100_utils.make_smem_layout_epi",
+            "D3 \u00b7 vLLM #43141 \u00b7 deepseek \u00b7 [Bug]: Deepseek v4 ImportError: cannot import name 'Arch' from 'cutlass.base_dsl",
+            "D4 \u00b7 SGLang #29123 \u00b7 deepseek \u00b7 Gloo timeout deadlock in disaggregated decode DP attention (all_gather_into_tens",
+            "D4 \u00b7 SGLang #29152 \u00b7 deepseek \u00b7 [Bug] deepseek-v4-pro pd disaggregation"
+          ],
+          "narration": "Picks include vLLM issues related to Blackwell and DeepSeek, as well as CUTLASS and SGLang issues. These issues cover a range of topics, including out of resource errors, sparse-MLA indexer errors, and Gloo timeout deadlocks.",
+          "duration_s": 45
+        }
+      ],
+      "outro": "That's all for today."
+    },
+    "video_path": "out/2026-06-25/brief.mp4",
+    "video_url": null,
+    "duration_s": 25,
+    "built_at": "2026-06-25T14:56:17.482315+00:00"
+  },
+  {
     "briefing_date": "2026-06-19",
     "repo_scope": [
       "vllm-project/vllm",
