@@ -154,6 +154,36 @@ ORG_KEYWORDS: list[tuple[str, str]] = [
     ("01.ai",           "01.AI"),
     ("zhipu",           "Zhipu AI"),
     ("moonshot",        "Moonshot AI"),
+    # Academic labs and inference research groups
+    ("lmsys",           "LMSys"),
+    ("uc berkeley",     "UC Berkeley"),
+    ("berkeley",        "UC Berkeley"),
+    ("stanford",        "Stanford"),
+    ("mit ",            "MIT"),
+    ("carnegie mellon", "CMU"),
+    ("cmu",             "CMU"),
+    ("university of washington", "UW"),
+    ("peking university", "PKU"),
+    ("tsinghua",        "Tsinghua"),
+    ("shanghai ai",     "SHAI Lab"),
+    ("shanghai jiao",   "SJTU"),
+    ("zhejiang",        "Zhejiang U"),
+    # Inference startups and cloud providers
+    ("runpod",          "RunPod"),
+    ("lambda labs",     "Lambda Labs"),
+    ("lambdalabs",      "Lambda Labs"),
+    ("coreweave",       "CoreWeave"),
+    ("vast.ai",         "Vast.ai"),
+    ("scale ai",        "Scale AI"),
+    ("scaleai",         "Scale AI"),
+    ("lepton",          "Lepton AI"),
+    ("perplexity",      "Perplexity"),
+    ("inflection",      "Inflection AI"),
+    ("reka",            "Reka AI"),
+    ("lightllm",        "LightLLM"),
+    ("sagemaker",       "Amazon"),
+    ("nvidia research", "NVIDIA"),
+    ("nvidia labs",     "NVIDIA"),
 ]
 
 # Regex to extract GitHub @mentions from text
@@ -280,19 +310,23 @@ async def _pass_keyword_buckets(db: RadarDB) -> None:
         repo_id = int(row["repo_id"])
         raw = loads(row["raw_json"]) or {}
         author_login: str | None = (raw.get("user") or {}).get("login")
-        text = " ".join(filter(None, [
-            str(row["title"] or ""),
-            str(row["body"] or ""),
-        ]))
+        title = str(row["title"] or "")
+        body = str(row["body"] or "")
+        full_text = f"{title} {body}"
 
-        primary, secondary = assign_keyword_bucket(text)
+        primary, secondary = assign_keyword_bucket(full_text)
         await db.update_pr_keyword_bucket(pr_id, primary, secondary, author_login)
 
+        # Only record keyword_first_seen when the bucket matches in the PR
+        # TITLE (not just the body) — title matches are far less noisy and
+        # represent genuine intent rather than incidental mention.
         if primary:
-            key = (primary, repo_id)
-            created = str(row["created_at"] or now_iso())
-            if key not in bucket_first or created < bucket_first[key][1]:
-                bucket_first[key] = (pr_id, created)
+            title_primary, _ = assign_keyword_bucket(title)
+            if title_primary == primary:  # confirmed in title
+                key = (primary, repo_id)
+                created = str(row["created_at"] or now_iso())
+                if key not in bucket_first or created < bucket_first[key][1]:
+                    bucket_first[key] = (pr_id, created)
 
     await db.conn.commit()
 
@@ -310,9 +344,20 @@ async def _pass_keyword_buckets(db: RadarDB) -> None:
 # ---------------------------------------------------------------------------
 
 def extract_mentions(text: str) -> list[str]:
-    """Return unique GitHub logins @mentioned in text, bots excluded."""
+    """Return unique GitHub logins @mentioned in text, bots and noise excluded."""
     found = {m.lower() for m in _MENTION_RE.findall(text)}
-    return [m for m in found if m not in _BOT_LOGINS]
+    result = []
+    for m in found:
+        if m in _BOT_LOGINS:
+            continue
+        if m.isdigit():                  # @1, @32 — issue/PR number refs
+            continue
+        if len(m) < 3:                   # single/double char noise
+            continue
+        if m[0] == "v" and m[1:].replace(".", "").isdigit():  # @v1.0.0
+            continue
+        result.append(m)
+    return result
 
 
 async def _pass_mentions(db: RadarDB) -> None:
