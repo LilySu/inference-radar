@@ -29,6 +29,16 @@ from radar.db import RadarDB, loads
 
 log = structlog.get_logger(__name__)
 
+# Bot/automation accounts that open PRs but are not real contributors.
+# Used in RISING CONTRIBUTORS and CROSS-REPO TRAVELERS queries.
+_AUTHOR_BOTS = (
+    "dependabot", "dependabot[bot]", "pre-commit-ci", "pre-commit-ci[bot]",
+    "github-actions", "github-actions[bot]", "renovate", "renovate[bot]",
+    "codecov", "codecov[bot]", "copilot", "copilot[bot]",
+    "coderabbitai", "coderabbitai[bot]", "sourcery-ai",
+    "tensorrt-cicd", "mcore-oncall", "nvidia", "aws",
+)
+
 
 # ---------------------------------------------------------------------------
 # Section builders — each returns a list of text lines
@@ -114,11 +124,11 @@ async def _section_ripening(db: RadarDB) -> list[str]:
                   r.slug AS repo_slug,
                   CAST(julianday('now') - julianday(p.created_at) AS INTEGER) AS days_open,
                   co.org AS author_org,
-                  json_extract(p.raw_json, '$.user.login') AS author_login
+                  p.author_login
            FROM prs p
            JOIN repos r       ON r.id  = p.repo_id
            JOIN pr_review_signal rs ON rs.pr_id = p.id
-           LEFT JOIN contributor_orgs co ON co.login = json_extract(p.raw_json, '$.user.login')
+           LEFT JOIN contributor_orgs co ON co.login = p.author_login
            WHERE p.state = 'open'
              AND rs.newbie_viable = 1
              AND rs.stall_reason NOT IN ('duplicate_internal','not_on_roadmap','needs_rfc_first')
@@ -343,21 +353,24 @@ async def _section_rising_contributors(db: RadarDB) -> list[str]:
     lines = ["=== RISING CONTRIBUTORS — recent acceleration ===", ""]
 
     # Include closed PRs as proxy for merged (merged_at sparse in early data)
+    bot_ph = ",".join("?" * len(_AUTHOR_BOTS))
     async with db.conn.execute(
-        """SELECT json_extract(p.raw_json, '$.user.login') AS login,
+        f"""SELECT p.author_login AS login,
                   co.org,
                   p.keyword_bucket,
                   SUM(CASE WHEN p.created_at > date('now', '-60 days') THEN 1 ELSE 0 END) AS recent,
                   SUM(CASE WHEN p.created_at <= date('now', '-60 days') THEN 1 ELSE 0 END) AS historical
            FROM prs p
-           LEFT JOIN contributor_orgs co ON co.login = json_extract(p.raw_json, '$.user.login')
+           LEFT JOIN contributor_orgs co ON co.login = p.author_login
            WHERE (p.merged_at IS NOT NULL OR p.state = 'closed')
              AND p.created_at > date('now', '-365 days')
-             AND json_extract(p.raw_json, '$.user.login') IS NOT NULL
-           GROUP BY login, keyword_bucket
+             AND p.author_login IS NOT NULL
+             AND p.author_login NOT IN ({bot_ph})
+           GROUP BY p.author_login, p.keyword_bucket
            HAVING recent >= 3 AND recent > historical
            ORDER BY recent DESC
-           LIMIT 15"""
+           LIMIT 15""",
+        list(_AUTHOR_BOTS),
     ) as cur:
         rows = await cur.fetchall()
 
@@ -377,21 +390,24 @@ async def _section_cross_repo_travelers(db: RadarDB) -> list[str]:
     """Contributors active in multiple repos — highest-leverage to know."""
     lines = ["=== CROSS-REPO TRAVELERS — multi-repo contributors ===", ""]
 
+    bot_ph = ",".join("?" * len(_AUTHOR_BOTS))
     async with db.conn.execute(
-        """SELECT json_extract(p.raw_json, '$.user.login') AS login,
+        f"""SELECT p.author_login AS login,
                   co.org,
                   COUNT(DISTINCT p.repo_id) AS repo_count,
                   GROUP_CONCAT(DISTINCT r.slug) AS repos,
                   SUM(CASE WHEN p.merged_at IS NOT NULL THEN 1 ELSE 0 END) AS total_merges
            FROM prs p
            JOIN repos r ON r.id = p.repo_id
-           LEFT JOIN contributor_orgs co ON co.login = json_extract(p.raw_json, '$.user.login')
+           LEFT JOIN contributor_orgs co ON co.login = p.author_login
            WHERE p.created_at > date('now', '-180 days')
-             AND json_extract(p.raw_json, '$.user.login') IS NOT NULL
-           GROUP BY login
+             AND p.author_login IS NOT NULL
+             AND p.author_login NOT IN ({bot_ph})
+           GROUP BY p.author_login
            HAVING repo_count > 1
            ORDER BY total_merges DESC
-           LIMIT 20"""
+           LIMIT 20""",
+        list(_AUTHOR_BOTS),
     ) as cur:
         rows = await cur.fetchall()
 
