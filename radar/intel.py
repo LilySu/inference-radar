@@ -37,6 +37,8 @@ _AUTHOR_BOTS = (
     "codecov", "codecov[bot]", "copilot", "copilot[bot]",
     "coderabbitai", "coderabbitai[bot]", "sourcery-ai",
     "tensorrt-cicd", "mcore-oncall", "nvidia", "aws",
+    "nvidia-megatron-lm-release-bot", "nvidia-megatron-lm-release-bot[bot]",
+    "triton-lang", "meta-llama", "huggingface",
 )
 
 
@@ -182,7 +184,7 @@ async def _section_open_terrain(db: RadarDB) -> list[str]:
                   SUM(CASE WHEN p.merged_at IS NOT NULL THEN 1 ELSE 0 END) AS merged
            FROM prs p
            JOIN contributor_orgs co ON co.login = p.author_login
-           WHERE p.keyword_bucket IS NOT NULL
+           WHERE p.keyword_bucket IS NOT NULL AND p.keyword_bucket != ''
              AND co.org IS NOT NULL
              AND p.created_at > date('now', '-180 days')
            GROUP BY p.keyword_bucket, co.org
@@ -237,7 +239,7 @@ async def _section_company_map(db: RadarDB) -> list[str]:
                   ) AS merge_pct
            FROM prs p
            JOIN contributor_orgs co ON co.login = p.author_login
-           WHERE p.keyword_bucket IS NOT NULL
+           WHERE p.keyword_bucket IS NOT NULL AND p.keyword_bucket != ''
              AND co.org IS NOT NULL
              AND p.created_at > date('now', '-180 days')
            GROUP BY co.org, p.keyword_bucket
@@ -276,7 +278,7 @@ async def _section_label_merge_times(db: RadarDB) -> list[str]:
                   ) AS avg_days
            FROM prs p
            WHERE p.merged_at IS NOT NULL
-             AND p.keyword_bucket IS NOT NULL
+             AND p.keyword_bucket IS NOT NULL AND p.keyword_bucket != ''
              AND p.labels_json IS NOT NULL
              AND p.labels_json != '[]'
              AND p.created_at > date('now', '-365 days')
@@ -319,7 +321,7 @@ async def _section_mentions_power(db: RadarDB) -> list[str]:
            FROM pr_mentions pm
            JOIN prs p         ON p.id = pm.pr_id
            LEFT JOIN contributor_orgs co ON co.login = pm.mentioned_login
-           WHERE p.keyword_bucket IS NOT NULL
+           WHERE p.keyword_bucket IS NOT NULL AND p.keyword_bucket != ''
              AND p.created_at > date('now', '-180 days')
              AND pm.mentioned_login NOT IN ({bot_placeholders})
            GROUP BY pm.mentioned_login, p.keyword_bucket
@@ -366,6 +368,7 @@ async def _section_rising_contributors(db: RadarDB) -> list[str]:
              AND p.created_at > date('now', '-365 days')
              AND p.author_login IS NOT NULL
              AND p.author_login NOT IN ({bot_ph})
+             AND p.keyword_bucket IS NOT NULL AND p.keyword_bucket != ''
            GROUP BY p.author_login, p.keyword_bucket
            HAVING recent >= 3 AND recent > historical
            ORDER BY recent DESC
@@ -379,7 +382,7 @@ async def _section_rising_contributors(db: RadarDB) -> list[str]:
     for r in rows:
         org_tag = f" [{r['org']}]" if r["org"] else ""
         lines.append(
-            f"  @{r['login']}{org_tag}  {r['keyword_bucket'] or 'general'}"
+            f"  @{r['login']}{org_tag}  {r['keyword_bucket'] or 'unclassified'}"
             f"  +{r['recent']} recent vs {r['historical']} historical"
         )
     lines.append("")

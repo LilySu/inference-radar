@@ -848,12 +848,15 @@ class RadarDB:
         self, pr_id: int, primary: str | None, secondary: list[str],
         author_login: str | None,
     ) -> None:
+        # Use '' (empty string) as a sentinel for "evaluated, no bucket match"
+        # so the PR is excluded from future keyword_bucket IS NULL queries.
+        bucket_val = primary if primary else ""
         await self.conn.execute(
             """UPDATE prs
                SET keyword_bucket=?, keyword_secondary_json=?,
                    author_login=COALESCE(author_login, ?)
                WHERE id=?""",
-            (primary, dumps(secondary) if secondary else None, author_login, pr_id),
+            (bucket_val, dumps(secondary) if secondary else None, author_login, pr_id),
         )
 
     # --- analytics: pr_review_signal ---
