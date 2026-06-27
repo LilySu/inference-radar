@@ -198,8 +198,15 @@ _BOT_LOGINS = frozenset({
     "coderabbitai", "coderabbitai[bot]", "sourcery-ai", "deepsource-autofix",
     "greptile", "sweep-ai", "ellipsis-dev",
     # Corporate oncall/team accounts (not individual engineers)
-    "mcore-oncall", "nvidia", "anthropic", "meta-llama",
-    "google", "microsoft", "amazon-chime-sdk", "aws",
+    "mcore-oncall", "nvidia", "anthropic", "meta-llama", "amd",
+    "google", "microsoft", "amazon-chime-sdk", "aws", "flashinfer",
+    "huggingface", "openai", "pytorch", "triton-lang",
+    # Common false-positive tokens that regex picks up from prose / email refs
+    "gmail", "users", "pytest", "torch", "python", "linux",
+    "example", "localhost", "noreply", "mention", "here",
+    # Python decorators / stdlib that get picked up from code blocks
+    "cache", "property", "staticmethod", "classmethod", "abstractmethod",
+    "dataclass", "override", "deprecated",
 })
 
 # Review signal LLM schema
