@@ -222,6 +222,76 @@ CREATE TABLE IF NOT EXISTS briefings (
 CREATE INDEX IF NOT EXISTS idx_brief_date ON briefings(briefing_date DESC);
 """
 
+# Analytics layer — populated by comments.py, enrich.py, papers.py.
+# Kept separate from _SCHEMA so existing tables are never touched.
+_ANALYTICS_SCHEMA = """
+CREATE TABLE IF NOT EXISTS pr_comments (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    pr_id       INTEGER NOT NULL REFERENCES prs(id),
+    comment_id  INTEGER NOT NULL,
+    author_login TEXT,
+    body        TEXT,
+    created_at  TEXT,
+    source      TEXT NOT NULL,   -- 'issue_comment' | 'review'
+    UNIQUE(pr_id, comment_id, source)
+);
+CREATE INDEX IF NOT EXISTS idx_prc_pr ON pr_comments(pr_id);
+CREATE INDEX IF NOT EXISTS idx_prc_author ON pr_comments(author_login);
+
+CREATE TABLE IF NOT EXISTS pr_mentions (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    pr_id           INTEGER NOT NULL REFERENCES prs(id),
+    mentioned_login TEXT NOT NULL,
+    source          TEXT NOT NULL,   -- 'body' | 'comment'
+    UNIQUE(pr_id, mentioned_login, source)
+);
+CREATE INDEX IF NOT EXISTS idx_prm_login ON pr_mentions(mentioned_login);
+CREATE INDEX IF NOT EXISTS idx_prm_pr    ON pr_mentions(pr_id);
+
+CREATE TABLE IF NOT EXISTS contributor_orgs (
+    login        TEXT PRIMARY KEY,
+    org          TEXT,
+    org_source   TEXT,   -- 'github_company' | 'bio_keyword' | 'manual'
+    company_raw  TEXT,
+    bio_snippet  TEXT,
+    refreshed_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS pr_review_signal (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    pr_id           INTEGER NOT NULL REFERENCES prs(id) UNIQUE,
+    stall_reason    TEXT,
+    reviewer_stance TEXT,
+    newbie_viable   INTEGER NOT NULL DEFAULT 0,
+    one_line_reason TEXT,
+    model           TEXT,
+    prompt_version  TEXT,
+    classified_at   TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_prs_newbie ON pr_review_signal(newbie_viable, stall_reason);
+
+CREATE TABLE IF NOT EXISTS paper_signals (
+    paper_id          TEXT PRIMARY KEY,
+    title             TEXT NOT NULL,
+    published_date    TEXT,
+    keyword_buckets   TEXT,   -- JSON array of matched bucket names
+    abstract_snippet  TEXT,
+    hf_url            TEXT,
+    arxiv_id          TEXT,
+    vllm_pr_appeared  TEXT,   -- date when a matching vLLM PR first appeared
+    ingested_at       TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_ps_date ON paper_signals(published_date DESC);
+
+CREATE TABLE IF NOT EXISTS keyword_first_seen (
+    bucket      TEXT    NOT NULL,
+    repo_id     INTEGER NOT NULL REFERENCES repos(id),
+    first_pr_id INTEGER REFERENCES prs(id),
+    first_seen  TEXT    NOT NULL,
+    PRIMARY KEY (bucket, repo_id)
+);
+"""
+
 
 def now_iso() -> str:
     return datetime.now(UTC).isoformat()
@@ -265,7 +335,22 @@ class RadarDB:
         await self._db.execute("PRAGMA busy_timeout=5000")
         await self._db.execute("PRAGMA foreign_keys=ON")
         await self._db.executescript(_SCHEMA)
+        await self._db.executescript(_ANALYTICS_SCHEMA)
+        await self._analytics_migrate()
         await self._db.commit()
+
+    async def _analytics_migrate(self) -> None:
+        """Add analytics columns to prs; safe to call on existing DBs."""
+        for sql in [
+            "ALTER TABLE prs ADD COLUMN keyword_bucket TEXT",
+            "ALTER TABLE prs ADD COLUMN keyword_secondary_json TEXT",
+            "ALTER TABLE prs ADD COLUMN author_login TEXT",
+            "ALTER TABLE prs ADD COLUMN comments_fetched_at TEXT",
+        ]:
+            try:
+                await self.conn.execute(sql)
+            except Exception:
+                pass  # column already exists
 
     async def close(self) -> None:
         if self._db:
@@ -655,6 +740,222 @@ class RadarDB:
         )
         await self.conn.commit()
         return int(cur.lastrowid or 0)
+
+    # --- analytics: pr_comments ---
+
+    async def fetch_prs_needing_comments(self, max_prs: int = 100) -> list[aiosqlite.Row]:
+        """PRs that have never had their comments fetched. Open first, then recent."""
+        async with self.conn.execute(
+            """SELECT p.id, p.number, p.state, r.slug AS repo_slug
+               FROM prs p JOIN repos r ON r.id = p.repo_id
+               WHERE p.comments_fetched_at IS NULL
+                 AND p.created_at > date('now', '-180 days')
+               ORDER BY CASE WHEN p.state='open' THEN 0 ELSE 1 END, p.updated_at DESC
+               LIMIT ?""",
+            (max_prs,),
+        ) as cur:
+            return list(await cur.fetchall())
+
+    async def upsert_pr_comment(
+        self, *, pr_id: int, comment_id: int, author_login: str | None,
+        body: str | None, created_at: str | None, source: str,
+    ) -> None:
+        await self.conn.execute(
+            """INSERT INTO pr_comments (pr_id, comment_id, author_login, body, created_at, source)
+               VALUES (?, ?, ?, ?, ?, ?)
+               ON CONFLICT(pr_id, comment_id, source) DO UPDATE SET
+                   author_login=excluded.author_login, body=excluded.body""",
+            (pr_id, comment_id, author_login, body, created_at, source),
+        )
+
+    async def mark_comments_fetched(self, pr_id: int) -> None:
+        await self.conn.execute(
+            "UPDATE prs SET comments_fetched_at=? WHERE id=?", (now_iso(), pr_id),
+        )
+        await self.conn.commit()
+
+    async def fetch_pr_comments(self, pr_id: int) -> list[aiosqlite.Row]:
+        async with self.conn.execute(
+            """SELECT author_login, body, created_at, source
+               FROM pr_comments WHERE pr_id=? ORDER BY created_at ASC""",
+            (pr_id,),
+        ) as cur:
+            return list(await cur.fetchall())
+
+    # --- analytics: pr_mentions ---
+
+    async def upsert_pr_mention(
+        self, *, pr_id: int, mentioned_login: str, source: str,
+    ) -> None:
+        await self.conn.execute(
+            """INSERT OR IGNORE INTO pr_mentions (pr_id, mentioned_login, source)
+               VALUES (?, ?, ?)""",
+            (pr_id, mentioned_login, source),
+        )
+
+    # --- analytics: contributor_orgs ---
+
+    async def get_contributor_org(self, login: str) -> aiosqlite.Row | None:
+        async with self.conn.execute(
+            "SELECT * FROM contributor_orgs WHERE login=?", (login,),
+        ) as cur:
+            return await cur.fetchone()
+
+    async def upsert_contributor_org(
+        self, *, login: str, org: str | None, org_source: str,
+        company_raw: str | None, bio_snippet: str | None,
+    ) -> None:
+        await self.conn.execute(
+            """INSERT INTO contributor_orgs
+               (login, org, org_source, company_raw, bio_snippet, refreshed_at)
+               VALUES (?, ?, ?, ?, ?, ?)
+               ON CONFLICT(login) DO UPDATE SET
+                   org=excluded.org, org_source=excluded.org_source,
+                   company_raw=excluded.company_raw, bio_snippet=excluded.bio_snippet,
+                   refreshed_at=excluded.refreshed_at""",
+            (login, org, org_source, company_raw, bio_snippet, now_iso()),
+        )
+
+    async def fetch_logins_needing_org_lookup(self, max_logins: int = 300) -> list[str]:
+        """Unique author logins from prs not yet in contributor_orgs (or stale >90d)."""
+        async with self.conn.execute(
+            """SELECT DISTINCT json_extract(p.raw_json, '$.user.login') AS login
+               FROM prs p
+               WHERE json_extract(p.raw_json, '$.user.login') IS NOT NULL
+                 AND NOT EXISTS (
+                     SELECT 1 FROM contributor_orgs co
+                     WHERE co.login = json_extract(p.raw_json, '$.user.login')
+                       AND co.refreshed_at > date('now', '-90 days')
+                 )
+               LIMIT ?""",
+            (max_logins,),
+        ) as cur:
+            rows = await cur.fetchall()
+        return [r["login"] for r in rows if r["login"]]
+
+    # --- analytics: keyword_bucket on prs ---
+
+    async def fetch_prs_needing_keyword_bucket(self, limit: int = 2000) -> list[aiosqlite.Row]:
+        async with self.conn.execute(
+            """SELECT id, title, body FROM prs
+               WHERE keyword_bucket IS NULL
+               ORDER BY updated_at DESC LIMIT ?""",
+            (limit,),
+        ) as cur:
+            return list(await cur.fetchall())
+
+    async def update_pr_keyword_bucket(
+        self, pr_id: int, primary: str | None, secondary: list[str],
+        author_login: str | None,
+    ) -> None:
+        await self.conn.execute(
+            """UPDATE prs
+               SET keyword_bucket=?, keyword_secondary_json=?,
+                   author_login=COALESCE(author_login, ?)
+               WHERE id=?""",
+            (primary, dumps(secondary) if secondary else None, author_login, pr_id),
+        )
+
+    # --- analytics: pr_review_signal ---
+
+    async def get_pr_review_signal(self, pr_id: int) -> aiosqlite.Row | None:
+        async with self.conn.execute(
+            "SELECT * FROM pr_review_signal WHERE pr_id=?", (pr_id,),
+        ) as cur:
+            return await cur.fetchone()
+
+    async def upsert_pr_review_signal(
+        self, *, pr_id: int, stall_reason: str, reviewer_stance: str,
+        newbie_viable: bool, one_line_reason: str, model: str, prompt_version: str,
+    ) -> None:
+        await self.conn.execute(
+            """INSERT INTO pr_review_signal
+               (pr_id, stall_reason, reviewer_stance, newbie_viable,
+                one_line_reason, model, prompt_version, classified_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(pr_id) DO UPDATE SET
+                   stall_reason=excluded.stall_reason,
+                   reviewer_stance=excluded.reviewer_stance,
+                   newbie_viable=excluded.newbie_viable,
+                   one_line_reason=excluded.one_line_reason,
+                   model=excluded.model, prompt_version=excluded.prompt_version,
+                   classified_at=excluded.classified_at""",
+            (pr_id, stall_reason, reviewer_stance, 1 if newbie_viable else 0,
+             one_line_reason, model, prompt_version, now_iso()),
+        )
+        await self.conn.commit()
+
+    async def fetch_prs_needing_review_signal(self, limit: int = 20) -> list[aiosqlite.Row]:
+        """Open PRs that have comments but no review signal yet."""
+        async with self.conn.execute(
+            """SELECT p.id, p.title, p.state, r.slug AS repo_slug
+               FROM prs p JOIN repos r ON r.id = p.repo_id
+               WHERE p.state = 'open'
+                 AND p.comments_fetched_at IS NOT NULL
+                 AND NOT EXISTS (
+                     SELECT 1 FROM pr_review_signal rs WHERE rs.pr_id = p.id
+                 )
+                 AND EXISTS (
+                     SELECT 1 FROM pr_comments pc WHERE pc.pr_id = p.id LIMIT 1
+                 )
+               ORDER BY p.updated_at DESC LIMIT ?""",
+            (limit,),
+        ) as cur:
+            return list(await cur.fetchall())
+
+    # --- analytics: paper_signals ---
+
+    async def upsert_paper_signal(
+        self, *, paper_id: str, title: str, published_date: str | None,
+        keyword_buckets: list[str], abstract_snippet: str | None,
+        hf_url: str | None, arxiv_id: str | None,
+    ) -> None:
+        await self.conn.execute(
+            """INSERT INTO paper_signals
+               (paper_id, title, published_date, keyword_buckets,
+                abstract_snippet, hf_url, arxiv_id, ingested_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(paper_id) DO UPDATE SET
+                   keyword_buckets=excluded.keyword_buckets,
+                   abstract_snippet=excluded.abstract_snippet,
+                   ingested_at=excluded.ingested_at""",
+            (paper_id, title, published_date, dumps(keyword_buckets),
+             abstract_snippet, hf_url, arxiv_id, now_iso()),
+        )
+        await self.conn.commit()
+
+    async def mark_paper_vllm_appeared(self, paper_id: str, appeared_date: str) -> None:
+        await self.conn.execute(
+            "UPDATE paper_signals SET vllm_pr_appeared=? WHERE paper_id=?",
+            (appeared_date, paper_id),
+        )
+        await self.conn.commit()
+
+    # --- analytics: keyword_first_seen ---
+
+    async def upsert_keyword_first_seen(
+        self, *, bucket: str, repo_id: int, first_pr_id: int, first_seen: str,
+    ) -> None:
+        await self.conn.execute(
+            """INSERT OR IGNORE INTO keyword_first_seen
+               (bucket, repo_id, first_pr_id, first_seen)
+               VALUES (?, ?, ?, ?)""",
+            (bucket, repo_id, first_pr_id, first_seen),
+        )
+        await self.conn.commit()
+
+    async def fetch_bucket_first_seen(
+        self, bucket: str,
+    ) -> list[aiosqlite.Row]:
+        """For a bucket, return one row per repo with first_seen date."""
+        async with self.conn.execute(
+            """SELECT kfs.bucket, kfs.first_seen, kfs.first_pr_id, r.slug AS repo_slug
+               FROM keyword_first_seen kfs JOIN repos r ON r.id = kfs.repo_id
+               WHERE kfs.bucket=?
+               ORDER BY kfs.first_seen ASC""",
+            (bucket,),
+        ) as cur:
+            return list(await cur.fetchall())
 
     # --- briefings ---
 

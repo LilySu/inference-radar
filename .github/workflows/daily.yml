@@ -120,6 +120,32 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: uv run python -m radar.classify --max 50
 
+      # Fetch PR comments for stall-reason classification.
+      # Capped at 60 PRs (~120 GitHub API calls) to stay well inside the
+      # 5000/hr authenticated limit. Open PRs are prioritised automatically.
+      - name: Fetch PR comments
+        if: github.event.schedule == '13 12 * * *' || inputs.run_brief
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: uv run python -m radar.comments --max 60
+
+      # Enrichment: keyword buckets (regex, free), @mentions (regex, free),
+      # contributor org lookup (GitHub API, cached 90d), and LLM review-signal
+      # classification (Groq, capped at 15 PRs = 3 batched calls).
+      # --skip-signals keeps Groq budget for brief; re-enable once TPD is higher.
+      - name: Enrich PRs
+        if: github.event.schedule == '13 12 * * *' || inputs.run_brief
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: uv run python -m radar.enrich --max-signals 15 --max-org-lookups 150
+
+      # HuggingFace daily papers: fetch last 3 days, match keyword buckets,
+      # cross-reference against vLLM PRs. No API key required.
+      - name: Fetch HF papers
+        if: github.event.schedule == '13 12 * * *' || inputs.run_brief
+        run: uv run python -m radar.papers --days-back 3
+
       # Force a Groq TPM-minute boundary between classify and brief.
       # Classify's batched calls saturate the per-minute token budget; without
       # this gap, brief hits 429 on attempt 0 and exhausts its 30s backoff before
