@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import os
+import re
 from datetime import UTC, date, datetime, timedelta
 
 import httpx
@@ -35,6 +36,21 @@ _INFERENCE_BUCKETS = frozenset({
     "quantization", "hardware_hopper", "hardware_ada", "hardware_amd",
     "hardware_other", "lora_serving", "distributed", "scheduler",
 })
+
+# At least one LLM/inference anchor must appear in title+abstract to avoid
+# false positives: "mixture of experts" in a speech paper, "kv cache" in a
+# database paper, etc.
+_LLM_ANCHOR_RE = re.compile(
+    r"\b("
+    r"large language model|language model|llm|"
+    r"autoregressive|transformer\b.{0,40}(?:model|inference|serving)|"
+    r"token generation|decoding|"
+    r"(?:llm|model)\s+inference|inference serving|"
+    r"prefill|kv.?cache|attention mechanism|"
+    r"speculative decod|vllm|sglang|trt-llm|tensorrt"
+    r")\b",
+    re.IGNORECASE,
+)
 
 
 async def _fetch_papers_for_date(
@@ -79,9 +95,15 @@ def _extract_fields(item: dict) -> tuple[str, str, str | None, str | None, str |
     return paper_id, title, abstract[:600], published_date, arxiv_id
 
 
-def _is_inference_relevant(buckets: list[str]) -> bool:
-    """Require at least one hard inference bucket (not just model_support alone)."""
-    return bool(set(buckets) & _INFERENCE_BUCKETS)
+def _is_inference_relevant(buckets: list[str], text: str) -> bool:
+    """Require a hard inference bucket AND an LLM-context anchor in the text.
+
+    The anchor check blocks keyword false-positives: 'mixture of experts' in a
+    speech model paper, 'kv cache' in a database paper, etc.
+    """
+    if not (set(buckets) & _INFERENCE_BUCKETS):
+        return False
+    return bool(_LLM_ANCHOR_RE.search(text))
 
 
 async def _cross_reference_vllm(db: RadarDB) -> int:
@@ -153,7 +175,7 @@ async def run(days_back: int = 7, db_path: str | None = None) -> None:
                     primary, secondary = assign_keyword_bucket(text)
                     all_buckets = ([primary] if primary else []) + secondary
 
-                    if not _is_inference_relevant(all_buckets):
+                    if not _is_inference_relevant(all_buckets, text):
                         continue
 
                     hf_url = (
