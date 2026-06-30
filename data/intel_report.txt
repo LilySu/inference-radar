@@ -1,0 +1,86 @@
+============================================================
+  INFERENCE RADAR INTEL  —  2026-06-30
+============================================================
+
+=== EMERGING — techniques not yet in vLLM ===
+
+  [hardware_ada] DreamForge-World 0.1 Preview: A Low-Compute Real-Time Controllable World Model
+      published 2026-06-28
+      https://huggingface.co/papers/2606.30292
+      We present DreamForge-World 0.1 Preview, a preview foundational world model for real-time interactive world simulation. …
+
+  [Cross-repo lag — in SGLang, not yet in vLLM]
+    scheduler                       SGLang: 2026-05-20  lag: 41d
+
+=== RIPENING — stalled PRs a newcomer can address ===
+
+  (none yet — run enrich + comments first)
+=== OPEN TERRAIN — no dominant org (safe to contribute) ===
+
+  model_support                   top org: Red Hat (3/7 merges, 43% share)
+
+=== COMPANY MAP — org × keyword area ===
+
+  Red Hat               model_support (3/13, 23%)  |  moe_routing (2/2, 100%)  |  quantization (1/4, 25%)  |  hardware_hopper (1/4, 25%)  |  attention_kernel (1/2, 50%)
+  AMD                   hardware_amd (2/3, 67%)
+  NVIDIA                model_support (2/3, 67%)  |  moe_routing (0/2, 0%)
+  Amazon                model_support (1/2, 50%)
+  Neural Magic          model_support (1/3, 33%)
+  Alibaba               quantization (0/2, 0%)
+
+=== MERGE VELOCITY — median days by label × bucket ===
+
+  hardware_amd                  [rocm, ready, ci/build]  n=5  avg 0.3d
+  hardware_amd                  [documentation, rocm, ready]  n=3  avg 0.9d
+  hardware_other                [documentation, npu, run-ci]  n=3  avg 1.3d
+  hardware_amd                  [rocm, ready]  n=4  avg 6.8d
+  hardware_other                [intel-gpu, ready]  n=3  avg 7.0d
+  hardware_amd                  [rocm, ready, v1]  n=5  avg 7.4d
+  hardware_other                [run-ci]  n=6  avg 7.6d
+  hardware_other                [npu, run-ci]  n=3  avg 8.1d
+  hardware_amd                  [amd, run-ci]  n=3  avg 15.3d
+
+=== MENTION POWER — who controls each area ===
+
+  hardware_amd                    @andreaskaratzas (?, 3x)
+  model_support                   @claude (?, 3x)
+
+=== RISING CONTRIBUTORS — recent acceleration ===
+
+  @AndreasKaratzas  hardware_amd  +10 recent vs 0 historical
+  @ronhuafeng  hardware_hopper  +6 recent vs 0 historical
+  @peizhang56  hardware_amd  +5 recent vs 0 historical
+  @silencejade  hardware_other  +5 recent vs 3 historical
+  @BBuf  hardware_hopper  +4 recent vs 0 historical
+  @varun-sundar-rabindranath [Red Hat]  model_support  +4 recent vs 0 historical
+  @Johnsonms  hardware_hopper  +3 recent vs 2 historical
+  @Lzy17  hardware_amd  +3 recent vs 0 historical
+  @chaojun-zhang  hardware_other  +3 recent vs 0 historical
+  @chienchunhung  kv_cache  +3 recent vs 0 historical
+  @ghangz  hardware_amd  +3 recent vs 0 historical
+  @kpham-sgl  model_support  +3 recent vs 0 historical
+  @mickqian  hardware_hopper  +3 recent vs 0 historical
+
+=== CROSS-REPO TRAVELERS — multi-repo contributors ===
+
+  @mmangkad  2 repos  5 merges  | vllm-project/vllm,sgl-project/sglang
+  @b8zhong  2 repos  5 merges  | sgl-project/sglang,flashinfer-ai/flashinfer
+  @jiahanc  2 repos  2 merges  | NVIDIA/TensorRT-LLM,flashinfer-ai/flashinfer
+  @zianglih  2 repos  1 merges  | sgl-project/sglang,flashinfer-ai/flashinfer
+  @waynehacking8  3 repos  1 merges  | sgl-project/sglang,flashinfer-ai/flashinfer,vllm-project/vllm
+  @soaringk  2 repos  1 merges  | vllm-project/vllm,sgl-project/sglang
+  @jmamou  2 repos  1 merges  | vllm-project/vllm,sgl-project/sglang
+  @jhjpark  2 repos  1 merges  | NVIDIA/cudnn-frontend,flashinfer-ai/flashinfer
+  @jdebache  2 repos  1 merges  | flashinfer-ai/flashinfer,vllm-project/vllm
+  @danielafrimi  2 repos  1 merges  | vllm-project/vllm,sgl-project/sglang
+  @yuyz-cyber  2 repos  0 merges  | vllm-project/vllm,sgl-project/sglang
+  @yangspirit [Google]  2 repos  0 merges  | vllm-project/vllm,sgl-project/sglang
+  @wgu9  2 repos  0 merges  | flashinfer-ai/flashinfer,vllm-project/vllm
+  @vitamin-chaos  2 repos  0 merges  | flashinfer-ai/flashinfer,vllm-project/vllm
+  @thanhhao98  2 repos  0 merges  | sgl-project/sglang,flashinfer-ai/flashinfer
+  @tc-mb  2 repos  0 merges  | vllm-project/vllm,NVIDIA/TensorRT-LLM
+  @sureshnam  2 repos  0 merges  | vllm-project/vllm,sgl-project/sglang
+  @spandantiwari  2 repos  0 merges  | sgl-project/sglang,vllm-project/vllm
+  @sjmshsh  2 repos  0 merges  | vllm-project/vllm,sgl-project/sglang
+  @seongyun1104  2 repos  0 merges  | vllm-project/vllm,Dao-AILab/flash-attention
+

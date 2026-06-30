@@ -1,5 +1,47 @@
 [
   {
+    "briefing_date": "2026-06-30",
+    "repo_scope": [
+      "vllm-project/vllm",
+      "sgl-project/sglang",
+      "NVIDIA/Megatron-LM",
+      "NVIDIA/TensorRT-LLM",
+      "NVIDIA/cutlass",
+      "NVIDIA/cudnn-frontend",
+      "NVIDIA/cccl",
+      "Dao-AILab/flash-attention",
+      "flashinfer-ai/flashinfer",
+      "tile-ai/tilelang"
+    ],
+    "script": {
+      "title": "Inference Radar \u2014 2026-06-30",
+      "intro": "Blackwell PRs accelerated",
+      "slides": [
+        {
+          "heading": "Picks",
+          "subhead": "Open issues",
+          "bullets": [
+            "D2 \u00b7 CUTLASS #3358 \u00b7 cutlass_cute \u00b7 [QST] Difference between Fp4 GEMM and Fp4 Ultra Gemm?",
+            "D3 \u00b7 SGLang #29747 \u00b7 deepseek \u00b7 [Bug] I'd like to know if it's possible to deploy Deepseek-v4-flash on a 4090",
+            "D4 \u00b7 FlashInfer #3775 \u00b7 b200 \u00b7 aot.py never registers selective_state_update_sm100 \u2014 Mamba SSU op can't be AOT-",
+            "D3 \u00b7 SGLang #29738 \u00b7 deepseek \u00b7 [Bug] NameError: name 'deep_gemm' is not defined in tf32_hc_prenorm_gemm when SG",
+            "D4 \u00b7 vLLM #47127 \u00b7 cutlass_cute \u00b7 [Bug] OOM during profile_run with GLM-5.2 PD disaggregation + FlashInfer CUTLASS",
+            "D4 \u00b7 vLLM #47130 \u00b7 b200 \u00b7 [Bug] v0.24.0: DeepGEMM 'Unknown recipe' assertion in FP8 kernel warmup on Black",
+            "D4 \u00b7 TileLang #2483 \u00b7 b200 \u00b7 [BUG][Fuzzer] `T.Cast` of an integer to `bfloat16` silently truncates toward zer",
+            "D5 \u00b7 TileLang #2489 \u00b7 b200 \u00b7 [BUG][Fuzzer] Vectorized broadcast-store of a negative `int32` across a 256-bit"
+          ],
+          "narration": "Several open issues caught our attention, including CUTLASS, SGLang, FlashInfer, vLLM, and TileLang, with various bugs and questions related to Blackwell and DeepSeek architectures.",
+          "duration_s": 30
+        }
+      ],
+      "outro": "That's all for today."
+    },
+    "video_path": "out/2026-06-30/brief.mp4",
+    "video_url": null,
+    "duration_s": 22,
+    "built_at": "2026-06-30T14:44:43.565100+00:00"
+  },
+  {
     "briefing_date": "2026-06-25",
     "repo_scope": [
       "vllm-project/vllm",
