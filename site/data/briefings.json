@@ -1,5 +1,82 @@
 [
   {
+    "briefing_date": "2026-07-05",
+    "repo_scope": [
+      "vllm-project/vllm",
+      "sgl-project/sglang",
+      "NVIDIA/Megatron-LM",
+      "NVIDIA/TensorRT-LLM",
+      "NVIDIA/cutlass",
+      "NVIDIA/cudnn-frontend",
+      "NVIDIA/cccl",
+      "Dao-AILab/flash-attention",
+      "flashinfer-ai/flashinfer",
+      "tile-ai/tilelang"
+    ],
+    "script": {
+      "title": "Inference Radar \u2014 2026-07-05",
+      "intro": "VLLM and SGLang see multiple PRs for model support and performance.",
+      "slides": [
+        {
+          "heading": "vLLM",
+          "subhead": "Model Support and Perf Fixes",
+          "bullets": [
+            "Voxtral Realtime \u2014 fixes token feedback task timeout (#44461)",
+            "Mamba/Mamba2 \u2014 fixes loading checkpoint without architectures field (#46037)",
+            "Sequence Parallelism \u2014 1.9% end-to-end throughput improvement (#47070)"
+          ],
+          "narration": "Three landings on vLLM. Voxtral Realtime fixes a bug where the token feedback task would timeout. Mamba and Mamba2 checkpoints can now be loaded without an architectures field. Sequence Parallelism adds support without needing data parallelism, resulting in a 1.9% end-to-end throughput improvement.",
+          "duration_s": 20
+        },
+        {
+          "heading": "SGLang",
+          "subhead": "Metal RMSNorm and Fast Recovery",
+          "bullets": [
+            "Metal RMSNorm kernel \u2014 at parity or better than mx.fast.rms_norm (#30163)",
+            "Fast Recovery Framework \u2014 reduces engine restart time to < 10 seconds (#27139)"
+          ],
+          "narration": "Two key updates in SGLang. A custom Metal RMSNorm kernel is now available, offering performance at or better than the existing mx.fast.rms_norm implementation. Additionally, the Fast Recovery Framework significantly reduces engine restart time to under 10 seconds.",
+          "duration_s": 18
+        },
+        {
+          "heading": "Megatron",
+          "subhead": "MoE and FSDP Fixes",
+          "bullets": [
+            "MoE: Fix memory leak in full recompute mode (#5197)",
+            "FSDP: Fix Torch FSDP2 crash (#4953)"
+          ],
+          "narration": "Megatron sees two important fixes. One addresses a memory leak issue in MoE architecture with full recomputation, and the other resolves a crash in Torch FSDP2.",
+          "duration_s": 15
+        },
+        {
+          "heading": "TRT-LLM",
+          "subhead": "Performance Enhancements",
+          "bullets": [
+            "Mamba SSD HAS_INITSTATES=True kernels warmup \u2014 3.36% total token throughput improvement (#15876)",
+            "Qwen-Image-Layered FP8 support \u2014 includes SageAttention and Cache-DiT integration (#15096)"
+          ],
+          "narration": "TRT-LLM introduces performance enhancements. Pre-JITing certain kernels during warmup improves total token throughput by 3.36%. Additionally, Qwen-Image-Layered FP8 support has been added, featuring SageAttention and Cache-DiT integration.",
+          "duration_s": 18
+        },
+        {
+          "heading": "Picks",
+          "subhead": "Open Issues",
+          "bullets": [
+            "D4 \u00b7 SGLang #30162 \u00b7 b200 \u00b7 Gemma4 vision-prefill collapses at low concurrency with max_soft_tokens=11",
+            "D4 \u00b7 vLLM #47648 \u00b7 deepseek \u00b7 DeepSeek-V4-Flash-DSpark fails on H200/SM90 with FlashMLA KV cache shape"
+          ],
+          "narration": "Two notable open issues. One in SGLang where Gemma4 vision-prefill collapses under specific conditions, and another in vLLM where DeepSeek-V4-Flash-DSpark fails on certain hardware configurations.",
+          "duration_s": 18
+        }
+      ],
+      "outro": "That's all for today's Inference Radar."
+    },
+    "video_path": "out/2026-07-05/brief.mp4",
+    "video_url": null,
+    "duration_s": 91,
+    "built_at": "2026-07-05T14:12:22.264757+00:00"
+  },
+  {
     "briefing_date": "2026-06-30",
     "repo_scope": [
       "vllm-project/vllm",
