@@ -1,5 +1,51 @@
 [
   {
+    "briefing_date": "2026-07-30",
+    "repo_scope": [
+      "vllm-project/vllm",
+      "sgl-project/sglang",
+      "NVIDIA/Megatron-LM",
+      "NVIDIA/TensorRT-LLM",
+      "NVIDIA/cutlass",
+      "NVIDIA/cudnn-frontend",
+      "NVIDIA/cccl",
+      "Dao-AILab/flash-attention",
+      "flashinfer-ai/flashinfer",
+      "tile-ai/tilelang"
+    ],
+    "script": {
+      "title": "Inference Radar \u2014 2026-07-30",
+      "intro": "vLLM and SGLang see Blackwell-targeted kernel work and bug fixes.",
+      "slides": [
+        {
+          "heading": "vLLM",
+          "subhead": "TORCH_CUDA_ARCH_LIST warning",
+          "bullets": [
+            "TORCH_CUDA_ARCH_LIST PTX warning \u2014 Warn when TORCH_CUDA_ARCH_LIST contains +PTX entries that vLLM does not preserve in global CUDA arch extraction (#47649)"
+          ],
+          "narration": "One landing on vLLM, a TORCH_CUDA_ARCH_LIST PTX warning, which warns when TORCH_CUDA_ARCH_LIST contains plus PTX entries that vLLM does not preserve in global CUDA arch extraction.",
+          "duration_s": 15
+        },
+        {
+          "heading": "Picks",
+          "subhead": "Open issues across repos",
+          "bullets": [
+            "D4 \u00b7 vLLM #50430 \u00b7 b200 \u00b7 [Bug]: vllm hangs at using NCCL message on 8xB200 \u2014 The issue is related to vllm hanging at using NCCL message on 8xB200, which is a Blackwell-targeted kernel work.",
+            "D4 \u00b7 SGLang #32907 \u00b7 cutlass_cute \u00b7 [Bug] cutedsl_bf16_gemm 2-CTA TGV kernel: missing trailing cluster barrier \u2192 CUD \u2014 The issue discusses a bug in the cutedsl_bf16_gemm kernel and proposes a fix, which is related to CUTLASS and CuTe.",
+            "D4 \u00b7 vLLM #50416 \u00b7 b200 \u00b7 [Performance]: FlashInfer NVFP4 KV cache causal prefill is ~1.7-1.8x slower than \u2014 The issue discusses NVFP4 KV cache causal prefill performance on SM120 (Blackwell) and proposes an optimized path for NVFP4 KV prefill."
+          ],
+          "narration": "Three open issues across vLLM and SGLang, including a vLLM hang at using NCCL message on 8xB200, a bug in the cutedsl_bf16_gemm kernel in SGLang, and a performance issue with FlashInfer NVFP4 KV cache causal prefill in vLLM.",
+          "duration_s": 25
+        }
+      ],
+      "outro": "That's all for today's Inference Radar."
+    },
+    "video_path": "out/2026-07-30/brief.mp4",
+    "video_url": null,
+    "duration_s": 43,
+    "built_at": "2026-07-30T14:31:22.477081+00:00"
+  },
+  {
     "briefing_date": "2026-07-05",
     "repo_scope": [
       "vllm-project/vllm",

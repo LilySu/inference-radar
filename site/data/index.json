@@ -1,6 +1,6 @@
 {
   "latest_briefing": {
-    "briefing_date": "2026-07-05",
+    "briefing_date": "2026-07-30",
     "repo_scope": [
       "vllm-project/vllm",
       "sgl-project/sglang",
@@ -14,69 +14,74 @@
       "tile-ai/tilelang"
     ],
     "script": {
-      "title": "Inference Radar \u2014 2026-07-05",
-      "intro": "VLLM and SGLang see multiple PRs for model support and performance.",
+      "title": "Inference Radar \u2014 2026-07-30",
+      "intro": "vLLM and SGLang see Blackwell-targeted kernel work and bug fixes.",
       "slides": [
         {
           "heading": "vLLM",
-          "subhead": "Model Support and Perf Fixes",
+          "subhead": "TORCH_CUDA_ARCH_LIST warning",
           "bullets": [
-            "Voxtral Realtime \u2014 fixes token feedback task timeout (#44461)",
-            "Mamba/Mamba2 \u2014 fixes loading checkpoint without architectures field (#46037)",
-            "Sequence Parallelism \u2014 1.9% end-to-end throughput improvement (#47070)"
+            "TORCH_CUDA_ARCH_LIST PTX warning \u2014 Warn when TORCH_CUDA_ARCH_LIST contains +PTX entries that vLLM does not preserve in global CUDA arch extraction (#47649)"
           ],
-          "narration": "Three landings on vLLM. Voxtral Realtime fixes a bug where the token feedback task would timeout. Mamba and Mamba2 checkpoints can now be loaded without an architectures field. Sequence Parallelism adds support without needing data parallelism, resulting in a 1.9% end-to-end throughput improvement.",
-          "duration_s": 20
-        },
-        {
-          "heading": "SGLang",
-          "subhead": "Metal RMSNorm and Fast Recovery",
-          "bullets": [
-            "Metal RMSNorm kernel \u2014 at parity or better than mx.fast.rms_norm (#30163)",
-            "Fast Recovery Framework \u2014 reduces engine restart time to < 10 seconds (#27139)"
-          ],
-          "narration": "Two key updates in SGLang. A custom Metal RMSNorm kernel is now available, offering performance at or better than the existing mx.fast.rms_norm implementation. Additionally, the Fast Recovery Framework significantly reduces engine restart time to under 10 seconds.",
-          "duration_s": 18
-        },
-        {
-          "heading": "Megatron",
-          "subhead": "MoE and FSDP Fixes",
-          "bullets": [
-            "MoE: Fix memory leak in full recompute mode (#5197)",
-            "FSDP: Fix Torch FSDP2 crash (#4953)"
-          ],
-          "narration": "Megatron sees two important fixes. One addresses a memory leak issue in MoE architecture with full recomputation, and the other resolves a crash in Torch FSDP2.",
+          "narration": "One landing on vLLM, a TORCH_CUDA_ARCH_LIST PTX warning, which warns when TORCH_CUDA_ARCH_LIST contains plus PTX entries that vLLM does not preserve in global CUDA arch extraction.",
           "duration_s": 15
         },
         {
-          "heading": "TRT-LLM",
-          "subhead": "Performance Enhancements",
-          "bullets": [
-            "Mamba SSD HAS_INITSTATES=True kernels warmup \u2014 3.36% total token throughput improvement (#15876)",
-            "Qwen-Image-Layered FP8 support \u2014 includes SageAttention and Cache-DiT integration (#15096)"
-          ],
-          "narration": "TRT-LLM introduces performance enhancements. Pre-JITing certain kernels during warmup improves total token throughput by 3.36%. Additionally, Qwen-Image-Layered FP8 support has been added, featuring SageAttention and Cache-DiT integration.",
-          "duration_s": 18
-        },
-        {
           "heading": "Picks",
-          "subhead": "Open Issues",
+          "subhead": "Open issues across repos",
           "bullets": [
-            "D4 \u00b7 SGLang #30162 \u00b7 b200 \u00b7 Gemma4 vision-prefill collapses at low concurrency with max_soft_tokens=11",
-            "D4 \u00b7 vLLM #47648 \u00b7 deepseek \u00b7 DeepSeek-V4-Flash-DSpark fails on H200/SM90 with FlashMLA KV cache shape"
+            "D4 \u00b7 vLLM #50430 \u00b7 b200 \u00b7 [Bug]: vllm hangs at using NCCL message on 8xB200 \u2014 The issue is related to vllm hanging at using NCCL message on 8xB200, which is a Blackwell-targeted kernel work.",
+            "D4 \u00b7 SGLang #32907 \u00b7 cutlass_cute \u00b7 [Bug] cutedsl_bf16_gemm 2-CTA TGV kernel: missing trailing cluster barrier \u2192 CUD \u2014 The issue discusses a bug in the cutedsl_bf16_gemm kernel and proposes a fix, which is related to CUTLASS and CuTe.",
+            "D4 \u00b7 vLLM #50416 \u00b7 b200 \u00b7 [Performance]: FlashInfer NVFP4 KV cache causal prefill is ~1.7-1.8x slower than \u2014 The issue discusses NVFP4 KV cache causal prefill performance on SM120 (Blackwell) and proposes an optimized path for NVFP4 KV prefill."
           ],
-          "narration": "Two notable open issues. One in SGLang where Gemma4 vision-prefill collapses under specific conditions, and another in vLLM where DeepSeek-V4-Flash-DSpark fails on certain hardware configurations.",
-          "duration_s": 18
+          "narration": "Three open issues across vLLM and SGLang, including a vLLM hang at using NCCL message on 8xB200, a bug in the cutedsl_bf16_gemm kernel in SGLang, and a performance issue with FlashInfer NVFP4 KV cache causal prefill in vLLM.",
+          "duration_s": 25
         }
       ],
       "outro": "That's all for today's Inference Radar."
     },
-    "video_path": "out/2026-07-05/brief.mp4",
+    "video_path": "out/2026-07-30/brief.mp4",
     "video_url": null,
-    "duration_s": 91,
-    "built_at": "2026-07-05T14:12:22.264757+00:00"
+    "duration_s": 43,
+    "built_at": "2026-07-30T14:31:22.477081+00:00"
   },
   "top_firsts": [
+    {
+      "repo": "NVIDIA/cutlass",
+      "repo_short": "CUTLASS",
+      "number": 3414,
+      "title": "[DOC] Broken notebook links",
+      "html_url": "https://github.com/NVIDIA/cutlass/issues/3414",
+      "created_at": "2026-07-28T11:39:13Z",
+      "updated_at": "2026-07-29T00:05:13Z",
+      "bucket": "cutlass_cute",
+      "difficulty": 1,
+      "why": "The issue is related to CUTLASS documentation, which fits into the cutlass_cute bucket.",
+      "evidence_quotes": [
+        "https://docs.nvidia.com/cutlass/latest/media/docs/pythonDSL/cute_dsl_general/notebooks.html"
+      ],
+      "blackwell_intent_signal": null,
+      "evaluated_at": "2026-07-28T13:19:39.748721+00:00",
+      "model": "groq:llama-3.3-70b-versatile"
+    },
+    {
+      "repo": "sgl-project/sglang",
+      "repo_short": "SGLang",
+      "number": 31337,
+      "title": "[ROCM] default setting of deepseek-ai/DeepSeek-V4-Pro in MI355X ROCm image (lmsysorg/sglang-rocm:v0.5.14-rocm720-mi35x-20260710) ",
+      "html_url": "https://github.com/sgl-project/sglang/issues/31337",
+      "created_at": "2026-07-15T13:44:07Z",
+      "updated_at": "2026-07-15T13:45:18Z",
+      "bucket": "deepseek",
+      "difficulty": 1,
+      "why": "The issue is about setting default environment variables for DeepSeek-V4-Pro, which is related to the deepseek bucket.",
+      "evidence_quotes": [
+        "DeepSeek-V4-Pro"
+      ],
+      "blackwell_intent_signal": null,
+      "evaluated_at": "2026-07-16T01:08:57.533219+00:00",
+      "model": "groq:llama-3.3-70b-versatile"
+    },
     {
       "repo": "NVIDIA/cutlass",
       "repo_short": "CUTLASS",
@@ -132,58 +137,20 @@
       "blackwell_intent_signal": "explicit-sm100",
       "evaluated_at": "2026-06-16T23:12:07.882713+00:00",
       "model": "anthropic:claude-sonnet-4-6"
-    },
-    {
-      "repo": "NVIDIA/cutlass",
-      "repo_short": "CUTLASS",
-      "number": 2241,
-      "title": "[QST][CUTE] How to systematically and easily compose the cute layout algebra operations to get custom layout",
-      "html_url": "https://github.com/NVIDIA/cutlass/issues/2241",
-      "created_at": "2025-04-16T04:07:15Z",
-      "updated_at": "2025-09-11T20:05:50Z",
-      "bucket": "cutlass_cute",
-      "difficulty": 1,
-      "why": "This is a usage/documentation question specifically about CuTe layout algebra, clearly in the cutlass_cute bucket.",
-      "evidence_quotes": [
-        "[QST][CUTE] How to systematically and easily compose the cute layout algebra operations to get custom layout",
-        "I am very interested in how to write any custom layout I want using cute"
-      ],
-      "blackwell_intent_signal": null,
-      "evaluated_at": "2026-06-16T19:56:57.345476+00:00",
-      "model": "anthropic:claude-sonnet-4-6"
-    },
-    {
-      "repo": "NVIDIA/cutlass",
-      "repo_short": "CUTLASS",
-      "number": 2335,
-      "title": "[QST] How do I get PTX from CuTE DSL kernels?",
-      "html_url": "https://github.com/NVIDIA/cutlass/issues/2335",
-      "created_at": "2025-05-26T19:28:42Z",
-      "updated_at": "2025-09-24T00:25:50Z",
-      "bucket": "cutlass_cute",
-      "difficulty": 1,
-      "why": "The issue title explicitly mentions CuTe DSL kernels, satisfying the cutlass_cute bucket requirement with the 'CuTE DSL' reference in the title.",
-      "evidence_quotes": [
-        "How do I get the PTX from the compiled kernels?",
-        "CuTE DSL kernels"
-      ],
-      "blackwell_intent_signal": null,
-      "evaluated_at": "2026-06-16T19:56:44.430868+00:00",
-      "model": "anthropic:claude-sonnet-4-6"
     }
   ],
   "recent_prs": [
     {
-      "id": 72988,
+      "id": 181987,
       "repo": "NVIDIA/cccl",
       "repo_short": "CCCL",
-      "number": 9686,
-      "title": "Allow public tuning of `cub::DeviceSegmentedReduce`",
-      "html_url": "https://github.com/NVIDIA/cccl/pull/9686",
+      "number": 10556,
+      "title": "[CUB] Add runtime-sized shared-memory histogram privatization",
+      "html_url": "https://github.com/NVIDIA/cccl/pull/10556",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-02T10:04:43Z",
-      "updated_at": "2026-07-05T14:04:07Z",
+      "created_at": "2026-07-30T12:54:43Z",
+      "updated_at": "2026-07-30T14:27:05Z",
       "labels": [],
       "primary_category": null,
       "secondary_categories": [],
@@ -198,338 +165,305 @@
       "classified_at": null
     },
     {
-      "id": 4443,
-      "repo": "NVIDIA/Megatron-LM",
-      "repo_short": "Megatron",
-      "number": 5197,
-      "title": "fix(moe): free activations immediately in full recompute mode",
-      "html_url": "https://github.com/NVIDIA/Megatron-LM/pull/5197",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-06-06T12:02:58Z",
-      "updated_at": "2026-07-05T14:02:54Z",
-      "labels": [
-        "community-request",
-        "Final Review",
-        "waiting-on-maintainers"
-      ],
-      "primary_category": "moe",
-      "secondary_categories": [
-        "activation_offload"
-      ],
-      "novel_category_proposed": null,
-      "one_line_summary": "MoE: Fix memory leak in full recompute mode",
-      "technical_summary": "The PR fixes a memory leak issue in MoE architecture with full recomputation by explicitly deleting intermediate tensor references after building the final output tensor. This allows the CUDA caching allocator to reclaim memory immediately during the same training step. The fix is implemented in moe_utils.py.",
-      "perf_numbers": [],
-      "cross_references": [],
-      "reasoning": "The strongest signal from the title and body is the mention of 'moe' and 'full recompute mode', which indicates that the primary category is 'moe'.",
-      "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:06:50.262132+00:00"
-    },
-    {
-      "id": 80304,
+      "id": 1769,
       "repo": "sgl-project/sglang",
       "repo_short": "SGLang",
-      "number": 30163,
-      "title": "[Apple Silicon] Add a custom Metal RMSNorm kernel",
-      "html_url": "https://github.com/sgl-project/sglang/pull/30163",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-07-05T13:54:18Z",
-      "updated_at": "2026-07-05T13:56:31Z",
-      "labels": [
-        "sgl-kernel",
-        "apple-silicon"
-      ],
-      "primary_category": "attention",
-      "secondary_categories": [
-        "model_support"
-      ],
-      "novel_category_proposed": null,
-      "one_line_summary": "Metal RMSNorm kernel",
-      "technical_summary": "This PR adds a custom Metal RMSNorm kernel for Apple Silicon, which is at parity or better than the existing mx.fast.rms_norm implementation. The kernel is off by default and can be enabled with an environment variable.",
-      "perf_numbers": [
-        {
-          "metric": "throughput",
-          "baseline": "mx.fast.rms_norm",
-          "new": "custom Metal RMSNorm kernel",
-          "delta_pct": null
-        }
-      ],
-      "cross_references": [],
-      "reasoning": "The strongest signal is the addition of a custom Metal RMSNorm kernel, which falls under the attention category.",
-      "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:05:25.188308+00:00"
-    },
-    {
-      "id": 1839,
-      "repo": "sgl-project/sglang",
-      "repo_short": "SGLang",
-      "number": 27139,
-      "title": "[FEAT] Fast Recovery",
-      "html_url": "https://github.com/sgl-project/sglang/pull/27139",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-06-03T08:27:41Z",
-      "updated_at": "2026-07-05T13:56:13Z",
-      "labels": [
-        "documentation",
-        "npu",
-        "run-ci",
-        "run-ci-extra"
-      ],
-      "primary_category": "perf_eng_mrv2",
-      "secondary_categories": [
-        "distributed",
-        "scheduler"
-      ],
-      "novel_category_proposed": null,
-      "one_line_summary": "Fast Recovery Framework",
-      "technical_summary": "This PR proposes a Fast Recovery Framework to reduce engine restart time to < 10 seconds. The framework includes a weight cache daemon, CUDA graph serialization, kernel warmup optimization, and server initialization optimization.",
-      "perf_numbers": [
-        {
-          "metric": "restart time",
-          "baseline": "~390s",
-          "new": "< 10s",
-          "delta_pct": null
-        }
-      ],
-      "cross_references": [],
-      "reasoning": "The strongest signal is the proposal of a Fast Recovery Framework, which falls under the perf_eng_mrv2 category.",
-      "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:05:25.188975+00:00"
-    },
-    {
-      "id": 80194,
-      "repo": "vllm-project/vllm",
-      "repo_short": "vLLM",
-      "number": 47645,
-      "title": "[Tests] Add parallel sampling coverage for LLMEngine.add_request()/step() (#21948)",
-      "html_url": "https://github.com/vllm-project/vllm/pull/47645",
+      "number": 28306,
+      "title": "Keep Mooncake embedding cache I/O thread alive on backend errors",
+      "html_url": "https://github.com/sgl-project/sglang/pull/28306",
       "state": "closed",
       "merged_at": null,
-      "created_at": "2026-07-05T11:52:00Z",
-      "updated_at": "2026-07-05T13:54:27Z",
+      "created_at": "2026-06-15T12:58:47Z",
+      "updated_at": "2026-07-30T14:27:02Z",
       "labels": [
-        "v1"
+        "run-ci"
       ],
-      "primary_category": "model_support",
-      "secondary_categories": [
-        "distributed"
-      ],
-      "novel_category_proposed": null,
-      "one_line_summary": "LLMEngine parallel sampling tests",
-      "technical_summary": "Added parallel sampling coverage for LLMEngine.add_request()/step() to ensure correct behavior for different output kinds. The test exercises parallel sampling directly through LLMEngine for every output kind. The test also verifies that the engine never finishes all child requests and that the finished set is equal to the set of range(n).",
-      "perf_numbers": [],
-      "cross_references": [],
-      "reasoning": "I picked model_support as the primary category because the PR is adding test coverage for LLMEngine, which is a model-related component.",
-      "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:07:16.941822+00:00"
-    },
-    {
-      "id": 29283,
-      "repo": "sgl-project/sglang",
-      "repo_short": "SGLang",
-      "number": 28715,
-      "title": "[minimax-m3] Split 4/4: model + VL + glue + function-call + fp8 quant + generic infra",
-      "html_url": "https://github.com/sgl-project/sglang/pull/28715",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-06-19T06:35:32Z",
-      "updated_at": "2026-07-05T13:53:21Z",
-      "labels": [
-        "quant",
-        "run-ci",
-        "jit-kernel"
-      ],
-      "primary_category": "model_support",
-      "secondary_categories": [
-        "fp8_quantization",
-        "moe"
-      ],
-      "novel_category_proposed": null,
-      "one_line_summary": "MiniMax-M3 integration",
-      "technical_summary": "This PR integrates the MiniMax-M3 model, including VL, glue, function-call, and fp8 quantization changes. The PR also includes generic MoE infra changes and depends on three other PRs.",
-      "perf_numbers": [],
-      "cross_references": [],
-      "reasoning": "The strongest signal is the integration of the MiniMax-M3 model, which falls under the model_support category.",
-      "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:05:25.189538+00:00"
-    },
-    {
-      "id": 80221,
-      "repo": "sgl-project/sglang",
-      "repo_short": "SGLang",
-      "number": 30161,
-      "title": "[Gemma4] Support per-request max_soft_tokens (image resolution) via images_config and mm_processor_kwargs",
-      "html_url": "https://github.com/sgl-project/sglang/pull/30161",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-07-05T12:39:00Z",
-      "updated_at": "2026-07-05T13:50:26Z",
-      "labels": [],
-      "primary_category": "model_support",
+      "primary_category": null,
       "secondary_categories": [],
       "novel_category_proposed": null,
-      "one_line_summary": "Gemma 4 max_soft_tokens",
-      "technical_summary": "This PR adds support for per-request max_soft_tokens (image resolution) via images_config and mm_processor_kwargs for Gemma 4. The change is additive and backward-compatible.",
+      "one_line_summary": null,
+      "technical_summary": null,
       "perf_numbers": [],
       "cross_references": [],
-      "reasoning": "The strongest signal is the addition of support for per-request max_soft_tokens, which falls under the model_support category.",
+      "reasoning": null,
       "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:05:25.190259+00:00"
+      "model": null,
+      "classified_at": null
     },
     {
-      "id": 80284,
+      "id": 165948,
       "repo": "vllm-project/vllm",
       "repo_short": "vLLM",
-      "number": 47649,
-      "title": "Warn when TORCH_CUDA_ARCH_LIST PTX is ignored",
-      "html_url": "https://github.com/vllm-project/vllm/pull/47649",
+      "number": 49990,
+      "title": "Resolve revision to commit_hash once per model load, via huggingface_hub's `resolve_revision`",
+      "html_url": "https://github.com/vllm-project/vllm/pull/49990",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-05T13:16:28Z",
-      "updated_at": "2026-07-05T13:47:08Z",
+      "created_at": "2026-07-27T13:52:31Z",
+      "updated_at": "2026-07-30T14:25:47Z",
       "labels": [
         "ci/build",
+        "cpu",
         "nvidia"
       ],
-      "primary_category": "torch_compile",
+      "primary_category": null,
       "secondary_categories": [],
       "novel_category_proposed": null,
-      "one_line_summary": "TORCH_CUDA_ARCH_LIST PTX warning",
-      "technical_summary": "Warn when TORCH_CUDA_ARCH_LIST contains +PTX entries that vLLM does not preserve in global CUDA arch extraction. The existing per-kernel CUDA arch selection behavior remains unchanged.",
+      "one_line_summary": null,
+      "technical_summary": null,
       "perf_numbers": [],
       "cross_references": [],
-      "reasoning": "I picked torch_compile as the primary category because the PR is related to CUDA arch extraction and TORCH_CUDA_ARCH_LIST, which is a torch-related configuration.",
+      "reasoning": null,
       "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:07:16.942936+00:00"
+      "model": null,
+      "classified_at": null
     },
     {
-      "id": 1071,
-      "repo": "vllm-project/vllm",
-      "repo_short": "vLLM",
-      "number": 44839,
-      "title": "[XPU] fix transformers version for xpu platform",
-      "html_url": "https://github.com/vllm-project/vllm/pull/44839",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-06-08T06:44:37Z",
-      "updated_at": "2026-07-05T13:46:42Z",
-      "labels": [
-        "intel-gpu",
-        "ci/build"
-      ],
-      "primary_category": "model_support",
-      "secondary_categories": [
-        "distributed"
-      ],
-      "novel_category_proposed": null,
-      "one_line_summary": "XPU transformers version fix",
-      "technical_summary": "Fixed transformers version for XPU platform.",
-      "perf_numbers": [],
-      "cross_references": [],
-      "reasoning": "I picked model_support as the primary category because the PR is fixing an issue related to a specific model (transformers) on a particular platform (XPU).",
-      "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:07:16.943561+00:00"
-    },
-    {
-      "id": 77126,
+      "id": 111563,
       "repo": "sgl-project/sglang",
       "repo_short": "SGLang",
-      "number": 30048,
-      "title": "[XPU] Unbreak stage-b: re-add --disable-decode-cuda-graph, quarantine EAGLE3 parity",
-      "html_url": "https://github.com/sgl-project/sglang/pull/30048",
+      "number": 31172,
+      "title": "[GDN] Hoist GDN extend preparation across layers",
+      "html_url": "https://github.com/sgl-project/sglang/pull/31172",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-03T13:35:19Z",
-      "updated_at": "2026-07-05T13:43:12Z",
-      "labels": [
-        "run-ci",
-        "run-ci-extra"
-      ],
-      "primary_category": "attention",
-      "secondary_categories": [
-        "kv_cache"
-      ],
+      "created_at": "2026-07-14T08:44:57Z",
+      "updated_at": "2026-07-30T14:25:27Z",
+      "labels": [],
+      "primary_category": null,
+      "secondary_categories": [],
       "novel_category_proposed": null,
-      "one_line_summary": "flash-attn kernel",
-      "technical_summary": "This PR re-adds the --disable-decode-cuda-graph flag to prevent stage-b from timing out due to the lack of SYCL Graph extension support for sycl_ext_oneapi_work_group_scratch_memory. The flash-attn kernel uses this feature, causing the test to fail. The PR is a temporary fix until the real issue is addressed in sgl-kernel-xpu.",
+      "one_line_summary": null,
+      "technical_summary": null,
       "perf_numbers": [],
       "cross_references": [],
-      "reasoning": "The PR is primarily related to attention kernels, as it deals with the flash-attn kernel and its compatibility with the SYCL Graph extension.",
+      "reasoning": null,
       "bot_or_chore": false,
-      "model": "groq:llama-3.3-70b-versatile",
-      "classified_at": "2026-07-05T14:05:28.058208+00:00"
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 76270,
+      "repo": "NVIDIA/cccl",
+      "repo_short": "CCCL",
+      "number": 9699,
+      "title": "Warpspeed Implementation of `cub::DeviceRunLengthEncode::Encode`",
+      "html_url": "https://github.com/NVIDIA/cccl/pull/9699",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-07-03T05:56:13Z",
+      "updated_at": "2026-07-30T14:24:58Z",
+      "labels": [],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 173349,
+      "repo": "NVIDIA/TensorRT-LLM",
+      "repo_short": "TRT-LLM",
+      "number": 16971,
+      "title": "[https://nvbugs/6523767][fix] Size MPI worker-identity barrier timeout to cover worker bootstrap",
+      "html_url": "https://github.com/NVIDIA/TensorRT-LLM/pull/16971",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-07-28T23:25:29Z",
+      "updated_at": "2026-07-30T14:24:46Z",
+      "labels": [],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 7137,
+      "repo": "NVIDIA/TensorRT-LLM",
+      "repo_short": "TRT-LLM",
+      "number": 13385,
+      "title": "[None][feat] Add duration-based execution to benchmark",
+      "html_url": "https://github.com/NVIDIA/TensorRT-LLM/pull/13385",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-04-23T14:19:57Z",
+      "updated_at": "2026-07-30T14:23:57Z",
+      "labels": [
+        "Community want to contribute"
+      ],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 282,
+      "repo": "vllm-project/vllm",
+      "repo_short": "vLLM",
+      "number": 45560,
+      "title": "[GPT-OSS] Strict tool call and constrained decoding for Harmony",
+      "html_url": "https://github.com/vllm-project/vllm/pull/45560",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-06-14T03:57:04Z",
+      "updated_at": "2026-07-30T14:22:44Z",
+      "labels": [
+        "frontend",
+        "ready",
+        "needs-rebase",
+        "tool-calling",
+        "gpt-oss"
+      ],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 170981,
+      "repo": "sgl-project/sglang",
+      "repo_short": "SGLang",
+      "number": 32649,
+      "title": "add NPU GSM8K accuracy tests for 7 models",
+      "html_url": "https://github.com/sgl-project/sglang/pull/32649",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-07-28T11:38:14Z",
+      "updated_at": "2026-07-30T14:21:52Z",
+      "labels": [
+        "documentation",
+        "deepseek",
+        "npu",
+        "run-ci"
+      ],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 180198,
+      "repo": "sgl-project/sglang",
+      "repo_short": "SGLang",
+      "number": 32890,
+      "title": "feat(kernels): port standalone Kimi K3 kernels",
+      "html_url": "https://github.com/sgl-project/sglang/pull/32890",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-07-30T06:04:59Z",
+      "updated_at": "2026-07-30T14:21:23Z",
+      "labels": [
+        "documentation",
+        "quant",
+        "Multi-modal",
+        "jit-kernel"
+      ],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
     }
   ],
   "repos": [
     {
       "slug": "vllm-project/vllm",
       "name": "vLLM",
-      "pr_count": 3998,
+      "pr_count": 6744,
       "classified_count": 15
     },
     {
       "slug": "sgl-project/sglang",
       "name": "SGLang",
-      "pr_count": 4489,
+      "pr_count": 7091,
       "classified_count": 19
     },
     {
       "slug": "NVIDIA/Megatron-LM",
       "name": "Megatron",
-      "pr_count": 2835,
+      "pr_count": 3258,
       "classified_count": 3
     },
     {
       "slug": "NVIDIA/TensorRT-LLM",
       "name": "TRT-LLM",
-      "pr_count": 4573,
+      "pr_count": 6118,
       "classified_count": 7
     },
     {
       "slug": "NVIDIA/cutlass",
       "name": "CUTLASS",
-      "pr_count": 430,
+      "pr_count": 466,
       "classified_count": 0
     },
     {
       "slug": "NVIDIA/cudnn-frontend",
       "name": "cuDNN-frontend",
-      "pr_count": 208,
+      "pr_count": 286,
       "classified_count": 0
     },
     {
       "slug": "NVIDIA/cccl",
       "name": "CCCL",
-      "pr_count": 1259,
+      "pr_count": 1622,
       "classified_count": 0
     },
     {
       "slug": "Dao-AILab/flash-attention",
       "name": "FlashAttention",
-      "pr_count": 637,
+      "pr_count": 677,
       "classified_count": 0
     },
     {
       "slug": "flashinfer-ai/flashinfer",
       "name": "FlashInfer",
-      "pr_count": 1024,
+      "pr_count": 1363,
       "classified_count": 0
     },
     {
       "slug": "tile-ai/tilelang",
       "name": "TileLang",
-      "pr_count": 1440,
+      "pr_count": 1609,
       "classified_count": 0
     }
   ]
