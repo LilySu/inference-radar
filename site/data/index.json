@@ -1,6 +1,6 @@
 {
   "latest_briefing": {
-    "briefing_date": "2026-07-30",
+    "briefing_date": "2026-07-31",
     "repo_scope": [
       "vllm-project/vllm",
       "sgl-project/sglang",
@@ -14,36 +14,38 @@
       "tile-ai/tilelang"
     ],
     "script": {
-      "title": "Inference Radar \u2014 2026-07-30",
-      "intro": "vLLM and SGLang see Blackwell-targeted kernel work and bug fixes.",
+      "title": "Inference Radar \u2014 2026-07-31",
+      "intro": "SGLang shipped Metal RMSNorm kernel",
       "slides": [
         {
-          "heading": "vLLM",
-          "subhead": "TORCH_CUDA_ARCH_LIST warning",
+          "heading": "SGLang",
+          "subhead": "Metal RMSNorm kernel",
           "bullets": [
-            "TORCH_CUDA_ARCH_LIST PTX warning \u2014 Warn when TORCH_CUDA_ARCH_LIST contains +PTX entries that vLLM does not preserve in global CUDA arch extraction (#47649)"
+            "Metal RMSNorm kernel \u2014 at parity or better than mx.fast.rms_norm (#30163)"
           ],
-          "narration": "One landing on vLLM, a TORCH_CUDA_ARCH_LIST PTX warning, which warns when TORCH_CUDA_ARCH_LIST contains plus PTX entries that vLLM does not preserve in global CUDA arch extraction.",
-          "duration_s": 15
+          "narration": "SGLang has a new Metal RMSNorm kernel, which is at parity or better than the existing mx.fast.rms_norm implementation.",
+          "duration_s": 12
         },
         {
           "heading": "Picks",
-          "subhead": "Open issues across repos",
+          "subhead": "Open issues",
           "bullets": [
-            "D4 \u00b7 vLLM #50430 \u00b7 b200 \u00b7 [Bug]: vllm hangs at using NCCL message on 8xB200 \u2014 The issue is related to vllm hanging at using NCCL message on 8xB200, which is a Blackwell-targeted kernel work.",
-            "D4 \u00b7 SGLang #32907 \u00b7 cutlass_cute \u00b7 [Bug] cutedsl_bf16_gemm 2-CTA TGV kernel: missing trailing cluster barrier \u2192 CUD \u2014 The issue discusses a bug in the cutedsl_bf16_gemm kernel and proposes a fix, which is related to CUTLASS and CuTe.",
-            "D4 \u00b7 vLLM #50416 \u00b7 b200 \u00b7 [Performance]: FlashInfer NVFP4 KV cache causal prefill is ~1.7-1.8x slower than \u2014 The issue discusses NVFP4 KV cache causal prefill performance on SM120 (Blackwell) and proposes an optimized path for NVFP4 KV prefill."
+            "D5 \u00b7 TRT-LLM #17126 \u00b7 b200 \u00b7 [Bug]: SM121 excluded from FP8 block-scales SM120 Python paths while C++",
+            "D2 \u00b7 FlashInfer #4294 \u00b7 cutlass_cute \u00b7 [Bug][v0.6.17]test_selected_tactic_disables_async_memset_while_tuning  ValueErro",
+            "D3 \u00b7 CUTLASS #3425 \u00b7 cutlass_cute \u00b7 [BUG] Jetson thor use run-iket output code -6",
+            "D4 \u00b7 SGLang #32993 \u00b7 b200 \u00b7 [Feature] Route per-tensor FP8 checkpoints to FlashInfer on SM89/SM90",
+            "D4 \u00b7 vLLM #41360 \u00b7 b200 \u00b7 [Bug]: Qwen3-30B-A3B on B200 (TP=8) \u2014 K must be divisible by blockK in flashinfe"
           ],
-          "narration": "Three open issues across vLLM and SGLang, including a vLLM hang at using NCCL message on 8xB200, a bug in the cutedsl_bf16_gemm kernel in SGLang, and a performance issue with FlashInfer NVFP4 KV cache causal prefill in vLLM.",
+          "narration": "Several open issues caught our attention, including TRT-LLM, FlashInfer, CUTLASS, SGLang, and vLLM, all related to various bugs and features.",
           "duration_s": 25
         }
       ],
-      "outro": "That's all for today's Inference Radar."
+      "outro": "That's all for today."
     },
-    "video_path": "out/2026-07-30/brief.mp4",
+    "video_path": "out/2026-07-31/brief.mp4",
     "video_url": null,
-    "duration_s": 43,
-    "built_at": "2026-07-30T14:31:22.477081+00:00"
+    "duration_s": 31,
+    "built_at": "2026-07-31T14:34:46.715688+00:00"
   },
   "top_firsts": [
     {
@@ -141,16 +143,16 @@
   ],
   "recent_prs": [
     {
-      "id": 181987,
-      "repo": "NVIDIA/cccl",
-      "repo_short": "CCCL",
-      "number": 10556,
-      "title": "[CUB] Add runtime-sized shared-memory histogram privatization",
-      "html_url": "https://github.com/NVIDIA/cccl/pull/10556",
+      "id": 187020,
+      "repo": "tile-ai/tilelang",
+      "repo_short": "TileLang",
+      "number": 2833,
+      "title": "[BugFix] Include buffer offsets in TMA descriptor bases",
+      "html_url": "https://github.com/tile-ai/tilelang/pull/2833",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-30T12:54:43Z",
-      "updated_at": "2026-07-30T14:27:05Z",
+      "created_at": "2026-07-31T12:00:38Z",
+      "updated_at": "2026-07-31T14:30:44Z",
       "labels": [],
       "primary_category": null,
       "secondary_categories": [],
@@ -165,18 +167,18 @@
       "classified_at": null
     },
     {
-      "id": 1769,
+      "id": 187087,
       "repo": "sgl-project/sglang",
       "repo_short": "SGLang",
-      "number": 28306,
-      "title": "Keep Mooncake embedding cache I/O thread alive on backend errors",
-      "html_url": "https://github.com/sgl-project/sglang/pull/28306",
-      "state": "closed",
+      "number": 33084,
+      "title": "docs: fix non-existent `--optimistic-prefill-retries` server arg",
+      "html_url": "https://github.com/sgl-project/sglang/pull/33084",
+      "state": "open",
       "merged_at": null,
-      "created_at": "2026-06-15T12:58:47Z",
-      "updated_at": "2026-07-30T14:27:02Z",
+      "created_at": "2026-07-31T14:29:38Z",
+      "updated_at": "2026-07-31T14:30:32Z",
       "labels": [
-        "run-ci"
+        "documentation"
       ],
       "primary_category": null,
       "secondary_categories": [],
@@ -191,19 +193,78 @@
       "classified_at": null
     },
     {
-      "id": 165948,
+      "id": 81737,
       "repo": "vllm-project/vllm",
       "repo_short": "vLLM",
-      "number": 49990,
-      "title": "Resolve revision to commit_hash once per model load, via huggingface_hub's `resolve_revision`",
-      "html_url": "https://github.com/vllm-project/vllm/pull/49990",
+      "number": 47719,
+      "title": "[ROCm][Perf] Add Qwen3 AITER fused QKV/RoPE KV-cache path",
+      "html_url": "https://github.com/vllm-project/vllm/pull/47719",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-27T13:52:31Z",
-      "updated_at": "2026-07-30T14:25:47Z",
+      "created_at": "2026-07-06T09:22:48Z",
+      "updated_at": "2026-07-31T14:30:22Z",
       "labels": [
-        "ci/build",
-        "cpu",
+        "documentation",
+        "rocm",
+        "needs-rebase",
+        "qwen"
+      ],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 199,
+      "repo": "vllm-project/vllm",
+      "repo_short": "vLLM",
+      "number": 45390,
+      "title": "[Security] Add configurable input size bounds for DoS mitigation",
+      "html_url": "https://github.com/vllm-project/vllm/pull/45390",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-06-12T08:31:20Z",
+      "updated_at": "2026-07-31T14:30:12Z",
+      "labels": [
+        "structured-output",
+        "frontend",
+        "ready",
+        "needs-rebase",
+        "v1"
+      ],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 79639,
+      "repo": "vllm-project/vllm",
+      "repo_short": "vLLM",
+      "number": 47625,
+      "title": "[MM][CG] Support ViT full CUDA graph for Idefics3 and SmolVLM",
+      "html_url": "https://github.com/vllm-project/vllm/pull/47625",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-07-05T02:51:10Z",
+      "updated_at": "2026-07-31T14:29:41Z",
+      "labels": [
+        "documentation",
+        "multi-modality",
         "nvidia"
       ],
       "primary_category": null,
@@ -219,40 +280,16 @@
       "classified_at": null
     },
     {
-      "id": 111563,
-      "repo": "sgl-project/sglang",
-      "repo_short": "SGLang",
-      "number": 31172,
-      "title": "[GDN] Hoist GDN extend preparation across layers",
-      "html_url": "https://github.com/sgl-project/sglang/pull/31172",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-07-14T08:44:57Z",
-      "updated_at": "2026-07-30T14:25:27Z",
-      "labels": [],
-      "primary_category": null,
-      "secondary_categories": [],
-      "novel_category_proposed": null,
-      "one_line_summary": null,
-      "technical_summary": null,
-      "perf_numbers": [],
-      "cross_references": [],
-      "reasoning": null,
-      "bot_or_chore": false,
-      "model": null,
-      "classified_at": null
-    },
-    {
-      "id": 76270,
+      "id": 124678,
       "repo": "NVIDIA/cccl",
       "repo_short": "CCCL",
-      "number": 9699,
-      "title": "Warpspeed Implementation of `cub::DeviceRunLengthEncode::Encode`",
-      "html_url": "https://github.com/NVIDIA/cccl/pull/9699",
+      "number": 9982,
+      "title": "Add multi-GPU sort",
+      "html_url": "https://github.com/NVIDIA/cccl/pull/9982",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-03T05:56:13Z",
-      "updated_at": "2026-07-30T14:24:58Z",
+      "created_at": "2026-07-16T19:03:26Z",
+      "updated_at": "2026-07-31T14:29:38Z",
       "labels": [],
       "primary_category": null,
       "secondary_categories": [],
@@ -267,16 +304,16 @@
       "classified_at": null
     },
     {
-      "id": 173349,
+      "id": 185172,
       "repo": "NVIDIA/TensorRT-LLM",
       "repo_short": "TRT-LLM",
-      "number": 16971,
-      "title": "[https://nvbugs/6523767][fix] Size MPI worker-identity barrier timeout to cover worker bootstrap",
-      "html_url": "https://github.com/NVIDIA/TensorRT-LLM/pull/16971",
+      "number": 17107,
+      "title": "[None][fix] align Python Mamba cache headroom with C++",
+      "html_url": "https://github.com/NVIDIA/TensorRT-LLM/pull/17107",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-28T23:25:29Z",
-      "updated_at": "2026-07-30T14:24:46Z",
+      "created_at": "2026-07-31T04:41:48Z",
+      "updated_at": "2026-07-31T14:28:37Z",
       "labels": [],
       "primary_category": null,
       "secondary_categories": [],
@@ -291,76 +328,17 @@
       "classified_at": null
     },
     {
-      "id": 7137,
-      "repo": "NVIDIA/TensorRT-LLM",
-      "repo_short": "TRT-LLM",
-      "number": 13385,
-      "title": "[None][feat] Add duration-based execution to benchmark",
-      "html_url": "https://github.com/NVIDIA/TensorRT-LLM/pull/13385",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-04-23T14:19:57Z",
-      "updated_at": "2026-07-30T14:23:57Z",
-      "labels": [
-        "Community want to contribute"
-      ],
-      "primary_category": null,
-      "secondary_categories": [],
-      "novel_category_proposed": null,
-      "one_line_summary": null,
-      "technical_summary": null,
-      "perf_numbers": [],
-      "cross_references": [],
-      "reasoning": null,
-      "bot_or_chore": false,
-      "model": null,
-      "classified_at": null
-    },
-    {
-      "id": 282,
-      "repo": "vllm-project/vllm",
-      "repo_short": "vLLM",
-      "number": 45560,
-      "title": "[GPT-OSS] Strict tool call and constrained decoding for Harmony",
-      "html_url": "https://github.com/vllm-project/vllm/pull/45560",
-      "state": "open",
-      "merged_at": null,
-      "created_at": "2026-06-14T03:57:04Z",
-      "updated_at": "2026-07-30T14:22:44Z",
-      "labels": [
-        "frontend",
-        "ready",
-        "needs-rebase",
-        "tool-calling",
-        "gpt-oss"
-      ],
-      "primary_category": null,
-      "secondary_categories": [],
-      "novel_category_proposed": null,
-      "one_line_summary": null,
-      "technical_summary": null,
-      "perf_numbers": [],
-      "cross_references": [],
-      "reasoning": null,
-      "bot_or_chore": false,
-      "model": null,
-      "classified_at": null
-    },
-    {
-      "id": 170981,
+      "id": 170403,
       "repo": "sgl-project/sglang",
       "repo_short": "SGLang",
-      "number": 32649,
-      "title": "add NPU GSM8K accuracy tests for 7 models",
-      "html_url": "https://github.com/sgl-project/sglang/pull/32649",
+      "number": 32637,
+      "title": "Optimize delayed sample and mrope position computation",
+      "html_url": "https://github.com/sgl-project/sglang/pull/32637",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-28T11:38:14Z",
-      "updated_at": "2026-07-30T14:21:52Z",
+      "created_at": "2026-07-28T09:25:57Z",
+      "updated_at": "2026-07-31T14:27:50Z",
       "labels": [
-        "documentation",
-        "deepseek",
-        "npu",
         "run-ci"
       ],
       "primary_category": null,
@@ -376,21 +354,52 @@
       "classified_at": null
     },
     {
-      "id": 180198,
-      "repo": "sgl-project/sglang",
-      "repo_short": "SGLang",
-      "number": 32890,
-      "title": "feat(kernels): port standalone Kimi K3 kernels",
-      "html_url": "https://github.com/sgl-project/sglang/pull/32890",
+      "id": 182723,
+      "repo": "vllm-project/vllm",
+      "repo_short": "vLLM",
+      "number": 50457,
+      "title": "[Spec Decode][Core] Run an all-sliding DFlash drafter with prefix caching enabled",
+      "html_url": "https://github.com/vllm-project/vllm/pull/50457",
       "state": "open",
       "merged_at": null,
-      "created_at": "2026-07-30T06:04:59Z",
-      "updated_at": "2026-07-30T14:21:23Z",
+      "created_at": "2026-07-30T17:28:17Z",
+      "updated_at": "2026-07-31T14:27:01Z",
+      "labels": [
+        "speculative-decoding",
+        "v1",
+        "qwen",
+        "kv-connector",
+        "nvidia",
+        "verified",
+        "kimi",
+        "k3"
+      ],
+      "primary_category": null,
+      "secondary_categories": [],
+      "novel_category_proposed": null,
+      "one_line_summary": null,
+      "technical_summary": null,
+      "perf_numbers": [],
+      "cross_references": [],
+      "reasoning": null,
+      "bot_or_chore": false,
+      "model": null,
+      "classified_at": null
+    },
+    {
+      "id": 187089,
+      "repo": "sgl-project/sglang",
+      "repo_short": "SGLang",
+      "number": 33083,
+      "title": "[Docs] Add DeepSeek-V4 Flash Official (0731) recipe",
+      "html_url": "https://github.com/sgl-project/sglang/pull/33083",
+      "state": "open",
+      "merged_at": null,
+      "created_at": "2026-07-31T14:24:51Z",
+      "updated_at": "2026-07-31T14:26:36Z",
       "labels": [
         "documentation",
-        "quant",
-        "Multi-modal",
-        "jit-kernel"
+        "deepseek"
       ],
       "primary_category": null,
       "secondary_categories": [],
@@ -409,61 +418,61 @@
     {
       "slug": "vllm-project/vllm",
       "name": "vLLM",
-      "pr_count": 6744,
+      "pr_count": 6896,
       "classified_count": 15
     },
     {
       "slug": "sgl-project/sglang",
       "name": "SGLang",
-      "pr_count": 7091,
+      "pr_count": 7220,
       "classified_count": 19
     },
     {
       "slug": "NVIDIA/Megatron-LM",
       "name": "Megatron",
-      "pr_count": 3258,
+      "pr_count": 3277,
       "classified_count": 3
     },
     {
       "slug": "NVIDIA/TensorRT-LLM",
       "name": "TRT-LLM",
-      "pr_count": 6118,
+      "pr_count": 6177,
       "classified_count": 7
     },
     {
       "slug": "NVIDIA/cutlass",
       "name": "CUTLASS",
-      "pr_count": 466,
+      "pr_count": 467,
       "classified_count": 0
     },
     {
       "slug": "NVIDIA/cudnn-frontend",
       "name": "cuDNN-frontend",
-      "pr_count": 286,
+      "pr_count": 296,
       "classified_count": 0
     },
     {
       "slug": "NVIDIA/cccl",
       "name": "CCCL",
-      "pr_count": 1622,
+      "pr_count": 1634,
       "classified_count": 0
     },
     {
       "slug": "Dao-AILab/flash-attention",
       "name": "FlashAttention",
-      "pr_count": 677,
+      "pr_count": 678,
       "classified_count": 0
     },
     {
       "slug": "flashinfer-ai/flashinfer",
       "name": "FlashInfer",
-      "pr_count": 1363,
+      "pr_count": 1386,
       "classified_count": 0
     },
     {
       "slug": "tile-ai/tilelang",
       "name": "TileLang",
-      "pr_count": 1609,
+      "pr_count": 1622,
       "classified_count": 0
     }
   ]

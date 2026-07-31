@@ -269,6 +269,24 @@
     "model": "anthropic:claude-sonnet-4-6"
   },
   {
+    "repo": "flashinfer-ai/flashinfer",
+    "repo_short": "FlashInfer",
+    "number": 4294,
+    "title": "[Bug][v0.6.17]test_selected_tactic_disables_async_memset_while_tuning  ValueError: Expected a cuda device, but got: cpu",
+    "html_url": "https://github.com/flashinfer-ai/flashinfer/issues/4294",
+    "created_at": "2026-07-31T09:01:21Z",
+    "updated_at": "2026-07-31T09:01:36Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 2,
+    "why": "The issue mentions CuTe, which is a keyword related to the cutlass_cute bucket.",
+    "evidence_quotes": [
+      "cute_dsl_fused_moe"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-07-31T11:11:49.504853+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
     "repo": "vllm-project/vllm",
     "repo_short": "vLLM",
     "number": 41081,
@@ -342,25 +360,6 @@
     ],
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-07-16T21:46:51.892048+00:00",
-    "model": "groq:llama-3.3-70b-versatile"
-  },
-  {
-    "repo": "flashinfer-ai/flashinfer",
-    "repo_short": "FlashInfer",
-    "number": 3945,
-    "title": "check_cuda_arch() rejects SM 12.0 (Blackwell) due to string comparison",
-    "html_url": "https://github.com/flashinfer-ai/flashinfer/issues/3945",
-    "created_at": "2026-07-13T12:20:15Z",
-    "updated_at": "2026-07-13T12:20:23Z",
-    "bucket": "b200",
-    "difficulty": 2,
-    "why": "The issue is related to Blackwell (SM 12.0) and the check_cuda_arch function, which is a Blackwell-targeted kernel work issue.",
-    "evidence_quotes": [
-      "SM 12.0 (Blackwell)",
-      "compute capability 12.0"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-07-13T17:01:00.512479+00:00",
     "model": "groq:llama-3.3-70b-versatile"
   },
   {
@@ -1115,7 +1114,7 @@
     "title": "[BUG] Unexpected SystemExit: nvidia_cutlass_dsl/python_packages/cutlass/base_dsl/dsl.py(911): diagnostic",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/3142",
     "created_at": "2026-04-01T14:26:14Z",
-    "updated_at": "2026-05-01T15:25:23Z",
+    "updated_at": "2026-07-30T15:40:16Z",
     "bucket": "cutlass_cute",
     "difficulty": 2,
     "why": "The issue is about a bug in the CuTe DSL Python package (nvidia_cutlass_dsl), which is part of CUTLASS. The fix is concretely described (change parse_known_args behavior) and is a small logic tweak in one file.",
@@ -1287,26 +1286,6 @@
   {
     "repo": "NVIDIA/Megatron-LM",
     "repo_short": "Megatron",
-    "number": 4901,
-    "title": "[Tracking] Dynamic inference: MLA flash_decode_and_prefill call missing is_decode_only",
-    "html_url": "https://github.com/NVIDIA/Megatron-LM/issues/4901",
-    "created_at": "2026-05-20T20:45:51Z",
-    "updated_at": "2026-05-20T23:14:17Z",
-    "bucket": "deepseek",
-    "difficulty": 2,
-    "why": "Issue is squarely about MLA (Multi-Latent Attention), a DeepSeek architectural primitive, with a concretely described single-line fix (pass is_decode_only argument).",
-    "evidence_quotes": [
-      "Dynamic inference for MLA-based models that use cached MLA latents can fail at runtime in `MultiLatentAttention`",
-      "Models using Multi-Latent Attention (MLA)",
-      "cache_mla_latents=True"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T00:42:09.786775+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/Megatron-LM",
-    "repo_short": "Megatron",
     "number": 2998,
     "title": "[QUESTION] Question for DSA",
     "html_url": "https://github.com/NVIDIA/Megatron-LM/issues/2998",
@@ -1342,6 +1321,42 @@
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-06-16T00:40:17.570567+00:00",
     "model": "anthropic:claude-sonnet-4-6"
+  },
+  {
+    "repo": "NVIDIA/cutlass",
+    "repo_short": "CUTLASS",
+    "number": 3425,
+    "title": "[BUG] Jetson thor use run-iket output code -6",
+    "html_url": "https://github.com/NVIDIA/cutlass/issues/3425",
+    "created_at": "2026-07-31T08:02:24Z",
+    "updated_at": "2026-07-31T08:12:49Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 3,
+    "why": "The issue mentions CuTe DSL, which is related to the cutlass_cute bucket.",
+    "evidence_quotes": [
+      "CuTe DSL"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-07-31T08:21:14.645827+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "repo_short": "SGLang",
+    "number": 32950,
+    "title": "[Feature] Integrate `cute-dsl` backend of `mm_mxfp8` and other improvements",
+    "html_url": "https://github.com/sgl-project/sglang/issues/32950",
+    "created_at": "2026-07-30T17:52:44Z",
+    "updated_at": "2026-07-30T20:09:34Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 3,
+    "why": "The issue mentions CUTLASS, which is a specific requirement for the cutlass_cute bucket.",
+    "evidence_quotes": [
+      "CUTLASS"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-07-30T19:01:33.058699+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
   },
   {
     "repo": "NVIDIA/TensorRT-LLM",
@@ -1861,7 +1876,7 @@
     "title": "VLLM_ENGINE_READY_TIMEOUT_S default (600s) insufficient for large MoE + cold FlashInfer JIT cache on new GPU archs (GB10 / sm_121a)",
     "html_url": "https://github.com/vllm-project/vllm/issues/48031",
     "created_at": "2026-07-08T18:40:22Z",
-    "updated_at": "2026-07-16T20:50:27Z",
+    "updated_at": "2026-07-30T21:10:14Z",
     "bucket": "b200",
     "difficulty": 3,
     "why": "The issue mentions Blackwell architecture and GB10, which is related to the b200 bucket.",
@@ -3840,25 +3855,6 @@
     ],
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-06-16T18:34:49.804329+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 3113,
-    "title": "[QST] [CuTeDSL] Compilation caused core dumped",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/3113",
-    "created_at": "2026-03-19T03:01:17Z",
-    "updated_at": "2026-07-17T15:30:43Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue is about a crash in CuTeDSL (CuTe DSL), which is part of the CUTLASS/CuTe ecosystem; the evidence references CuTeDSL and the cutlass_ir shared library.",
-    "evidence_quotes": [
-      "[CuTeDSL] Compilation caused core dumped",
-      "_cutlass_ir.cpython-312-x86_64-linux-gnu.so"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:34:49.802878+00:00",
     "model": "anthropic:claude-sonnet-4-6"
   }
 ]

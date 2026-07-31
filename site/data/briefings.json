@@ -1,5 +1,53 @@
 [
   {
+    "briefing_date": "2026-07-31",
+    "repo_scope": [
+      "vllm-project/vllm",
+      "sgl-project/sglang",
+      "NVIDIA/Megatron-LM",
+      "NVIDIA/TensorRT-LLM",
+      "NVIDIA/cutlass",
+      "NVIDIA/cudnn-frontend",
+      "NVIDIA/cccl",
+      "Dao-AILab/flash-attention",
+      "flashinfer-ai/flashinfer",
+      "tile-ai/tilelang"
+    ],
+    "script": {
+      "title": "Inference Radar \u2014 2026-07-31",
+      "intro": "SGLang shipped Metal RMSNorm kernel",
+      "slides": [
+        {
+          "heading": "SGLang",
+          "subhead": "Metal RMSNorm kernel",
+          "bullets": [
+            "Metal RMSNorm kernel \u2014 at parity or better than mx.fast.rms_norm (#30163)"
+          ],
+          "narration": "SGLang has a new Metal RMSNorm kernel, which is at parity or better than the existing mx.fast.rms_norm implementation.",
+          "duration_s": 12
+        },
+        {
+          "heading": "Picks",
+          "subhead": "Open issues",
+          "bullets": [
+            "D5 \u00b7 TRT-LLM #17126 \u00b7 b200 \u00b7 [Bug]: SM121 excluded from FP8 block-scales SM120 Python paths while C++",
+            "D2 \u00b7 FlashInfer #4294 \u00b7 cutlass_cute \u00b7 [Bug][v0.6.17]test_selected_tactic_disables_async_memset_while_tuning  ValueErro",
+            "D3 \u00b7 CUTLASS #3425 \u00b7 cutlass_cute \u00b7 [BUG] Jetson thor use run-iket output code -6",
+            "D4 \u00b7 SGLang #32993 \u00b7 b200 \u00b7 [Feature] Route per-tensor FP8 checkpoints to FlashInfer on SM89/SM90",
+            "D4 \u00b7 vLLM #41360 \u00b7 b200 \u00b7 [Bug]: Qwen3-30B-A3B on B200 (TP=8) \u2014 K must be divisible by blockK in flashinfe"
+          ],
+          "narration": "Several open issues caught our attention, including TRT-LLM, FlashInfer, CUTLASS, SGLang, and vLLM, all related to various bugs and features.",
+          "duration_s": 25
+        }
+      ],
+      "outro": "That's all for today."
+    },
+    "video_path": "out/2026-07-31/brief.mp4",
+    "video_url": null,
+    "duration_s": 31,
+    "built_at": "2026-07-31T14:34:46.715688+00:00"
+  },
+  {
     "briefing_date": "2026-07-30",
     "repo_scope": [
       "vllm-project/vllm",
