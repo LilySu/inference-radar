@@ -6,7 +6,7 @@
     "title": "[DOC] Broken notebook links",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/3414",
     "created_at": "2026-07-28T11:39:13Z",
-    "updated_at": "2026-07-29T00:05:13Z",
+    "updated_at": "2026-08-03T20:43:11Z",
     "bucket": "cutlass_cute",
     "difficulty": 1,
     "why": "The issue is related to CUTLASS documentation, which fits into the cutlass_cute bucket.",
@@ -42,7 +42,7 @@
     "title": "[FEA] nvidia-cutlass-dsl-libs-base / nvidia-cutlass-dsl-libs-cu13 release for Windows",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/3361",
     "created_at": "2026-07-02T00:20:09Z",
-    "updated_at": "2026-07-02T05:15:30Z",
+    "updated_at": "2026-08-01T06:55:16Z",
     "bucket": "cutlass_cute",
     "difficulty": 1,
     "why": "The issue is related to CuTe DSL, which is in scope for bucket cutlass_cute.",
@@ -194,7 +194,7 @@
     "title": "[FEA] Documentation for building `nvidia-cutlass-dsl-libs-base` package",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/3257",
     "created_at": "2026-05-21T11:17:38Z",
-    "updated_at": "2026-06-20T11:41:22Z",
+    "updated_at": "2026-08-07T14:24:07Z",
     "bucket": "cutlass_cute",
     "difficulty": 1,
     "why": "This is a documentation request for how to build the nvidia-cutlass-dsl-libs-base CUTLASS package for non-PyPI platforms/architectures, requiring only documentation changes.",
@@ -249,41 +249,216 @@
     "model": "anthropic:claude-sonnet-4-6"
   },
   {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 3205,
-    "title": "[BUG] [CuTe] print_tensor.hpp missing include for cute/pointer_flagged.hpp",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/3205",
-    "created_at": "2026-05-06T14:42:35Z",
-    "updated_at": "2026-06-10T03:15:03Z",
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 51776,
+    "title": "[Bug]: CuTe FA4 forward (flash_fwd.py SM80/SM120) fails on first call: NameError 'mDynamicCausal' and missing self.is_split_kv",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51776",
+    "created_at": "2026-08-11T07:15:36Z",
+    "updated_at": "2026-08-11T07:21:11Z",
     "bucket": "cutlass_cute",
-    "difficulty": 1,
-    "why": "This is a trivial missing include fix in a CuTe header file, naming CuTe explicitly.",
+    "difficulty": 2,
+    "why": "The issue is related to CuTe and CUTLASS, which fits into the cutlass_cute bucket.",
     "evidence_quotes": [
-      "cute/util/print_tensor.hpp",
-      "#include <cute/pointer_flagged.hpp>",
-      "print_tensor.hpp should be self-contained"
+      "CuTe FA4 forward (flash_fwd.py SM80/SM120)",
+      "cute/flash_fwd.py",
+      "cute.Tensor"
     ],
     "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T06:20:48.073884+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
+    "evaluated_at": "2026-08-11T09:43:51.913740+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "NVIDIA/cutlass",
+    "repo_short": "CUTLASS",
+    "number": 3443,
+    "title": "[BUG][CuTe DSL] Constructing cutlass Numeric scalars from Python values costs ~0.3-0.8us each",
+    "html_url": "https://github.com/NVIDIA/cutlass/issues/3443",
+    "created_at": "2026-08-10T16:51:32Z",
+    "updated_at": "2026-08-10T16:51:42Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 2,
+    "why": "The issue is related to CuTe DSL and CUTLASS, which falls under the cutlass_cute bucket.",
+    "evidence_quotes": [
+      "CuTe DSL",
+      "cutlass.Int32(val)",
+      "cutlass.Float32(val)"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-10T17:37:49.658140+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "Dao-AILab/flash-attention",
+    "repo_short": "FlashAttention",
+    "number": 2782,
+    "title": "CuTe DSL: replace removed quack.activation.sub_packed_f32x2 API",
+    "html_url": "https://github.com/Dao-AILab/flash-attention/issues/2782",
+    "created_at": "2026-08-10T06:20:45Z",
+    "updated_at": "2026-08-10T06:20:45Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 2,
+    "why": "The issue is related to CuTe DSL and uses CuTe-specific code, which fits into the cutlass_cute bucket.",
+    "evidence_quotes": [
+      "CuTe DSL",
+      "cute.arch.sub_packed_f32x2(...)"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-10T06:57:45.028088+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 19001,
+    "title": "[Usage]: How to use DeepSeek-R1-0528-Qwen3-8B with function call",
+    "html_url": "https://github.com/vllm-project/vllm/issues/19001",
+    "created_at": "2025-06-01T13:18:43Z",
+    "updated_at": "2026-08-09T02:14:45Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "The issue is about using DeepSeek-R1-0528-Qwen3-8B with function call, which directly relates to the DeepSeek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-R1-0528-Qwen3-8B"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-09T02:51:48.900744+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 51521,
+    "title": "DeepSeek-V4 (deepseek_v4): fused topk_softplus_sqrt router rejects non-standard expert counts on CUDA (REAP 144-expert ckpts); torch fallback is XPU-gated",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51521",
+    "created_at": "2026-08-08T21:32:11Z",
+    "updated_at": "2026-08-08T21:32:11Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "The issue is related to DeepSeek-V4 and its support for non-standard expert counts, which is a key component of the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4",
+      "DeepSeekV4ForCausalLM",
+      "DeepSeek-V4-Flash"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-08T22:03:07.164725+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "repo_short": "SGLang",
+    "number": 34092,
+    "title": "[Feature] Support config.json from transformers > 4.57 for DeepSeek V4",
+    "html_url": "https://github.com/sgl-project/sglang/issues/34092",
+    "created_at": "2026-08-08T07:21:56Z",
+    "updated_at": "2026-08-08T09:57:14Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "The issue is related to DeepSeek V4 and its configuration, which falls under the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek V4",
+      "DeepSeekV4Config"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-08T07:35:43.855293+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
   },
   {
     "repo": "flashinfer-ai/flashinfer",
     "repo_short": "FlashInfer",
-    "number": 4294,
-    "title": "[Bug][v0.6.17]test_selected_tactic_disables_async_memset_while_tuning  ValueError: Expected a cuda device, but got: cpu",
-    "html_url": "https://github.com/flashinfer-ai/flashinfer/issues/4294",
-    "created_at": "2026-07-31T09:01:21Z",
-    "updated_at": "2026-07-31T09:01:36Z",
+    "number": 4410,
+    "title": "[JIT] Build failures surface as one opaque ninja CalledProcessError; surface the real compiler/linker error and hint at known causes",
+    "html_url": "https://github.com/flashinfer-ai/flashinfer/issues/4410",
+    "created_at": "2026-08-07T20:34:13Z",
+    "updated_at": "2026-08-07T20:34:25Z",
     "bucket": "cutlass_cute",
     "difficulty": 2,
-    "why": "The issue mentions CuTe, which is a keyword related to the cutlass_cute bucket.",
+    "why": "The issue mentions CUTLASS and discusses a build failure related to CUTLASS FP4 translation units.",
     "evidence_quotes": [
-      "cute_dsl_fused_moe"
+      "cutlass/util/reference/device/tensor_fill.h",
+      "fp4_gemm_cutlass_sm120",
+      "CUTLASS FP4 translation unit"
     ],
     "blackwell_intent_signal": null,
-    "evaluated_at": "2026-07-31T11:11:49.504853+00:00",
+    "evaluated_at": "2026-08-07T21:22:45.863745+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "flashinfer-ai/flashinfer",
+    "repo_short": "FlashInfer",
+    "number": 4400,
+    "title": "[Bug][v0.6.18]tests/attention/test_cute_dsl_hca_dsv4.py AttributeError: module 'cutlass.cute.nvgpu.cpasync' has no attribute 'CopyBulkTensor2DGather4G2SOp'.",
+    "html_url": "https://github.com/flashinfer-ai/flashinfer/issues/4400",
+    "created_at": "2026-08-07T08:20:28Z",
+    "updated_at": "2026-08-07T08:20:43Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 2,
+    "why": "The issue is related to CUTLASS, which is one of the in-scope buckets.",
+    "evidence_quotes": [
+      "cutlass.cute.nvgpu.cpasync",
+      "AttributeError: module 'cutlass.cute.nvgpu.cpasync' has no attribute 'CopyBulkTensor2DGather4G2SOp'"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-07T08:39:53.452558+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "repo_short": "SGLang",
+    "number": 33867,
+    "title": "[Bug] /v1/responses API fails with 400 when function_call_output output is an array",
+    "html_url": "https://github.com/sgl-project/sglang/issues/33867",
+    "created_at": "2026-08-06T11:27:24Z",
+    "updated_at": "2026-08-06T11:34:49Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "The issue is related to the DeepSeek model and the proposed fix is a simple modification to the handling of function_call_output messages.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash-0731"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-06T16:02:09.371598+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "flashinfer-ai/flashinfer",
+    "repo_short": "FlashInfer",
+    "number": 4375,
+    "title": "CUDA 13.3 build failure in TRTLLM-Gen FMHA due to unavailable oversized shared-memory APIs",
+    "html_url": "https://github.com/flashinfer-ai/flashinfer/issues/4375",
+    "created_at": "2026-08-06T08:01:57Z",
+    "updated_at": "2026-08-06T08:02:07Z",
+    "bucket": "b200",
+    "difficulty": 2,
+    "why": "The issue mentions SM100 and CUDA 13.3, which is related to the b200 bucket.",
+    "evidence_quotes": [
+      "NVIDIA GB200/B200-class (SM100)",
+      "CUDA 13.3",
+      "CU_FUNC_ATTRIBUTE_SHARED_MEMORY_MODE",
+      "CU_SHARED_MEMORY_MODE_ALLOW_OVERSIZED_SHARED_MEMORY"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-08-06T11:07:58.546709+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41604,
+    "title": "[Bug]: DeepseekV4Attention crashes with KeyError: scale_fmt on non-canonical DSv4 quantizations",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41604",
+    "created_at": "2026-05-04T04:35:55Z",
+    "updated_at": "2026-08-04T02:15:35Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "The issue is related to a DeepSeek model and its quantization configuration, which fits into the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepseekV4Attention",
+      "DeepSeek-V4-Flash-W4A16-AutoRound"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-04T03:55:31.875625+00:00",
     "model": "groq:llama-3.3-70b-versatile"
   },
   {
@@ -360,24 +535,6 @@
     ],
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-07-16T21:46:51.892048+00:00",
-    "model": "groq:llama-3.3-70b-versatile"
-  },
-  {
-    "repo": "vllm-project/vllm",
-    "repo_short": "vLLM",
-    "number": 39441,
-    "title": "[Bug]: spec decode tests fail on nightly b200 job",
-    "html_url": "https://github.com/vllm-project/vllm/issues/39441",
-    "created_at": "2026-04-09T18:56:34Z",
-    "updated_at": "2026-07-09T02:15:59Z",
-    "bucket": "b200",
-    "difficulty": 2,
-    "why": "The issue mentions a 'nightly b200 job', which indicates Blackwell-related work.",
-    "evidence_quotes": [
-      "nightly b200 job"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-07-09T13:38:14.151391+00:00",
     "model": "groq:llama-3.3-70b-versatile"
   },
   {
@@ -575,7 +732,7 @@
     "title": "FA3 attention sinks blackwell sm120",
     "html_url": "https://github.com/Dao-AILab/flash-attention/issues/1810",
     "created_at": "2025-08-13T05:14:10Z",
-    "updated_at": "2026-07-22T20:00:50Z",
+    "updated_at": "2026-07-31T16:53:56Z",
     "bucket": "b200",
     "difficulty": 2,
     "why": "The issue explicitly mentions Blackwell, sm120, and sm100 GPUs (RTX 5000 series / RTX Pro 6000) asking about FA3 support on those architectures.",
@@ -894,24 +1051,6 @@
   {
     "repo": "NVIDIA/cutlass",
     "repo_short": "CUTLASS",
-    "number": 2658,
-    "title": "[QST][CuTe] How to dump ptxas compiling information in cute dsl?",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2658",
-    "created_at": "2025-09-22T05:20:45Z",
-    "updated_at": "2026-02-08T20:29:00Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 2,
-    "why": "The issue title explicitly names CuTe DSL and asks a question about ptxas compilation info within that framework, satisfying the cutlass_cute bucket requirement.",
-    "evidence_quotes": [
-      "[QST][CuTe] How to dump ptxas compiling information in cute dsl?"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T19:54:33.644959+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
     "number": 2388,
     "title": "[QST]how to understand wgmma swizzle atom?",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/2388",
@@ -1129,26 +1268,6 @@
   {
     "repo": "NVIDIA/cutlass",
     "repo_short": "CUTLASS",
-    "number": 2937,
-    "title": "[BUG] Epilogue: Memory access width exceeds width of the output tile",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2937",
-    "created_at": "2026-01-08T23:08:35Z",
-    "updated_at": "2026-05-19T15:10:37Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 2,
-    "why": "The issue is squarely about a CUTLASS C++ epilogue thread-map header; the fix is concretely described as a one-line const_min addition.",
-    "evidence_quotes": [
-      "CUTLASS C++",
-      "cutlass/epilogue/threadblock/output_tile_thread_map.h",
-      "static_assert( kAccessWidth * kElementsPerAccess <= Shape::kColumn, \"Accessing too many elements per access\");"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:02:29.171066+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
     "number": 3179,
     "title": "[Bug] `cutlass_profiler` fails to build with `CUTLASS_BUILD_SHARED_LIBS=OFF`",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/3179",
@@ -1194,7 +1313,7 @@
     "title": "[BUG] Potential overflow issue in packed_stride.hpp",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/3269",
     "created_at": "2026-05-24T22:39:08Z",
-    "updated_at": "2026-07-08T08:56:26Z",
+    "updated_at": "2026-08-07T09:24:00Z",
     "bucket": "cutlass_cute",
     "difficulty": 2,
     "why": "The issue is a potential integer overflow bug in CUTLASS's packed_stride.hpp, a CUTLASS utility file \u2014 directly a CUTLASS issue with a concrete fix described.",
@@ -1290,7 +1409,7 @@
     "title": "[QUESTION] Question for DSA",
     "html_url": "https://github.com/NVIDIA/Megatron-LM/issues/2998",
     "created_at": "2026-01-19T08:47:44Z",
-    "updated_at": "2026-07-10T19:31:12Z",
+    "updated_at": "2026-08-05T09:13:10Z",
     "bucket": "deepseek",
     "difficulty": 2,
     "why": "The issue explicitly names DeepSeek-V3.2 and describes a potential weight-loading mismatch in the MLA NOPE/PE split ordering \u2014 a small localized fix in the attention implementation.",
@@ -1303,24 +1422,345 @@
     "model": "anthropic:claude-sonnet-4-6"
   },
   {
-    "repo": "sgl-project/sglang",
-    "repo_short": "SGLang",
-    "number": 26960,
-    "title": "[Bug]  GB300 NVFP4 8k1k Disaggregated MTP Fails Due to Missing DeepGEMM API",
-    "html_url": "https://github.com/sgl-project/sglang/issues/26960",
-    "created_at": "2026-06-01T19:35:25Z",
-    "updated_at": "2026-06-03T20:47:26Z",
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 51790,
+    "title": "[Bug]: DeepSeek V4 mHC warmup is always skipped because DeepseekV4DecoderLayer has no hc_pre/hc_post attributes",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51790",
+    "created_at": "2026-08-11T09:16:03Z",
+    "updated_at": "2026-08-11T10:24:45Z",
     "bucket": "deepseek",
-    "difficulty": 2,
-    "why": "MTP (multi-token prediction) is a DeepSeek architectural primitive; the fix is concretely described as bumping the DeepGEMM dependency version in the container.",
+    "difficulty": 3,
+    "why": "The issue is related to DeepSeek V4, which fits into the deepseek bucket.",
     "evidence_quotes": [
-      "GB300 NVFP4 8k1k Disaggregated MTP Fails Due to Missing DeepGEMM API",
-      "GB300 NVFP4 Disagg MTP fails due to missing DeepGEMM API",
-      "the Qwen3.5 disaggregated MTP path ends up invoking `m_grouped_bf16_gemm_nt_masked`"
+      "DeepSeek V4 mHC warmup",
+      "DeepseekV4DecoderLayer"
     ],
     "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T00:40:17.570567+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
+    "evaluated_at": "2026-08-11T09:43:52.389133+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "NVIDIA/cutlass",
+    "repo_short": "CUTLASS",
+    "number": 3444,
+    "title": "[BUG][CuTe DSL] TVM-FFI env stream detection fails when all GPU tensors are nested in a tuple",
+    "html_url": "https://github.com/NVIDIA/cutlass/issues/3444",
+    "created_at": "2026-08-10T16:59:10Z",
+    "updated_at": "2026-08-10T16:59:19Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 3,
+    "why": "The issue is related to CuTe DSL and CUTLASS, which falls under the cutlass_cute bucket.",
+    "evidence_quotes": [
+      "CuTe DSL",
+      "cutlass.cute as cute",
+      "cutlass/base_dsl/tvm_ffi_builder/tvm_ffi_builder.py"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-10T17:37:49.656904+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 42229,
+    "title": "[Bug]:  ValueError: GGUF model with architecture deepseek2 is not supported yet.",
+    "html_url": "https://github.com/vllm-project/vllm/issues/42229",
+    "created_at": "2026-05-10T13:06:44Z",
+    "updated_at": "2026-08-10T03:32:05Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue mentions DeepSeek V4, which is an architectural primitive that counts for the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash",
+      "deepseek2",
+      "DeepSeek V4"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-10T03:00:17.656121+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 51533,
+    "title": "[Installation]: Worker processes hang in CPU deadloop after NCCL initialization when loading DeepSeek-V4-Flash-0731 with vLLM V1 engine on H100",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51533",
+    "created_at": "2026-08-09T04:13:27Z",
+    "updated_at": "2026-08-09T04:13:27Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue mentions DeepSeek-V4, which is a specific architectural primitive that fits the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash-0731"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-09T04:50:25.590311+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "NVIDIA/cudnn-frontend",
+    "repo_short": "cuDNN-frontend",
+    "number": 523,
+    "title": "frost(sdpa): has_lse specialization for the FP8/MXFP8 SM100 flavors (lse_optional parity)",
+    "html_url": "https://github.com/NVIDIA/cudnn-frontend/issues/523",
+    "created_at": "2026-08-08T05:52:16Z",
+    "updated_at": "2026-08-08T05:52:16Z",
+    "bucket": "b200",
+    "difficulty": 3,
+    "why": "The issue is related to adding has_lse specialization for FP8/MXFP8 SM100 flavors, which is relevant to the b200 bucket.",
+    "evidence_quotes": [
+      "SM100",
+      "FP8/MXFP8",
+      "lse_optional"
+    ],
+    "blackwell_intent_signal": "port-stated",
+    "evaluated_at": "2026-08-08T06:25:31.662809+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "Dao-AILab/flash-attention",
+    "repo_short": "FlashAttention",
+    "number": 2765,
+    "title": "[CuTe, SM100] test_clc_fuzz fails after #2559 due to stale scheduler expectations",
+    "html_url": "https://github.com/Dao-AILab/flash-attention/issues/2765",
+    "created_at": "2026-08-07T05:04:26Z",
+    "updated_at": "2026-08-07T05:04:26Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 3,
+    "why": "The issue is related to CuTe and SM100, which fits the cutlass_cute bucket.",
+    "evidence_quotes": [
+      "CuTe",
+      "SM100"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-07T05:24:36.951216+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 41920,
+    "title": "[Bug]: get_expert_mapping is inconsistent with load_weights for EPLB in DeepseekV2 and AXK1",
+    "html_url": "https://github.com/vllm-project/vllm/issues/41920",
+    "created_at": "2026-05-07T08:38:08Z",
+    "updated_at": "2026-08-06T02:15:07Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue is related to DeepSeekV2 and AXK1 models, which are part of the DeepSeek bucket.",
+    "evidence_quotes": [
+      "DeepseekV2ForCausalLM",
+      "DeepseekV2",
+      "AXK1ForCausalLM"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-06T11:07:46.028096+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 51223,
+    "title": "[Feature]: DeepSeek V4: option to preserve <think>/</think> markers in chat completion content",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51223",
+    "created_at": "2026-08-06T03:51:42Z",
+    "updated_at": "2026-08-06T04:27:55Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue is related to DeepSeek V4, which is one of the buckets.",
+    "evidence_quotes": [
+      "DeepSeek V4",
+      "DeepSeek-V4-Flash"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-06T04:49:30.903200+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 33770,
+    "title": "[Bug]: Loading Deepseek models is very slow",
+    "html_url": "https://github.com/vllm-project/vllm/issues/33770",
+    "created_at": "2026-02-04T06:16:33Z",
+    "updated_at": "2026-08-05T02:30:05Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue is related to DeepSeek, which is one of the three buckets.",
+    "evidence_quotes": [
+      "Loading Deepseek models"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-05T08:09:07.778416+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 51106,
+    "title": "[Bug]: DeepSeek-V4-Flash-0731 crashes on RTX PRO 5000 because FlashInfer cannot reshape a tensor with 0 elements into the shape [0, -1]",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51106",
+    "created_at": "2026-08-05T02:47:38Z",
+    "updated_at": "2026-08-05T21:40:05Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue is related to DeepSeek, which is one of the three buckets.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash-0731"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-05T08:09:07.774422+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "repo_short": "SGLang",
+    "number": 33493,
+    "title": "[Bug] DSPARK retrieves wrong key \"acc_linear_penalities\" from sampling_info",
+    "html_url": "https://github.com/sgl-project/sglang/issues/33493",
+    "created_at": "2026-08-04T05:39:28Z",
+    "updated_at": "2026-08-04T05:39:28Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue mentions DeepSeek, which is related to the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash-0731"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-04T22:45:06.264498+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 38106,
+    "title": "[Bug]: tool_choice=\"required\" + speculative decoding with lukealonso/Qwen3.5-397B-A17B-NVFP4 leads to failed tool calls.",
+    "html_url": "https://github.com/vllm-project/vllm/issues/38106",
+    "created_at": "2026-03-25T12:03:54Z",
+    "updated_at": "2026-08-04T02:19:16Z",
+    "bucket": "b200",
+    "difficulty": 3,
+    "why": "The issue mentions a Blackwell GPU model.",
+    "evidence_quotes": [
+      "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-08-04T07:26:03.481046+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "repo_short": "SGLang",
+    "number": 33422,
+    "title": "[Perf] DeepSeek-V4 dsv4 prefill on SM120 (4x RTX PRO 6000, TP=4): ~2-7K tok/s vs ~12.5K reported via vLLM/marlin on identical hardware \u2014 expected? tuning guidance?",
+    "html_url": "https://github.com/sgl-project/sglang/issues/33422",
+    "created_at": "2026-08-03T19:29:12Z",
+    "updated_at": "2026-08-04T08:44:35Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue is related to the performance of DeepSeek-V4 on SM120, which is one of the architectural primitives of DeepSeek.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash-0731",
+      "dsv4",
+      "DeepSeek-V4"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-03T20:46:55.580595+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "repo_short": "SGLang",
+    "number": 33360,
+    "title": "[Bug] DeepSeek-V4-Flash-0731 abnormal accuracy output when dp < tp",
+    "html_url": "https://github.com/sgl-project/sglang/issues/33360",
+    "created_at": "2026-08-03T07:09:29Z",
+    "updated_at": "2026-08-03T07:10:16Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue mentions DeepSeek-V4 which is related to the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash-0731"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-03T08:52:08.236135+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "repo_short": "SGLang",
+    "number": 33207,
+    "title": "[Bug] Unrecognized configuration class <class 'sglang.srt.utils.hf_transformers.common._DeepseekV4ConfigAlias'>",
+    "html_url": "https://github.com/sgl-project/sglang/issues/33207",
+    "created_at": "2026-08-01T15:22:42Z",
+    "updated_at": "2026-08-04T09:04:27Z",
+    "bucket": "b200",
+    "difficulty": 3,
+    "why": "The issue mentions the B200 GPU, which is related to the Blackwell architecture.",
+    "evidence_quotes": [
+      "NVIDIA B200"
+    ],
+    "blackwell_intent_signal": "explicit-sm100",
+    "evaluated_at": "2026-08-01T15:43:43.724993+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "sgl-project/sglang",
+    "repo_short": "SGLang",
+    "number": 33199,
+    "title": "[Bug] DeepSeek-V4 default prevents speculative decoding from resetting max-running-requests to 48",
+    "html_url": "https://github.com/sgl-project/sglang/issues/33199",
+    "created_at": "2026-08-01T11:36:45Z",
+    "updated_at": "2026-08-01T11:36:45Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue mentions DeepSeek-V4, which is one of the keywords related to the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4",
+      "DeepSeek-V4 default prevents speculative decoding from resetting max-running-requests to 48",
+      "DeepSeek-V4 cookbook"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-01T11:47:34.915733+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 21014,
+    "title": "[Feature]: Add Triton implementation of NVFP4 GEMM",
+    "html_url": "https://github.com/vllm-project/vllm/issues/21014",
+    "created_at": "2025-07-15T21:33:26Z",
+    "updated_at": "2026-08-01T02:17:26Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 3,
+    "why": "The issue mentions CUTLASS, which is a specific library for GPU-accelerated linear algebra.",
+    "evidence_quotes": [
+      "CUTLASS"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-01T05:00:19.573229+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "NVIDIA/cutlass",
+    "repo_short": "CUTLASS",
+    "number": 3428,
+    "title": "[BUG] Broken atomicCAS RMW loop in SubbyteReference::set() for straddling elements",
+    "html_url": "https://github.com/NVIDIA/cutlass/issues/3428",
+    "created_at": "2026-08-01T00:48:46Z",
+    "updated_at": "2026-08-01T00:48:53Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 3,
+    "why": "The issue is related to CUTLASS C++ and involves a bug in the SubbyteReference::set() function.",
+    "evidence_quotes": [
+      "CUTLASS C++",
+      "SubbyteReference::set()",
+      "cutlass/subbyte_reference.h"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-01T01:17:58.739919+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
   },
   {
     "repo": "NVIDIA/cutlass",
@@ -1347,7 +1787,7 @@
     "title": "[Feature] Integrate `cute-dsl` backend of `mm_mxfp8` and other improvements",
     "html_url": "https://github.com/sgl-project/sglang/issues/32950",
     "created_at": "2026-07-30T17:52:44Z",
-    "updated_at": "2026-07-30T20:09:34Z",
+    "updated_at": "2026-08-04T16:01:12Z",
     "bucket": "cutlass_cute",
     "difficulty": 3,
     "why": "The issue mentions CUTLASS, which is a specific requirement for the cutlass_cute bucket.",
@@ -1498,7 +1938,7 @@
     "title": "[Bug]: v0.26.0 EngineCore fails to start on SM90+ \u2014 _warmup_ll_bf16_router_gemm hits AttributeError: module 'cutlass.cute.core' has no attribute 'ThrMma' (nvidia-cutlass-dsl 4.6.0)",
     "html_url": "https://github.com/vllm-project/vllm/issues/49859",
     "created_at": "2026-07-26T07:01:21Z",
-    "updated_at": "2026-07-29T02:11:40Z",
+    "updated_at": "2026-08-06T20:00:02Z",
     "bucket": "cutlass_cute",
     "difficulty": 3,
     "why": "The issue is related to CUTLASS or CuTe, specifically the missing attribute 'ThrMma' in 'cutlass.cute.core'.",
@@ -1535,7 +1975,7 @@
     "title": "Deprecate CUTLASS MLA attention backend",
     "html_url": "https://github.com/sgl-project/sglang/issues/32111",
     "created_at": "2026-07-22T21:08:53Z",
-    "updated_at": "2026-07-22T22:55:09Z",
+    "updated_at": "2026-08-04T14:24:28Z",
     "bucket": "cutlass_cute",
     "difficulty": 3,
     "why": "The issue is about deprecating the CUTLASS MLA attention backend, which directly relates to the CUTLASS or CuTe bucket.",
@@ -1756,25 +2196,6 @@
     "model": "groq:llama-3.3-70b-versatile"
   },
   {
-    "repo": "flashinfer-ai/flashinfer",
-    "repo_short": "FlashInfer",
-    "number": 3936,
-    "title": "[Bug]Flaky issue on B300 and GB200: test_trtllm_gen_moe_autotune_tactics.py timeout with no results",
-    "html_url": "https://github.com/flashinfer-ai/flashinfer/issues/3936",
-    "created_at": "2026-07-12T11:38:50Z",
-    "updated_at": "2026-07-23T00:48:30Z",
-    "bucket": "b200",
-    "difficulty": 3,
-    "why": "The issue mentions the B300 and GB200, which are related to the Blackwell architecture.",
-    "evidence_quotes": [
-      "B300",
-      "GB200"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-07-12T11:44:30.117315+00:00",
-    "model": "groq:llama-3.3-70b-versatile"
-  },
-  {
     "repo": "NVIDIA/TensorRT-LLM",
     "repo_short": "TRT-LLM",
     "number": 16281,
@@ -1839,7 +2260,7 @@
     "title": "[Bug]:  DeepSeek V4 reasoning/tool parsers produce unbalanced tags under concurrent load",
     "html_url": "https://github.com/vllm-project/vllm/issues/48089",
     "created_at": "2026-07-09T06:23:05Z",
-    "updated_at": "2026-07-09T06:23:05Z",
+    "updated_at": "2026-08-11T03:22:48Z",
     "bucket": "deepseek",
     "difficulty": 3,
     "why": "The issue mentions 'DeepSeek V4', which is related to the deepseek bucket.",
@@ -1876,7 +2297,7 @@
     "title": "VLLM_ENGINE_READY_TIMEOUT_S default (600s) insufficient for large MoE + cold FlashInfer JIT cache on new GPU archs (GB10 / sm_121a)",
     "html_url": "https://github.com/vllm-project/vllm/issues/48031",
     "created_at": "2026-07-08T18:40:22Z",
-    "updated_at": "2026-07-30T21:10:14Z",
+    "updated_at": "2026-08-03T01:23:46Z",
     "bucket": "b200",
     "difficulty": 3,
     "why": "The issue mentions Blackwell architecture and GB10, which is related to the b200 bucket.",
@@ -1907,24 +2328,6 @@
     "model": "groq:llama-3.3-70b-versatile"
   },
   {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 3367,
-    "title": "[FEA] Interactive kernel selection guide for GEMM configurations",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/3367",
-    "created_at": "2026-07-06T10:48:07Z",
-    "updated_at": "2026-07-06T10:48:14Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "The issue is a feature request for CUTLASS and fits into the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "CUTLASS C++"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-07-06T11:17:36.996145+00:00",
-    "model": "groq:llama-3.3-70b-versatile"
-  },
-  {
     "repo": "sgl-project/sglang",
     "repo_short": "SGLang",
     "number": 30084,
@@ -1940,24 +2343,6 @@
     ],
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-07-04T05:29:20.069302+00:00",
-    "model": "groq:llama-3.3-70b-versatile"
-  },
-  {
-    "repo": "vllm-project/vllm",
-    "repo_short": "vLLM",
-    "number": 38829,
-    "title": "[Bug]: Unsharded model cannot be loaded",
-    "html_url": "https://github.com/vllm-project/vllm/issues/38829",
-    "created_at": "2026-04-02T17:01:13Z",
-    "updated_at": "2026-07-03T02:16:26Z",
-    "bucket": "b200",
-    "difficulty": 3,
-    "why": "The issue mentions the Blackwell server edition, which is related to the b200 bucket.",
-    "evidence_quotes": [
-      "NVIDIA RTX PRO 6000 Blackwell Server Edition"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-07-03T05:37:07.925837+00:00",
     "model": "groq:llama-3.3-70b-versatile"
   },
   {
@@ -1986,7 +2371,7 @@
     "title": "[Bug] NameError: name 'deep_gemm' is not defined in tf32_hc_prenorm_gemm when SGLANG_ENABLE_JIT_DEEPGEMM=0",
     "html_url": "https://github.com/sgl-project/sglang/issues/29738",
     "created_at": "2026-06-30T09:16:20Z",
-    "updated_at": "2026-06-30T09:16:20Z",
+    "updated_at": "2026-08-01T09:36:16Z",
     "bucket": "deepseek",
     "difficulty": 3,
     "why": "The issue is related to DeepSeek-V4, which is one of the architectural primitives in scope.",
@@ -2121,7 +2506,7 @@
     "title": "[BUG] ICE: Load/Store operand must be a pointer when loading/storing aligned FP4 tensor",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/3349",
     "created_at": "2026-06-25T15:58:36Z",
-    "updated_at": "2026-07-26T08:51:36Z",
+    "updated_at": "2026-08-07T05:33:37Z",
     "bucket": "cutlass_cute",
     "difficulty": 3,
     "why": "The issue is related to CuTe DSL and CUTLASS.",
@@ -2692,7 +3077,7 @@
     "title": "FA4 SM120 support?",
     "html_url": "https://github.com/Dao-AILab/flash-attention/issues/2307",
     "created_at": "2026-03-06T07:05:37Z",
-    "updated_at": "2026-03-17T23:20:53Z",
+    "updated_at": "2026-08-03T14:56:38Z",
     "bucket": "b200",
     "difficulty": 3,
     "why": "The issue explicitly asks about Blackwell GPU support (SM120, B200, GB200), making it clearly in-scope for the b200 bucket.",
@@ -3235,26 +3620,6 @@
   {
     "repo": "NVIDIA/cutlass",
     "repo_short": "CUTLASS",
-    "number": 2452,
-    "title": "[QST] (C7504) & (C7509) Potential Performance Loss: about 'setmaxnreg' and wgmma.mma_async",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2452",
-    "created_at": "2025-07-09T12:19:49Z",
-    "updated_at": "2026-02-05T21:10:58Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue explicitly names CUTLASS and CuTe and involves cutlass::arch::warpgroup_reg_alloc with wgmma.mma_async performance warnings, qualifying it for the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "I wrote a kernel based on cute and cutlass",
-      "cutlass::arch::warpgroup_reg_alloc",
-      "wgmma.mma_async"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T19:54:48.653866+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
     "number": 2350,
     "title": "[QST] Why cutlass profiler not profile all kernels?",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/2350",
@@ -3268,25 +3633,6 @@
     ],
     "blackwell_intent_signal": "explicit-sm100",
     "evaluated_at": "2026-06-16T19:54:33.732436+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2654,
-    "title": "[BUG] For mixed type gemms on SM90, custom stage count doesn't work.",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2654",
-    "created_at": "2025-09-19T06:49:14Z",
-    "updated_at": "2026-02-12T19:26:13Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "This is a CUTLASS C++ bug in the SM90 collective GEMM builder (sm90_gmma_builder.inl) where StageCount<N> is not handled properly, squarely fitting the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "At  sm90_gmma_builder.inl, the builder class expects template argument `StageCountType` has a static member named `bytes`",
-      "CUTLASS C++"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T19:54:33.644380+00:00",
     "model": "anthropic:claude-sonnet-4-6"
   },
   {
@@ -3395,7 +3741,7 @@
     "title": "[BUG] [CUTLASS] Integer-Gemm gives incorrect results",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/2716",
     "created_at": "2025-10-24T08:11:43Z",
-    "updated_at": "2026-03-05T16:22:10Z",
+    "updated_at": "2026-08-07T15:17:27Z",
     "bucket": "cutlass_cute",
     "difficulty": 3,
     "why": "Issue explicitly names CUTLASS and uses cutlass:: namespace types, and describes a correctness bug in the CUTLASS integer GEMM epilogue configuration.",
@@ -3453,26 +3799,6 @@
   {
     "repo": "NVIDIA/cutlass",
     "repo_short": "CUTLASS",
-    "number": 2679,
-    "title": "[BUG][CUTLASS C++] Building errors when using ConvKernel with StreamKScheduler",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2679",
-    "created_at": "2025-10-02T00:41:14Z",
-    "updated_at": "2026-03-17T00:35:51Z",
-    "bucket": "b200",
-    "difficulty": 3,
-    "why": "Issue is a build bug in the Blackwell (sm100) convolution example with explicit sm100 tile scheduler references, qualifying for b200; it also touches CUTLASS/CuTe headers.",
-    "evidence_quotes": [
-      "Modified `examples/76_blackwell_conv/76_blackwell_conv_fprop.cu`",
-      "sm100_tile_scheduler_stream_k.hpp",
-      "PersistentTileSchedulerSm100StreamK"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-06-16T18:37:32.860020+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
     "number": 2779,
     "title": "[FEA] need a feature for cvt a single element from bf16/f32 to f8",
     "html_url": "https://github.com/NVIDIA/cutlass/issues/2779",
@@ -3507,354 +3833,6 @@
     ],
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-06-16T18:37:17.593265+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 3037,
-    "title": "[QST] [Cute-DSL] How to get address of TMA descriptor",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/3037",
-    "created_at": "2026-02-15T21:52:14Z",
-    "updated_at": "2026-06-16T18:32:48Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "The issue is about CuTe DSL (cute::) TMA descriptor address access, which falls under the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "cute.nvgpu.make_tiled_tma_atom",
-      "[Cute-DSL] How to get address of TMA descriptor"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:37:17.592194+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2785,
-    "title": "[QST]The setup of Hopper GEMM epilogue",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2785",
-    "created_at": "2025-11-20T08:09:32Z",
-    "updated_at": "2026-03-20T09:17:43Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "The issue explicitly names CuTe DSL and cute:: APIs (make_tiled_copy_C_atom, make_copy_atom, etc.), qualifying it for the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "CuTe DSL example",
-      "cute.make_tiled_copy_C_atom",
-      "cute.make_tiled_copy_S",
-      "cute.nvgpu.warp.StMatrix8x8x16bOp",
-      "cute.make_copy_atom"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:37:01.641359+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2773,
-    "title": "[FEA] Support indexing `List[cute.Tensor]` with `thread_idx` inside kernel",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2773",
-    "created_at": "2025-11-14T08:50:01Z",
-    "updated_at": "2026-03-20T12:17:09Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "The issue explicitly names CuTe DSL and cute:: types, qualifying it for the cutlass_cute bucket; it requests support for indexing List[cute.Tensor] with a runtime thread index inside a CuTe DSL kernel.",
-    "evidence_quotes": [
-      "CuTe DSL",
-      "cutlass.base_dsl.common.DSLRuntimeError",
-      "@cute.kernel",
-      "cute.Tensor"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:37:01.640525+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2787,
-    "title": "[QST] Where is the actual MMA (a * b + c) implemented for SM70 SIMT convolution kernels?",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2787",
-    "created_at": "2025-11-20T12:19:53Z",
-    "updated_at": "2026-03-20T13:29:35Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "This issue explicitly names CUTLASS, cutlass:: types, and CUTLASS kernel paths, qualifying it for the cutlass_cute bucket; it is a question about the SM70 SIMT MMA call chain in CUTLASS.",
-    "evidence_quotes": [
-      "CUTLASS on an SM70 GPU",
-      "cutlass::conv::kernel::ImplicitGemmConvolution",
-      "include/cutlass/conv/kernel/implicit_gemm_convolution.h",
-      "gemm::warp::MmaSimt` in `include/cutlass/gemm/warp/mma_simt.h",
-      "include/cutlass/arch/mma.h` defines `cutlass::arch::Mma",
-      "include/cutlass/arch/mma_sm70.h"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:37:01.639402+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2805,
-    "title": "[QST] Details of Auto Schedule Execution Strategy on Blackwell",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2805",
-    "created_at": "2025-11-24T08:20:29Z",
-    "updated_at": "2026-03-24T09:23:01Z",
-    "bucket": "b200",
-    "difficulty": 3,
-    "why": "The issue explicitly names the Blackwell architecture multiple times and discusses CUTLASS Auto Schedule and DSMEM behavior on Blackwell, placing it in the b200 bucket.",
-    "evidence_quotes": [
-      "Details of Auto Schedule Execution Strategy on Blackwell",
-      "On the Blackwell architecture, which is preferred to use Auto Schedule.",
-      "I am currently running into an issue on Blackwell where I explicitly set cluster<_1, _1, _1>"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-06-16T18:36:46.208578+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2784,
-    "title": "[QST] Build failure of cutlass_profiler on Jetson AGX Thor: SMEM usage exceeded capacity in sm100_gemm_array_tma_warpspecialized",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2784",
-    "created_at": "2025-11-20T01:21:17Z",
-    "updated_at": "2026-03-24T09:23:06Z",
-    "bucket": "b200",
-    "difficulty": 3,
-    "why": "The issue explicitly references sm100 architecture, sm100_smem_capacity_bytes, and sm100_gemm_array_tma_warpspecialized.hpp \u2014 all Blackwell (sm_100) signals \u2014 making this squarely in the b200 bucket.",
-    "evidence_quotes": [
-      "sm100_gemm_array_tma_warpspecialized.hpp",
-      "static_assert(SharedStorageSize <= cutlass::arch::sm100_smem_capacity_bytes, \"SMEM usage exceeded capacity.\");",
-      "CUTLASS_NVCC_ARCHS=\"110a\"",
-      "related to shared memory (SMEM) capacity limits on the SM100 architecture"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-06-16T18:36:46.207515+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 3078,
-    "title": "[QST] TiledMMA.make_fragment_A fails with non-swizzled smem layout",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/3078",
-    "created_at": "2026-02-27T07:48:51Z",
-    "updated_at": "2026-06-27T09:00:55Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue directly involves CuTe DSL APIs (TiledMMA, cute::, cutlass.cute) and reports a bug in the CUTLASS CuTe Python DSL, qualifying for the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "TiledMMA.make_fragment_A fails with non-swizzled smem layout",
-      "When using TiledMMA (GMMA instructions on Hopper) with a plain non-swizzled shared memory layout",
-      "import cutlass.cute as cute",
-      "from cutlass.cute.nvgpu.warpgroup import"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:36:14.304278+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2825,
-    "title": "[QST][CuteDSL] warp mma support",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2825",
-    "created_at": "2025-12-01T04:40:20Z",
-    "updated_at": "2026-03-31T05:36:58Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue explicitly names CuteDSL and references the CuTe nvgpu warp mma module, qualifying for the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "[QST][CuteDSL] warp mma support",
-      "CuteDSL only supports fp16/bf16 warp mma",
-      "python/CuTeDSL/cutlass/cute/nvgpu/warp/mma.py"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:36:14.302804+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2560,
-    "title": "[QST][Cute-DSL] How to return more than 1 value from llvm.inline_asm",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2560",
-    "created_at": "2025-08-11T22:50:02Z",
-    "updated_at": "2026-03-31T14:36:24Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue explicitly names CuTe-DSL (cute-dsl) and asks about functionality within the CuTeDSL framework, qualifying for the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "[QST][Cute-DSL] How to return more than 1 value from llvm.inline_asm",
-      "I'm using llvm.inline_asm in cute-dsl"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:36:14.301717+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2843,
-    "title": "[FEA] PyTorch is moving to C++20",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2843",
-    "created_at": "2025-12-04T17:42:12Z",
-    "updated_at": "2026-04-03T18:17:29Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "The issue explicitly names CUTLASS C++ as the component and requests a C++20 language standard update for CUTLASS.",
-    "evidence_quotes": [
-      "CUTLASS C++"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:36:00.624296+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 3065,
-    "title": "[BUG] Compile error from including `\"cute/tensor.hpp\"` when building with MSVC with `/permissive-` option",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/3065",
-    "created_at": "2026-02-24T20:45:53Z",
-    "updated_at": "2026-07-02T20:31:47Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue is about a CUTLASS/CuTe compile error when including cute/tensor.hpp under MSVC with /permissive-, directly involving CuTe headers.",
-    "evidence_quotes": [
-      "Compile error from including `\"cute/tensor.hpp\"`",
-      "cute::Layout",
-      "cute::MMA_Traits",
-      "cute::compact_major",
-      "copy_traits_sm100.hpp"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:35:49.986601+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2847,
-    "title": "[BUG]  add_stub\" not implemented for 'Float8_e4m3fn, Float4_e2m1fn_x2",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2847",
-    "created_at": "2025-12-05T07:55:07Z",
-    "updated_at": "2026-04-05T04:54:26Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue explicitly involves the CuTe DSL (cutlass.cute) and reports bugs with low-precision arithmetic (Float8, Float4) in CuTe kernel compilation.",
-    "evidence_quotes": [
-      "CuTe DSL",
-      "import cutlass.cute as cute",
-      "from cutlass.cute.runtime import from_dlpack",
-      "naive_elementwise_add_kernel"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:35:49.983962+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 3057,
-    "title": "[BUG] nvpf4 tensor creation looks incorrect",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/3057",
-    "created_at": "2026-02-23T16:59:07Z",
-    "updated_at": "2026-07-09T18:39:49Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Bug in a CUTLASS CuTe DSL example file involving incorrect tensor creation logic for 4-bit packed types; directly names a CUTLASS file path and cutlass dtype.",
-    "evidence_quotes": [
-      "cutlass/examples/python/CuTeDSL/blackwell/grouped_blockscaled_gemm.py",
-      "cutlass.Float4E2M1FN"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:35:18.980766+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2886,
-    "title": "[BUG] Blackwell fmha_bwd overflows int32 spec",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2886",
-    "created_at": "2025-12-17T14:58:41Z",
-    "updated_at": "2026-04-17T07:37:32Z",
-    "bucket": "b200",
-    "difficulty": 3,
-    "why": "The bug is explicitly in a Blackwell (SM100) FMHA backward kernel where the workspace tensor overflows int32; fixing it requires migrating workspace size computation from int32 to int64 in that Blackwell kernel path.",
-    "evidence_quotes": [
-      "Blackwell fmha_bwd overflows int32 spec",
-      "examples/python/CuTeDSL/blackwell/fmha_bwd.py",
-      "Running Blackwell SM100 FMHA bwd test"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-06-16T18:35:05.517352+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 3015,
-    "title": "[QST] Why does sm103 GB300 FP4 block-scaled gemm have hardcoded SW128?",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/3015",
-    "created_at": "2026-02-11T01:31:32Z",
-    "updated_at": "2026-07-16T07:44:30Z",
-    "bucket": "b200",
-    "difficulty": 3,
-    "why": "Issue explicitly references sm103 and GB300, which are Blackwell-family GPUs, and discusses hardcoded SMEM swizzle for FP4 GEMM on that architecture.",
-    "evidence_quotes": [
-      "sm103 GB300 FP4 block-scaled gemm"
-    ],
-    "blackwell_intent_signal": "explicit-sm100",
-    "evaluated_at": "2026-06-16T18:34:50.173427+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2842,
-    "title": "[QST] About cast in cuteDSL",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2842",
-    "created_at": "2025-12-04T13:52:55Z",
-    "updated_at": "2026-04-17T15:27:11Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue is about using CuTeDSL (cutlass.cute) for a cast operation in a GEMM kernel; CUTLASS/CuTe APIs are directly referenced.",
-    "evidence_quotes": [
-      "About cast in cuteDSL",
-      "import cutlass.cute as cute",
-      "import cutlass",
-      "cute.autovec_copy",
-      "cute.make_fragment_like"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:34:50.172676+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2848,
-    "title": "[QST] CuteDSL in memory pass",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2848",
-    "created_at": "2025-12-05T08:07:22Z",
-    "updated_at": "2026-04-18T07:30:12Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "Issue is about using CuTeDSL (cutlass.cute) for a memory pass kernel; multiple CuTe/CUTLASS API references are present.",
-    "evidence_quotes": [
-      "import cutlass.cute as cute",
-      "import cutlass",
-      "cutlass.utils.hopper_helpers as sm90_utils",
-      "cute.make_tiled_copy_tv",
-      "cute.tile_to_shape"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:34:49.804329+00:00",
     "model": "anthropic:claude-sonnet-4-6"
   }
 ]

@@ -2,61 +2,61 @@
   {
     "slug": "vllm-project/vllm",
     "name": "vLLM",
-    "pr_count": 6896,
+    "pr_count": 8065,
     "classified_count": 15
   },
   {
     "slug": "sgl-project/sglang",
     "name": "SGLang",
-    "pr_count": 7220,
+    "pr_count": 8671,
     "classified_count": 19
   },
   {
     "slug": "NVIDIA/Megatron-LM",
     "name": "Megatron",
-    "pr_count": 3277,
+    "pr_count": 3517,
     "classified_count": 3
   },
   {
     "slug": "NVIDIA/TensorRT-LLM",
     "name": "TRT-LLM",
-    "pr_count": 6177,
+    "pr_count": 6635,
     "classified_count": 7
   },
   {
     "slug": "NVIDIA/cutlass",
     "name": "CUTLASS",
-    "pr_count": 467,
+    "pr_count": 481,
     "classified_count": 0
   },
   {
     "slug": "NVIDIA/cudnn-frontend",
     "name": "cuDNN-frontend",
-    "pr_count": 296,
+    "pr_count": 363,
     "classified_count": 0
   },
   {
     "slug": "NVIDIA/cccl",
     "name": "CCCL",
-    "pr_count": 1634,
+    "pr_count": 1761,
     "classified_count": 0
   },
   {
     "slug": "Dao-AILab/flash-attention",
     "name": "FlashAttention",
-    "pr_count": 678,
+    "pr_count": 709,
     "classified_count": 0
   },
   {
     "slug": "flashinfer-ai/flashinfer",
     "name": "FlashInfer",
-    "pr_count": 1386,
+    "pr_count": 1572,
     "classified_count": 0
   },
   {
     "slug": "tile-ai/tilelang",
     "name": "TileLang",
-    "pr_count": 1622,
+    "pr_count": 1698,
     "classified_count": 0
   }
 ]

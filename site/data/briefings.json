@@ -1,5 +1,44 @@
 [
   {
+    "briefing_date": "2026-08-11",
+    "repo_scope": [
+      "vllm-project/vllm",
+      "sgl-project/sglang",
+      "NVIDIA/Megatron-LM",
+      "NVIDIA/TensorRT-LLM",
+      "NVIDIA/cutlass",
+      "NVIDIA/cudnn-frontend",
+      "NVIDIA/cccl",
+      "Dao-AILab/flash-attention",
+      "flashinfer-ai/flashinfer",
+      "tile-ai/tilelang"
+    ],
+    "script": {
+      "title": "Inference Radar \u2014 2026-08-11",
+      "intro": "DeepSeek issues dominate the radar.",
+      "slides": [
+        {
+          "heading": "Picks",
+          "subhead": "Open issues across repos",
+          "bullets": [
+            "D4 \u00b7 cuDNN-frontend #548 \u00b7 b200 \u00b7 [Perf] SM100 DSA indexer backward: `kernel_gemm` pure-kernel latency regressed 1",
+            "D5 \u00b7 vLLM #51799 \u00b7 deepseek \u00b7 [Bug]: DeepSeek-V4-Flash-0731 shows severe 1M KV concurrency regression on B300",
+            "D5 \u00b7 vLLM #51771 \u00b7 deepseek \u00b7 EAGLE/MTP block drop + prefix caching is untested for hybrid models with \u22653 atte",
+            "D4 \u00b7 vLLM #51737 \u00b7 deepseek \u00b7 [Fix]: MTP speculative decoding crashes with RuntimeError on heterogeneous per-l",
+            "D2 \u00b7 vLLM #51776 \u00b7 cutlass_cute \u00b7 [Bug]: CuTe FA4 forward (flash_fwd.py SM80/SM120) fails on first call: NameError"
+          ],
+          "narration": "Several open issues are on the radar, including a performance regression on cuDNN-frontend, DeepSeek-V4-Flash concurrency regression, untested EAGLE and MTP block drop, MTP speculative decoding crashes, and a CuTe FA4 forward failure. These issues span across multiple repositories, including cuDNN-frontend and vLLM.",
+          "duration_s": 30
+        }
+      ],
+      "outro": "That's all for today."
+    },
+    "video_path": "out/2026-08-11/brief.mp4",
+    "video_url": null,
+    "duration_s": 31,
+    "built_at": "2026-08-11T13:40:49.092372+00:00"
+  },
+  {
     "briefing_date": "2026-07-31",
     "repo_scope": [
       "vllm-project/vllm",

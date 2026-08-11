@@ -1,116 +1,121 @@
 ============================================================
-  INFERENCE RADAR INTEL  —  2026-07-31
+  INFERENCE RADAR INTEL  —  2026-08-11
 ============================================================
 
 === EMERGING — techniques not yet in vLLM ===
 
   (none in window)
   [Cross-repo lag — in SGLang, not yet in vLLM]
-    hardware_ada                    SGLang: 2026-07-01  lag: 30d
-    scheduler                       SGLang: 2026-05-20  lag: 71d
+    hardware_ada                    SGLang: 2026-07-01  lag: 41d
+    scheduler                       SGLang: 2026-05-20  lag: 82d
 
 === RIPENING — stalled PRs a newcomer can address ===
 
   (none yet — run enrich + comments first)
 === OPEN TERRAIN — no dominant org (safe to contribute) ===
 
-  model_support                   top org: Red Hat (15/51 merges, 29% share)
-  quantization                    top org: Red Hat (5/15 merges, 33% share)
-  distributed                     top org: Red Hat (2/5 merges, 40% share)
-  attention_kernel                top org: Red Hat (8/18 merges, 44% share)
+  speculative_decoding            top org: Red Hat (2/8 merges, 25% share)
+  model_support                   top org: Red Hat (19/69 merges, 28% share)
+  quantization                    top org: Red Hat (5/17 merges, 29% share)
+  attention_kernel                top org: Red Hat (8/22 merges, 36% share)
+  distributed                     top org: Intel (3/8 merges, 38% share)
+  moe_routing                     top org: NVIDIA (11/27 merges, 41% share)
 
 === COMPANY MAP — org × keyword area ===
 
-  Red Hat               model_support (15/34, 44%)  |  hardware_hopper (9/16, 56%)  |  attention_kernel (8/14, 57%)  |  moe_routing (6/14, 43%)  |  kv_cache (6/18, 33%)
-  NVIDIA                model_support (14/40, 35%)  |  moe_routing (10/28, 36%)  |  attention_kernel (7/14, 50%)  |  quantization (4/18, 22%)  |  hardware_hopper (4/11, 36%)
-  Hugging Face          model_support (7/8, 88%)  |  quantization (3/3, 100%)  |  attention_kernel (2/3, 67%)
-  IBM                   model_support (4/10, 40%)  |  lora_serving (2/2, 100%)  |  kv_cache (2/8, 25%)  |  attention_kernel (1/2, 50%)  |  hardware_hopper (0/6, 0%)
-  Intel                 hardware_other (6/14, 43%)  |  moe_routing (2/7, 29%)  |  distributed (1/2, 50%)  |  model_support (0/2, 0%)  |  kv_cache (0/3, 0%)
-  AMD                   hardware_amd (8/11, 73%)
+  Red Hat               model_support (19/37, 51%)  |  hardware_hopper (10/16, 63%)  |  kv_cache (8/19, 42%)  |  attention_kernel (8/17, 47%)  |  moe_routing (7/16, 44%)
+  NVIDIA                model_support (17/43, 40%)  |  moe_routing (11/31, 35%)  |  attention_kernel (8/16, 50%)  |  quantization (5/20, 25%)  |  hardware_hopper (5/12, 42%)
+  Intel                 hardware_other (13/22, 59%)  |  moe_routing (8/11, 73%)  |  model_support (3/7, 43%)  |  distributed (3/3, 100%)  |  speculative_decoding (1/3, 33%)
+  IBM                   model_support (8/12, 67%)  |  hardware_hopper (3/6, 50%)  |  quantization (2/2, 100%)  |  lora_serving (2/2, 100%)  |  kv_cache (2/9, 22%)
+  Hugging Face          model_support (8/9, 89%)  |  quantization (3/3, 100%)  |  attention_kernel (3/3, 100%)
+  AMD                   hardware_amd (10/11, 91%)
   Anyscale              hardware_amd (4/10, 40%)
   Google                model_support (3/6, 50%)
   Alibaba               quantization (1/3, 33%)  |  model_support (1/4, 25%)  |  kv_cache (0/2, 0%)
-  Amazon                model_support (2/3, 67%)  |  lora_serving (0/2, 0%)
+  Amazon                model_support (2/5, 40%)
   Neural Magic          model_support (2/3, 67%)
+  UC Berkeley           model_support (2/5, 40%)
+  Baidu                 model_support (1/3, 33%)
+  CoreWeave             model_support (1/4, 25%)
   Mistral AI            model_support (1/2, 50%)
-  UC Berkeley           model_support (1/2, 50%)
-  Baidu                 model_support (0/2, 0%)
+  Together AI           attention_kernel (1/2, 50%)
   ByteDance             quantization (0/2, 0%)  |  model_support (0/4, 0%)
-  CoreWeave             model_support (0/4, 0%)
 
 === MERGE VELOCITY — median days by label × bucket ===
 
+  hardware_amd                  [ci/build]  n=3  avg 0.1d
   model_support                 [jit-kernel]  n=4  avg 0.1d
-  hardware_hopper               [documentation]  n=6  avg 0.3d
   attention_kernel              [bug, ready, v1]  n=3  avg 0.5d
-  attention_kernel              [ready]  n=4  avg 0.6d
+  hardware_hopper               [run-ci, diffusion, mergeable]  n=3  avg 0.5d
+  model_support                 [ready-to-merge]  n=4  avg 0.6d
   hardware_hopper               [run-ci, diffusion, run-ci-extra]  n=4  avg 0.6d
-  model_support                 [documentation]  n=14  avg 0.8d
+  hardware_hopper               [documentation]  n=7  avg 0.7d
   hardware_other                [documentation, npu, run-ci]  n=5  avg 0.9d
-  hardware_other                [documentation, run-ci]  n=3  avg 0.9d
-  hardware_amd                  [run-ci, diffusion]  n=3  avg 0.9d
-  model_support                 [bug, ready, v1]  n=6  avg 1.0d
   distributed                   [complexity: low, Approved]  n=3  avg 1.1d
   hardware_other                [documentation, npu]  n=3  avg 1.1d
-  speculative_decoding          [run-ci, run-ci-extra]  n=4  avg 1.3d
+  model_support                 [ready, multi-modality]  n=3  avg 1.4d
   model_support                 [deepseek]  n=5  avg 1.5d
   hardware_amd                  [ready]  n=5  avg 1.6d
-  moe_routing                   [op: moe]  n=9  avg 2.1d
-  quantization                  [run-ci, diffusion]  n=5  avg 2.3d
+  model_support                 [documentation, run-ci, diffusion]  n=3  avg 2.1d
+  model_support                 [documentation]  n=19  avg 2.1d
+  quantization                  [run-ci, diffusion]  n=6  avg 2.3d
+  model_support                 [bug, ready, v1]  n=7  avg 2.4d
+  hardware_hopper               [run-ci, jit-kernel]  n=3  avg 2.5d
+  hardware_hopper               [documentation, run-ci, diffusion]  n=4  avg 2.6d
   hardware_other                [intel-gpu, ready, v1]  n=4  avg 2.6d
-  model_support                 [complexity: low, Approved]  n=7  avg 3.0d
-  hardware_hopper               [run-ci]  n=7  avg 3.0d
 
 === MENTION POWER — who controls each area ===
 
-  attention_kernel                @claude (?, 7x)  |  @lucaswilkinson (?, 3x)  |  @matthewbonanni (?, 3x)
+  attention_kernel                @claude (?, 8x)  |  @lucaswilkinson (?, 4x)  |  @matthewbonanni (?, 4x)
   distributed                     @claude (?, 3x)
-  hardware_amd                    @andreaskaratzas (?, 7x)  |  @claude (?, 7x)  |  @kenroche (?, 5x)
-  hardware_hopper                 @tensorrt (?, 6x)  |  @tests (?, 5x)  |  @claude (?, 3x)
-  hardware_other                  @claude (?, 4x)  |  @jikunshang (?, 3x)  |  @mingfeima (?, 3x)
-  kv_cache                        @claude (?, 7x)  |  @njhill (?, 4x)  |  @tests (?, 4x)
-  model_support                   @claude (?, 15x)  |  @xiaoyao0115 (?, 10x)  |  @tests (?, 8x)
-  moe_routing                     @humansand (?, 6x)  |  @tests (?, 5x)  |  @claude (?, 3x)
-  quantization                    @mgoin (Red Hat, 3x)
+  hardware_amd                    @claude (?, 9x)  |  @andreaskaratzas (?, 7x)  |  @kenroche (?, 7x)
+  hardware_hopper                 @tests (?, 9x)  |  @tensorrt (?, 6x)  |  @claude (?, 5x)
+  hardware_other                  @claude (?, 6x)  |  @mingfeima (?, 4x)  |  @jikunshang (Intel, 3x)
+  kv_cache                        @claude (?, 10x)  |  @ivanium (UC Berkeley, 5x)  |  @njhill (?, 5x)
+  lora_serving                    @claude (?, 3x)
+  model_support                   @claude (?, 21x)  |  @xiaoyao0115 (?, 10x)  |  @tests (?, 9x)
+  moe_routing                     @humansand (?, 7x)  |  @claude (?, 5x)  |  @tests (?, 5x)
+  quantization                    @mgoin (Red Hat, 3x)  |  @mickqian (?, 3x)
+  speculative_decoding            @hnyls2002 (?, 3x)
 
 === RISING CONTRIBUTORS — recent acceleration ===
 
-  @AndreasKaratzas  hardware_amd  +59 recent vs 4 historical
-  @ch-wan  model_support  +23 recent vs 0 historical
-  @BBuf  hardware_hopper  +22 recent vs 1 historical
-  @trtllm-agent  hardware_hopper  +21 recent vs 0 historical
-  @mickqian  hardware_hopper  +15 recent vs 0 historical
-  @yctseng0211  hardware_amd  +15 recent vs 0 historical
-  @chienchunhung  hardware_hopper  +14 recent vs 1 historical
-  @michaelzhang-ai  hardware_amd  +14 recent vs 0 historical
-  @JustinTong0323  model_support  +13 recent vs 0 historical
-  @bingxche  hardware_amd  +13 recent vs 0 historical
-  @xxi-nv  moe_routing  +11 recent vs 0 historical
-  @YAMY1234  model_support  +10 recent vs 0 historical
-  @mickqian  model_support  +10 recent vs 3 historical
-  @njhill  model_support  +10 recent vs 1 historical
-  @chaojun-zhang  hardware_other  +9 recent vs 2 historical
+  @AndreasKaratzas  hardware_amd  +67 recent vs 7 historical
+  @bingxche  hardware_amd  +39 recent vs 17 historical
+  @ch-wan  model_support  +32 recent vs 0 historical
+  @BBuf  hardware_hopper  +30 recent vs 1 historical
+  @trtllm-agent  hardware_hopper  +26 recent vs 0 historical
+  @mickqian  hardware_hopper  +20 recent vs 1 historical
+  @michaelzhang-ai  hardware_amd  +19 recent vs 0 historical
+  @mickqian  model_support  +18 recent vs 3 historical
+  @chienchunhung  hardware_hopper  +17 recent vs 1 historical
+  @yctseng0211  hardware_amd  +17 recent vs 2 historical
+  @JustinTong0323  model_support  +16 recent vs 1 historical
+  @xxi-nv  moe_routing  +12 recent vs 0 historical
+  @YAMY1234  model_support  +11 recent vs 0 historical
+  @brnguyen2  model_support  +10 recent vs 0 historical
+  @hnyls2002  speculative_decoding  +10 recent vs 0 historical
 
 === CROSS-REPO TRAVELERS — multi-repo contributors ===
 
-  @mmangkad  3 repos  21 merges  | vllm-project/vllm,sgl-project/sglang,flashinfer-ai/flashinfer
-  @b8zhong  3 repos  21 merges  | sgl-project/sglang,NVIDIA/cutlass,flashinfer-ai/flashinfer
-  @JustinTong0323  2 repos  18 merges  | sgl-project/sglang,flashinfer-ai/flashinfer
+  @b8zhong  3 repos  27 merges  | sgl-project/sglang,NVIDIA/cutlass,flashinfer-ai/flashinfer
+  @mmangkad  3 repos  26 merges  | vllm-project/vllm,sgl-project/sglang,flashinfer-ai/flashinfer
+  @JustinTong0323  2 repos  25 merges  | sgl-project/sglang,flashinfer-ai/flashinfer
   @Anerudhan  3 repos  13 merges  | flashinfer-ai/flashinfer,NVIDIA/cudnn-frontend,vllm-project/vllm
+  @zianglih  3 repos  11 merges  | sgl-project/sglang,flashinfer-ai/flashinfer,NVIDIA/cudnn-frontend
   @Sunt-ing  3 repos  11 merges  | vllm-project/vllm,sgl-project/sglang,NVIDIA/Megatron-LM
+  @yichengj0  2 repos  10 merges  | flashinfer-ai/flashinfer,vllm-project/vllm
   @xianbaoqian  2 repos  10 merges  | vllm-project/vllm,flashinfer-ai/flashinfer
-  @LopezCastroRoberto [Red Hat]  2 repos  9 merges  | vllm-project/vllm,Dao-AILab/flash-attention
-  @zianglih  3 repos  8 merges  | sgl-project/sglang,flashinfer-ai/flashinfer,NVIDIA/cudnn-frontend
+  @jdebache  2 repos  10 merges  | flashinfer-ai/flashinfer,vllm-project/vllm
+  @LopezCastroRoberto [Red Hat]  2 repos  10 merges  | vllm-project/vllm,Dao-AILab/flash-attention
+  @guan404ming  2 repos  9 merges  | vllm-project/vllm,NVIDIA/TensorRT-LLM
   @waynehacking8 [NVIDIA]  5 repos  8 merges  | vllm-project/vllm,sgl-project/sglang,NVIDIA/TensorRT-LLM,flashinfer-ai/flashinfer,NVIDIA/cutlass
-  @jdebache  2 repos  8 merges  | flashinfer-ai/flashinfer,vllm-project/vllm
-  @guan404ming  2 repos  8 merges  | vllm-project/vllm,NVIDIA/TensorRT-LLM
-  @yichengj0  2 repos  7 merges  | flashinfer-ai/flashinfer,vllm-project/vllm
-  @zcnrex  2 repos  6 merges  | sgl-project/sglang,flashinfer-ai/flashinfer
-  @yihwang-nv  2 repos  6 merges  | NVIDIA/TensorRT-LLM,flashinfer-ai/flashinfer
-  @lesj0610  2 repos  5 merges  | vllm-project/vllm,flashinfer-ai/flashinfer
-  @joerowell  3 repos  5 merges  | NVIDIA/TensorRT-LLM,vllm-project/vllm,sgl-project/sglang
-  @spandantiwari  2 repos  4 merges  | sgl-project/sglang,vllm-project/vllm
-  @oonyshch  2 repos  4 merges  | vllm-project/vllm,sgl-project/sglang
-  @okorzh-amd  2 repos  4 merges  | vllm-project/vllm,sgl-project/sglang
-  @morluto  2 repos  4 merges  | vllm-project/vllm,tile-ai/tilelang
+  @NaderAlAwar  2 repos  8 merges  | NVIDIA/cccl,flashinfer-ai/flashinfer
+  @zcnrex  2 repos  7 merges  | sgl-project/sglang,flashinfer-ai/flashinfer
+  @yufeiwu-nv  2 repos  7 merges  | NVIDIA/TensorRT-LLM,flashinfer-ai/flashinfer
+  @yihwang-nv  2 repos  7 merges  | NVIDIA/TensorRT-LLM,flashinfer-ai/flashinfer
+  @nvpohanh  2 repos  7 merges  | sgl-project/sglang,flashinfer-ai/flashinfer
+  @zkyue  4 repos  6 merges  | sgl-project/sglang,NVIDIA/Megatron-LM,NVIDIA/cudnn-frontend,NVIDIA/cutlass
+  @yuxianq  2 repos  6 merges  | NVIDIA/TensorRT-LLM,flashinfer-ai/flashinfer
+  @joerowell  3 repos  6 merges  | NVIDIA/TensorRT-LLM,vllm-project/vllm,sgl-project/sglang
 
