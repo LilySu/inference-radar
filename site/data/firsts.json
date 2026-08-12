@@ -251,6 +251,24 @@
   {
     "repo": "vllm-project/vllm",
     "repo_short": "vLLM",
+    "number": 51829,
+    "title": "[Bug]: DeepSeek V4 Python renderer misplaces tools when a system message exists",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51829",
+    "created_at": "2026-08-11T14:27:50Z",
+    "updated_at": "2026-08-11T16:53:24Z",
+    "bucket": "deepseek",
+    "difficulty": 2,
+    "why": "The issue mentions DeepSeek V4, which is related to the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek V4"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-11T15:40:31.475053+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
     "number": 51776,
     "title": "[Bug]: CuTe FA4 forward (flash_fwd.py SM80/SM120) fails on first call: NameError 'mDynamicCausal' and missing self.is_split_kv",
     "html_url": "https://github.com/vllm-project/vllm/issues/51776",
@@ -286,25 +304,6 @@
     ],
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-08-10T17:37:49.658140+00:00",
-    "model": "groq:llama-3.3-70b-versatile"
-  },
-  {
-    "repo": "Dao-AILab/flash-attention",
-    "repo_short": "FlashAttention",
-    "number": 2782,
-    "title": "CuTe DSL: replace removed quack.activation.sub_packed_f32x2 API",
-    "html_url": "https://github.com/Dao-AILab/flash-attention/issues/2782",
-    "created_at": "2026-08-10T06:20:45Z",
-    "updated_at": "2026-08-10T06:20:45Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 2,
-    "why": "The issue is related to CuTe DSL and uses CuTe-specific code, which fits into the cutlass_cute bucket.",
-    "evidence_quotes": [
-      "CuTe DSL",
-      "cute.arch.sub_packed_f32x2(...)"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-08-10T06:57:45.028088+00:00",
     "model": "groq:llama-3.3-70b-versatile"
   },
   {
@@ -1424,6 +1423,62 @@
   {
     "repo": "vllm-project/vllm",
     "repo_short": "vLLM",
+    "number": 51916,
+    "title": "[Bug][DSV4-Flash][DSpark] v0.27 weight loader regressed \u2014 KeyError routed_experts.w13_weight_scale (v0.26 gracefully skipped)",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51916",
+    "created_at": "2026-08-12T03:07:04Z",
+    "updated_at": "2026-08-12T03:07:04Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "This issue is related to DeepSeek-V4, which is one of the models in the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash",
+      "DeepSeek-V4"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-12T03:12:05.158514+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "NVIDIA/cutlass",
+    "repo_short": "CUTLASS",
+    "number": 3447,
+    "title": "[BUG] cuteDSL export_to_c outputs i32 dynamic shapes in headers for i64 inputs",
+    "html_url": "https://github.com/NVIDIA/cutlass/issues/3447",
+    "created_at": "2026-08-11T18:29:27Z",
+    "updated_at": "2026-08-11T18:29:38Z",
+    "bucket": "cutlass_cute",
+    "difficulty": 3,
+    "why": "The issue is related to the CuTe DSL and cutlass, which falls under the cutlass_cute bucket.",
+    "evidence_quotes": [
+      "CuTe DSL",
+      "cutlass"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-11T23:24:01.887830+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
+    "number": 51822,
+    "title": "[Bug]: deepseek-v4-flash-0731 use vllm 0.27.0 run error",
+    "html_url": "https://github.com/vllm-project/vllm/issues/51822",
+    "created_at": "2026-08-11T13:14:20Z",
+    "updated_at": "2026-08-11T13:14:20Z",
+    "bucket": "deepseek",
+    "difficulty": 3,
+    "why": "The issue mentions DeepSeek-V4, which is related to the deepseek bucket.",
+    "evidence_quotes": [
+      "DeepSeek-V4-Flash-0731"
+    ],
+    "blackwell_intent_signal": null,
+    "evaluated_at": "2026-08-11T15:40:31.474162+00:00",
+    "model": "groq:llama-3.3-70b-versatile"
+  },
+  {
+    "repo": "vllm-project/vllm",
+    "repo_short": "vLLM",
     "number": 51790,
     "title": "[Bug]: DeepSeek V4 mHC warmup is always skipped because DeepseekV4DecoderLayer has no hc_pre/hc_post attributes",
     "html_url": "https://github.com/vllm-project/vllm/issues/51790",
@@ -1467,7 +1522,7 @@
     "title": "[Bug]:  ValueError: GGUF model with architecture deepseek2 is not supported yet.",
     "html_url": "https://github.com/vllm-project/vllm/issues/42229",
     "created_at": "2026-05-10T13:06:44Z",
-    "updated_at": "2026-08-10T03:32:05Z",
+    "updated_at": "2026-08-12T02:14:18Z",
     "bucket": "deepseek",
     "difficulty": 3,
     "why": "The issue mentions DeepSeek V4, which is an architectural primitive that counts for the deepseek bucket.",
@@ -1853,24 +1908,6 @@
     ],
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-07-29T04:53:24.862136+00:00",
-    "model": "groq:llama-3.3-70b-versatile"
-  },
-  {
-    "repo": "NVIDIA/TensorRT-LLM",
-    "repo_short": "TRT-LLM",
-    "number": 16967,
-    "title": "[Bug]: Structured Output with DSpark Speculative Drafter",
-    "html_url": "https://github.com/NVIDIA/TensorRT-LLM/issues/16967",
-    "created_at": "2026-07-28T18:25:25Z",
-    "updated_at": "2026-07-28T18:25:50Z",
-    "bucket": "deepseek",
-    "difficulty": 3,
-    "why": "The issue mentions DeepSeek-V4, which is related to the DeepSeek bucket.",
-    "evidence_quotes": [
-      "DeepSeek-V4-Flash"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-07-28T20:06:24.504295+00:00",
     "model": "groq:llama-3.3-70b-versatile"
   },
   {
@@ -3794,45 +3831,6 @@
     ],
     "blackwell_intent_signal": null,
     "evaluated_at": "2026-06-16T18:37:33.055349+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2779,
-    "title": "[FEA] need a feature for cvt a single element from bf16/f32 to f8",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2779",
-    "created_at": "2025-11-18T02:43:39Z",
-    "updated_at": "2026-03-18T06:29:38Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "This is a feature request for the CuTe DSL component of CUTLASS, explicitly labeled and named as such.",
-    "evidence_quotes": [
-      "CuTe DSL",
-      "cuteDSL hasn't supported convertion for a signle element from bf16/f32 to f8"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:37:17.594067+00:00",
-    "model": "anthropic:claude-sonnet-4-6"
-  },
-  {
-    "repo": "NVIDIA/cutlass",
-    "repo_short": "CUTLASS",
-    "number": 2763,
-    "title": "[QST] CuTeDSL should drop cuda.stream when creating mangle name.",
-    "html_url": "https://github.com/NVIDIA/cutlass/issues/2763",
-    "created_at": "2025-11-12T06:00:46Z",
-    "updated_at": "2026-03-18T08:20:01Z",
-    "bucket": "cutlass_cute",
-    "difficulty": 3,
-    "why": "This is a CuTe DSL (CUTLASS Python) issue about JIT compilation caching behavior, naming it CUTLASS/CuTe DSL code paths explicitly.",
-    "evidence_quotes": [
-      "CuTeDSL should drop cuda.stream when creating mangle name",
-      "examples/python/CuTeDSL/hopper/dense_gemm.py",
-      "python/CuTeDSL/cutlass/base_dsl/dsl.py"
-    ],
-    "blackwell_intent_signal": null,
-    "evaluated_at": "2026-06-16T18:37:17.593265+00:00",
     "model": "anthropic:claude-sonnet-4-6"
   }
 ]
